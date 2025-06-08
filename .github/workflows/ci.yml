@@ -1,0 +1,41 @@
+# .github/workflows/ci.yml dans conformeo-frontend
+name: CI Frontend
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+
+      - name: Build production bundle
+        run: npm run build -- --configuration=production
+
+      - name: Run E2E Cypress
+        env:
+          CYPRESS_baseUrl: http://localhost:4200
+          CYPRESS_API_URL: http://localhost:8000
+        run: |
+          npm run start:ci &    # Il faut ajouter ce script à ton package.json
+          npx wait-on http://localhost:4200
+          npm run cy:run

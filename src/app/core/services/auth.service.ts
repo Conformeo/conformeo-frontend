@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -10,9 +10,9 @@ export interface LoginResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = environment.apiUrl;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private apiUrl = environment.apiUrl;
 
   login(email: string, password: string): Observable<LoginResponse> {
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
@@ -35,6 +35,6 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return this.getToken() != null;
+    return !!localStorage.getItem('access_token');
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -15,14 +15,14 @@ import { AuthService } from '../../../core/services/auth.service';
   ]
 })
 export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   loginForm: FormGroup;
   errorMessage: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
@@ -34,7 +34,7 @@ export class LoginComponent {
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password).subscribe({
       next: () => this.router.navigate(['/dashboard']),
-      error: err => this.errorMessage = 'Identifiants incorrects'
+      error: () => this.errorMessage = 'Identifiants incorrects'
     });
   }
 }
