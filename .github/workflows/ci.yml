@@ -25,8 +25,15 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # <-- ICI on installe Chromium -->
+      - name: Install Chromium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
+
       - name: Unit tests
-        run: npm test -- --watch=false --browsers=ChromeHeadless
+        # on cible ChromiumHeadless au lieu de ChromeHeadless
+        run: npm test -- --watch=false --browsers=ChromiumHeadless
 
       - name: Build production bundle
         run: npm run build -- --configuration=production
@@ -36,6 +43,6 @@ jobs:
           CYPRESS_baseUrl: http://localhost:4200
           CYPRESS_API_URL: http://localhost:8000
         run: |
-          npm run start:ci &    # Il faut ajouter ce script à ton package.json
+          npm run start:ci &
           npx wait-on http://localhost:4200
           npm run cy:run
