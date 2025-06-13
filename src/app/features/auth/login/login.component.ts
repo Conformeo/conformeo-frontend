@@ -1,40 +1,40 @@
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-  ]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-  private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private router = inject(Router);
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+  errorMsg = '';
 
-  loginForm: FormGroup;
-  errorMessage: string | null = null;
+  private readonly fb = inject(FormBuilder);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
-  constructor() {
+  ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', Validators.required]
     });
   }
 
   onSubmit(): void {
-    if (this.loginForm.invalid) { return; }
+    if (this.loginForm.invalid) {
+      return;
+    }
     const { email, password } = this.loginForm.value;
-    this.authService.login(email, password).subscribe({
+    this.auth.login(email, password).subscribe({
       next: () => this.router.navigate(['/dashboard']),
-      error: () => this.errorMessage = 'Identifiants incorrects'
+      error: () => this.errorMsg = 'Identifiants invalides'
     });
+
   }
 }
