@@ -1,0 +1,16 @@
+<h2 *ngIf="checklist">Checklist : {{ checklist.name }}</h2>
+
+<ul>
+  <li *ngFor="let it of items">
+    <label>
+      <input type="checkbox" [checked]="it.is_done" (change)="toggle(it)">
+      {{ it.label }}
+    </label>
+    <button (click)="delete(it)">🗑️</button>
+  </li>
+</ul>
+
+<form (ngSubmit)="addItem()">
+  <input [(ngModel)]="label" name="label" placeholder="Nouvel item…">
+  <button type="submit">Ajouter</button>
+</form>

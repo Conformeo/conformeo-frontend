@@ -1,6 +1,5 @@
+// frontend/src/environments/environment.ts
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8000',
-  featureXEnabled: false,
-  featureYEnabled: false,
+  apiUrl: 'http://localhost:8000',   // <- port uvicorn
 };

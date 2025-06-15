@@ -1,0 +1,5 @@
+<ul>
+  <li *ngFor="let c of checklists">
+    <a [routerLink]="['/checklists', c.id]">{{ c.name }}</a>
+  </li>
+</ul>
