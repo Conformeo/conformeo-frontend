@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+// token override
+:root {
+  --color-primary:   #0055A4;
+  --color-secondary: #FFD100;
+  // …
+}
+@import "tailwindcss/utilities";

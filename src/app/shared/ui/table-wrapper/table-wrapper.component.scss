@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  th, td {
+    padding: $spacer/2;
+    border-bottom: 1px solid $color-light;
+  }
+  th {
+    text-align: left;
+    background-color: $color-light;
+  }
+}
