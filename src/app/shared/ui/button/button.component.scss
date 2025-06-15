@@ -1,0 +1,14 @@
+/* shared/ui/button/button.component.scss */
+:host {
+  display: inline-block;
+  font-family: $font-family-base;
+}
+button {
+  padding: $spacer/2 $spacer;
+  border-radius: $spacer/4;
+  background-color: $color-primary;
+  color: white;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  &:hover { background-color: darken($color-primary, 10%); }
+}

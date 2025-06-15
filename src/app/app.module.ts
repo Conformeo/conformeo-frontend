@@ -1,27 +1,17 @@
-// src/app/app.module.ts
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { LoginComponent } from './features/auth/login/login.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
-
+import { NgModule }          from '@angular/core';
+import { BrowserModule }     from '@angular/platform-browser';
+import { RouterModule }      from '@angular/router';
+import { routes }            from './app.routes';
+import { CoreModule }        from './core/core.module';
+import { SharedModule }      from './shared/shared.module';
 
 @NgModule({
-  // Import standalone components instead of declaring them
   imports: [
     BrowserModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    AppRoutingModule,
-    AppComponent,
-    LoginComponent,
-    DashboardComponent
+    CoreModule,
+    SharedModule,
+    RouterModule.forRoot(routes)
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [/* AppComponent */]
 })
-export class AppModule { }
+export class AppModule {}
