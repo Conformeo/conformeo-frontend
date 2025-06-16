@@ -1,3 +1,4 @@
+@use "sass:color";
 /* shared/ui/button/button.component.scss */
 :host {
   display: inline-block;
@@ -10,5 +11,5 @@ button {
   color: white;
   font-size: $font-size-base;
   line-height: $line-height-base;
-  &:hover { background-color: darken($color-primary, 10%); }
+  &:hover { background-color: color.adjust($color-primary, $lightness: -10%); }
 }
