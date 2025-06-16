@@ -1,2 +1,0 @@
-npm run test -- --watch=false --browsers=ChromeHeadless
-npx cypress run

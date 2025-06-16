@@ -31,7 +31,7 @@
                 "input": "public"
               }
             ],
-              "stylePreprocessorOptions": {
+            "stylePreprocessorOptions": {
               "includePaths": [
                 "src/app/shared/styles"
               ]
@@ -96,6 +96,11 @@
                 "input": "public"
               }
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/app/shared/styles"
+              ]
+            },
             "styles": [
               "src/app/shared/styles/_variables.scss",
               "src/styles.scss"

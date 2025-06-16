@@ -1,5 +1,76 @@
 npm run test -- --watch=false --browsers=ChromeHeadless
+# Avant commit : 
+ng lint && ng test --watch=false --browsers=ChromiumHeadless
 
 npm run start:ci &                           # script qui démarre ng serve sans watch
 npx wait-on http://localhost:4200            # attendre que le front soit up
 npm run cy:run
+
+
+
+cat << 'EOF' > cypress.config.ts
+import { defineConfig } from 'cypress';
+
+export default defineConfig({
+  e2e: {
+    baseUrl: 'http://localhost:4200',
+    supportFile: 'cypress/support/index.ts',
+    fixturesFolder: 'cypress/fixtures',
+    specPattern: 'cypress/e2e/**/*.cy.ts',
+    setupNodeEvents(on, config) {
+      // plugins éventuels
+    }
+  }
+});
+EOF
+
+mkdir -p cypress/fixtures
+cat << 'EOF' > cypress/fixtures/sites.json
+[
+  {
+    "id": "site-1",
+    "name": "Siège Social",
+    "address": "123 Rue de la République, Paris",
+    "nextControl": "2025-09-01",
+    "score": 85
+  },
+  {
+    "id": "site-2",
+    "name": "Usine Lyon",
+    "address": "45 Avenue de Lyon, Lyon",
+    "nextControl": "2025-10-15",
+    "score": 78
+  }
+]
+EOF
+
+mkdir -p cypress/e2e/sites
+cat << 'EOF' > cypress/e2e/sites/sites.cy.ts
+/// <reference types="cypress" />
+
+describe('Sites Page', () => {
+  beforeEach(() => {
+    cy.login();
+    cy.intercept('GET', '/api/sites', { fixture: 'sites.json' }).as('getSites');
+    cy.visitAuth('/sites');
+    cy.wait('@getSites');
+  });
+
+  it('devrait afficher la liste des sites', () => {
+    cy.get('app-site-table').should('exist');
+    cy.get('app-site-table table tbody tr').should('have.length', 2);
+    cy.contains('td', 'Siège Social').should('be.visible');
+    cy.contains('td', 'Usine Lyon').should('be.visible');
+  });
+
+  it('peut filtrer par nom de site', () => {
+    cy.get('app-site-filter input').type('Lyon');
+    cy.get('app-site-table table tbody tr').should('have.length', 1)
+      .first().contains('Usine Lyon');
+  });
+});
+EOF
+
+
+
+npx cypress open

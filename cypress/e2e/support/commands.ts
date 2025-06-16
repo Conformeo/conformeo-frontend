@@ -1,6 +1,6 @@
-// login via API (ou stub local)
+// cypress/support/commands.ts
+
 Cypress.Commands.add('login', () => {
-  // soit via requête POST, soit directement en stockant un token
   window.localStorage.setItem('token', 'fake-jwt-token');
 });
 
