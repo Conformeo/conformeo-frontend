@@ -6,15 +6,11 @@ import { SharedModule }  from '../../shared/shared.module';
 import { SitesPageComponent } from './pages/sites-page/sites-page.component'
 
 @NgModule({
-  declarations: [
-    SitesPageComponent,
-
-    // …
-  ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SitesPageComponent
   ]
 })
 

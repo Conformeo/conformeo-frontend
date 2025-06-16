@@ -6,15 +6,11 @@ import { SharedModule }  from '../../shared/shared.module';
 import { TrainingPageComponent } from './pages/training-page/training-page.component'
 
 @NgModule({
-  declarations: [
-    TrainingPageComponent,
-
-    // …
-  ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    TrainingPageComponent
   ]
 })
 

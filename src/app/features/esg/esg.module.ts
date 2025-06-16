@@ -6,14 +6,11 @@ import { SharedModule }  from '../../shared/shared.module';
 import { EsgPageComponent } from './pages/esg-page/esg-page.component'
 
 @NgModule({
-  declarations: [
-    EsgPageComponent,
-    // …
-  ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    EsgPageComponent
   ]
 })
 

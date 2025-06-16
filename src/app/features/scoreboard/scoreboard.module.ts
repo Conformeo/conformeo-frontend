@@ -6,15 +6,11 @@ import { SharedModule }  from '../../shared/shared.module';
 import { ScoreboardPageComponent } from './pages/scoreboard-page/scoreboard-page.component'
 
 @NgModule({
-  declarations: [
-    ScoreboardPageComponent,
-
-    // …
-  ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ScoreboardPageComponent
   ]
 })
 

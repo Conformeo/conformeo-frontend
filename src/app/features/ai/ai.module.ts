@@ -6,14 +6,12 @@ import { SharedModule }  from '../../shared/shared.module';
 import { AiPageComponent } from './pages/ai-page/ai-page.component'
 
 @NgModule({
-  declarations: [
-    AiPageComponent,
-
-  ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    AiPageComponent
+
   ]
 })
-export class ActionsModule {}
+export class AiModule {}

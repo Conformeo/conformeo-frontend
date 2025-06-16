@@ -6,15 +6,11 @@ import { SharedModule }  from '../../shared/shared.module';
 import { SettingsPageComponent } from './pages/settings-page/settings-page.component'
 
 @NgModule({
-  declarations: [
-    SettingsPageComponent,
-
-    // …
-  ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SettingsPageComponent
   ]
 })
 

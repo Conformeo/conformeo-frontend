@@ -8,16 +8,13 @@ import { CertificationTableComponent } from './components/certification-table/ce
 import { ExtinguisherTableComponent } from './components/extinguisher-table/extinguisher-table.component'
 
 @NgModule({
-  declarations: [
-    CompanyPageComponent,
-    CertificationTableComponent,
-    ExtinguisherTableComponent,
-    // …
-  ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    CompanyPageComponent,
+    CertificationTableComponent,
+    ExtinguisherTableComponent
   ]
 })
 

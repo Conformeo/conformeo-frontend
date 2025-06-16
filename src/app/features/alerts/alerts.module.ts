@@ -6,15 +6,11 @@ import { SharedModule }  from '../../shared/shared.module';
 import { AlertsPageComponent } from './pages/alerts-page/alerts-page.component'
 
 @NgModule({
-  declarations: [
-    AlertsPageComponent,
-
-    // …
-  ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    AlertsPageComponent
   ]
 })
 export class AlertsModule { }
