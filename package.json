@@ -21,10 +21,8 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
-    "@tailwindcss/postcss": "^4.1.10",
     "postcss": "^8.5.5",
     "rxjs": "~7.8.0",
-    "tailwindcss": "^4.1.10",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
@@ -46,6 +44,12 @@
     "prettier": "^3.5.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "8.33.1",
-    "wait-on": "^7.1.1"
+    "wait-on": "^7.1.1",
+    "tailwindcss": "3.4.4",
+    "postcss": "^8.4.35"
+  },
+  "overrides": {
+    "tailwindcss": "3.4.4" 
   }
+
 }

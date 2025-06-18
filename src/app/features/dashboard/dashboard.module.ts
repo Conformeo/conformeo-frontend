@@ -10,7 +10,7 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.co
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
-    DashboardPageComponent
+    DashboardPageComponent,
   ]
 })
 export class DashboardModule { }

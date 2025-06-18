@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+// src/app/shared/table-wrapper/table-wrapper.component.ts
+import { Component }   from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-table-wrapper',
-  imports: [],
-  templateUrl: './table-wrapper.component.html',
-  styleUrl: './table-wrapper.component.scss'
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div class="overflow-x-auto">
+      <ng-content></ng-content>
+    </div>
+  `
 })
-export class TableWrapperComponent {
-
-}
+export class TableWrapperComponent {}

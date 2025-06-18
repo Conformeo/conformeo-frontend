@@ -1,9 +1,14 @@
-@use "tailwindcss" as *;
+/* src/styles.scss  ── uniquement ces trois directives */
 
-// token override
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* puis vos overrides éventuels : */ 
+
 :root {
   --color-primary:   #0055A4;
   --color-secondary: #FFD100;
-  // …
+  --color-danger:    #dc3545;
+  /* … */
 }
-// @import "tailwindcss/utilities";

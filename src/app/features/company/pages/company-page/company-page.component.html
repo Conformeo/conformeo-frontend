@@ -1,1 +1,8 @@
-<p>company-page works!</p>
+<!-- company-page.component.html -->
+<app-extinguisher-table
+  [data]="extinguishers$ | async">
+</app-extinguisher-table>
+
+<app-certification-table
+  [data]="certifications$ | async">
+</app-certification-table>

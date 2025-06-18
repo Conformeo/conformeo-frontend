@@ -7,14 +7,14 @@ import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   { path: '',   redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'dashboard',
-    canActivate: [authGuard],
-    loadChildren: () => import('./features/dashboard/dashboard.module')
-                        .then(m => m.DashboardModule)
+   loadComponent: () =>
+     import('./features/dashboard/pages/dashboard-page/dashboard-page.component')
+       .then(c => c.DashboardPageComponent)
   },
-  { path: 'company', 
-    canActivate: [ authGuard ],
-    loadChildren: () =>
-      import('./features/company/company.module').then(m => m.CompanyModule)
+  { path: 'company',
+  loadComponent: () =>
+    import('./features/company/pages/company-page/company-page.component')
+      .then(m => m.CompanyPageComponent) 
   },
   { path: 'sites', 
     canActivate: [ authGuard ],
