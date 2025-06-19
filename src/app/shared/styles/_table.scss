@@ -1,0 +1,13 @@
+/* src/app/shared/styles/_table.scss */
+table {
+  @apply w-full border-collapse text-sm;
+  thead {
+    @apply bg-slate-50;
+  }
+  th, td {
+    @apply px-3 py-2 border-b;
+  }
+  tbody tr:nth-child(even) {
+    @apply bg-slate-50/40;
+  }
+}

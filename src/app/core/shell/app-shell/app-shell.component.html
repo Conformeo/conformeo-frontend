@@ -1,0 +1,35 @@
+<!-- Header -->
+<header class="flex items-center justify-between px-4 h-14 shadow">
+  <h1 class="font-semibold">Conforméo</h1>
+
+  <!-- Burger (visible uniquement < md) -->
+  <button class="md:hidden" (click)="menuOpen = !menuOpen">
+    <lucide-icon name="menu" class="w-6 h-6"></lucide-icon>
+  </button>
+</header>
+
+<!-- Layout principal -->
+<div class="flex">
+
+  <!-- Side-nav -->
+  <nav
+    class="bg-slate-100 w-56 p-4 space-y-2 transform transition-transform duration-200
+           fixed inset-y-14 left-0
+           md:static md:translate-x-0
+           "
+    [class.-translate-x-full]="!menuOpen">
+
+    <a *ngFor="let l of links"
+       routerLinkActive="font-semibold bg-primary/10"
+       [routerLink]="l.path"
+       class="flex items-center gap-2 rounded px-3 py-2 hover:bg-primary/10">
+      <lucide-icon [name]="l.icon" class="w-4 h-4"></lucide-icon>
+      {{ l.label }}
+    </a>
+  </nav>
+
+  <!-- Contenu -->
+  <main class="flex-1 p-6 md:ml-56">
+    <router-outlet></router-outlet>
+  </main>
+</div>

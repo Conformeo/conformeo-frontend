@@ -1,12 +1,3 @@
-<!-- company-page.component.html -->
-<app-extinguisher-table
-  [data]="extinguishers$ | async">
-</app-extinguisher-table>
-
-<app-certification-table
-  [data]="certifications$ | async">
-</app-certification-table>
-
 <h1 class="text-2xl font-semibold mb-4">Sécurité & certifications</h1>
 
 <div class="grid md:grid-cols-2 gap-6">
@@ -15,20 +6,24 @@
   <section>
     <h2 class="font-medium mb-2">Extincteurs</h2>
 
-    <ng-container *ngIf="(extinguishers$ | async) as exts; else loadExt">
-      <app-extinguisher-table [data]="exts"></app-extinguisher-table>
+    <app-search-input (searchChange)="extFilter = $event"></app-search-input>
+
+    <ng-container *ngIf="extinguishers$ | async as exts; else extSkeleton">
+      <app-extinguisher-table [data]="applyFilter(exts, extFilter)"></app-extinguisher-table>
     </ng-container>
-    <ng-template #loadExt><app-skeleton></app-skeleton></ng-template>
+    <ng-template #extSkeleton><app-skeleton></app-skeleton></ng-template>
   </section>
 
   <!-- Certifications -->
   <section>
     <h2 class="font-medium mb-2">Certifications</h2>
 
-    <ng-container *ngIf="(certifications$ | async) as certs; else loadCert">
-      <app-certification-table [data]="certs"></app-certification-table>
+    <app-search-input (searchChange)="certFilter = $event"></app-search-input>
+
+    <ng-container *ngIf="certifications$ | async as certs; else certSkeleton">
+      <app-certification-table [data]="applyFilter(certs, certFilter)"></app-certification-table>
     </ng-container>
-    <ng-template #loadCert><app-skeleton></app-skeleton></ng-template>
+    <ng-template #certSkeleton><app-skeleton></app-skeleton></ng-template>
   </section>
 
 </div>
