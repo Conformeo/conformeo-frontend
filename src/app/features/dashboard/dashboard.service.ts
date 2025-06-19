@@ -6,12 +6,11 @@ import { DashboardStat }  from '../../models/dashboard-stat.model';
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
   getStats(): Observable<DashboardStat[]> {
-    // 📝 pour l’instant on renvoie du mock local
     return of([
-      { label: 'Sites',          value: 24 },
-      { label: 'Contrôles à venir', value: 5,  variant: 'risk' },
-      { label: 'Inspections OK',    value: '92 %', inspect: 'inspect' },
-      { label: 'Actions en cours',  value: 7,  variant: 'risk' }
+      { label: 'Sites',            value: 24,        icon: 'home' },
+      { label: 'Contrôles à venir', value: 5, variant: 'risk', icon: 'alert-triangle' },
+      { label: 'Inspections OK',   value: '92 %',    icon: 'check-circle' },  // 👈
+      { label: 'Actions en cours', value: 7, variant: 'risk', icon: 'alert-triangle' }
     ]);
   }
 }

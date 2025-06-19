@@ -1,6 +1,6 @@
-// dashboard-stat.model.ts
 export interface DashboardStat {
-  label: string;
-  value: number | string;
-  variant?: 'normal'|'risk';
+  label:  string;
+  value:  string | number;
+  variant?: 'risk';         // ← rouge
+  icon?:   string;          // ← nom d’icône Lucide (optionnel)
 }
