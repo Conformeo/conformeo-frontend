@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule }     from '@angular/common';
-import { Certification }    from '../../../../models/certification.model';
+import { Certification }       from '../../../../models/certification.model';
 import { TableWrapperComponent } from '../../../../shared/table-wrapper/table-wrapper.component';
 
 @Component({
@@ -37,6 +37,7 @@ import { TableWrapperComponent } from '../../../../shared/table-wrapper/table-wr
   `
 })
 export class CertificationTableComponent {
-@Input() data: Certification[] | null = [];
-get rows(): Certification[] { return this.data ?? []; }
+  @Input() data: Certification[] | null = [];
+  get rows(): Certification[] { return this.data ?? []; }
+
 }

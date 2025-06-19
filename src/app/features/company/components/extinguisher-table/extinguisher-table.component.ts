@@ -34,5 +34,6 @@ import { TableWrapperComponent } from '../../../../shared/table-wrapper/table-wr
 })
 export class ExtinguisherTableComponent {
   @Input() data: FireExtinguisher[] | null = [];
-  get rows(): FireExtinguisher[] { return this.data ?? []; }
+  get rows() { return this.data ?? []; }
+
 }

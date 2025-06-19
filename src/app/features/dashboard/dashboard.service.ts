@@ -10,7 +10,7 @@ export class DashboardService {
     return of([
       { label: 'Sites',          value: 24 },
       { label: 'Contrôles à venir', value: 5,  variant: 'risk' },
-      { label: 'Inspections OK',    value: '92 %' },
+      { label: 'Inspections OK',    value: '92 %', inspect: 'inspect' },
       { label: 'Actions en cours',  value: 7,  variant: 'risk' }
     ]);
   }

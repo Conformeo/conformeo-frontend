@@ -1,1 +1,7 @@
-<p>dashboard-page works!</p>
+<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+  <app-stat-card
+    *ngFor="let stat of stats$ | async; let i = index"
+    [stat]="stat"
+    [icon]="i % 2 === 0 ? 'home' : 'alert-triangle'">
+  </app-stat-card>
+</div>
