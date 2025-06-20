@@ -1,1 +1,29 @@
-<p>certification-table works!</p>
+<!-- certification-table.component.html -->
+<input
+  type="search"
+  [(ngModel)]="query"
+  placeholder="Rechercher une certification…"
+  class="w-full mb-3 rounded-lg border px-3 py-2"
+/>
+
+<table class="w-full text-sm rounded-lg overflow-hidden">
+  <thead class="bg-slate-100 text-left">
+    <tr>
+      <th class="px-3 py-2">Certification</th>
+      <th class="px-3 py-2">Valide jusqu’au</th>
+      <th class="px-3 py-2 text-center">Statut</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let c of filtered">
+      <td class="px-3 py-2">{{ c.name }}</td>
+      <td class="px-3 py-2">
+        {{ c.validUntil ? (c.validUntil | date:'yyyy-MM') : '—' }}
+      </td>
+      <td class="px-3 py-2 text-center">
+        <lucide-icon [name]="icon(c.status)" [class]="color(c.status)"></lucide-icon>
+      </td>
+    </tr>
+  </tbody>
+</table>

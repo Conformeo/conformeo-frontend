@@ -1,0 +1,17 @@
+<!-- certification-form.component.html -->
+<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-3">
+  <div>
+    <label class="block text-sm mb-1">Nom</label>
+    <input formControlName="name" class="w-full rounded border px-3 py-2"/>
+  </div>
+
+  <div>
+    <label class="block text-sm mb-1">Valide jusqu’au</label>
+    <input type="date" formControlName="validUntil" class="w-full rounded border px-3 py-2"/>
+  </div>
+
+  <div class="flex gap-2 justify-end pt-2">
+    <button type="button" (click)="cancel()" class="btn-secondary">Annuler</button>
+    <button class="btn-primary" [disabled]="form.invalid">Enregistrer</button>
+  </div>
+</form>

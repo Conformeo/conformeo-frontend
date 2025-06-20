@@ -1,0 +1,48 @@
+<p>extinguisher-form.component.ts works!</p>
+<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4 w-96">
+
+  <h2 class="text-lg font-semibold mb-2">
+    {{ extinguisher ? 'Modifier un extincteur' : 'Nouvel extincteur' }}
+  </h2>
+
+  <!-- Emplacement -->
+  <label class="block">
+    <span class="block text-sm font-medium">Emplacement</span>
+    <input type="text" formControlName="location"
+           class="mt-1 w-full rounded-lg border px-3 py-2" autofocus>
+  </label>
+
+  <!-- N° de série -->
+  <label class="block">
+    <span class="block text-sm font-medium">N° de série</span>
+    <input type="text" formControlName="serialNumber"
+           class="mt-1 w-full rounded-lg border px-3 py-2">
+  </label>
+
+  <div class="grid grid-cols-2 gap-4">
+    <!-- Dernier contrôle -->
+    <label>
+      <span class="block text-sm font-medium">Dernier contrôle</span>
+      <input type="date" formControlName="lastControl"
+             class="mt-1 w-full rounded-lg border px-3 py-2">
+    </label>
+
+    <!-- Prochain contrôle -->
+    <label>
+      <span class="block text-sm font-medium">Prochain contrôle</span>
+      <input type="date" formControlName="nextControl"
+             class="mt-1 w-full rounded-lg border px-3 py-2">
+    </label>
+  </div>
+
+  <!-- Boutons -->
+  <div class="flex justify-end space-x-3 pt-2">
+    <button type="button" (click)="cancel()"
+            class="px-4 py-2 rounded-lg border">Annuler</button>
+    <button type="submit" [disabled]="form.invalid"
+            class="px-4 py-2 rounded-lg bg-cyan-600 text-white">
+      {{ extinguisher ? 'Enregistrer' : 'Créer' }}
+    </button>
+  </div>
+
+</form>

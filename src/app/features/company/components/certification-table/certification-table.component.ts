@@ -1,55 +1,47 @@
+// features/company/components/certification-table/certification-table.component.ts
 import { Component, Input } from '@angular/core';
 import { CommonModule }     from '@angular/common';
+import { FormsModule }      from '@angular/forms';
+import { IconsModule }      from '../../../../icons/icons.module';
 
-import { TableWrapperComponent }   from '../../../../shared/table-wrapper/table-wrapper.component';
-import { Certification }           from '../../../../models/certification.model';
-import { IconsModule }  from '../../../../icons/icons.module';
+import { Certification }    from '../../../../models/certification.model';
+import { CertStatus }       from '../../../../models/certification.model'; // ou votre enum
 
 @Component({
-  selector: 'app-certification-table',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TableWrapperComponent,
-    IconsModule
-  ],
-  template: `
-    <app-table-wrapper>
-      <table class="w-full text-sm">
-        <thead class="bg-slate-100">
-          <tr>
-            <th>Certification</th>
-            <th>Valide jusqu’au</th>
-            <th class="text-center">Statut</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let c of rows" class="border-b">
-            <td>{{ c.name }}</td>
-            <td>{{ c.validUntil }}</td>
-            <td class="text-center">
-              <lucide-icon name="check"
-                           *ngIf="c.status==='VALID'"
-                           class="text-green-600 inline" size="16">
-              </lucide-icon>
-
-              <lucide-icon name="alert-triangle"
-                           *ngIf="c.status==='RENEW'"
-                           class="text-yellow-500 inline" size="16">
-              </lucide-icon>
-
-              <lucide-icon name="x"
-                           *ngIf="c.status==='NOT_OBTAINED'"
-                           class="text-red-600 inline" size="16">
-              </lucide-icon>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </app-table-wrapper>
-  `
+  selector   : 'app-certification-table',
+  standalone : true,
+  imports    : [CommonModule, FormsModule, IconsModule],
+  templateUrl: './certification-table.component.html',
 })
 export class CertificationTableComponent {
-  @Input() data: Certification[] | null = [];
-  get rows() { return this.data ?? []; }
+
+  @Input() data: Certification[] = [];
+
+  /* ---------------- barre de recherche ---------------- */
+  query = '';
+
+  get filtered(): Certification[] {
+    const q = this.query.toLowerCase().trim();
+    return this.data
+      .filter(c =>
+        !q ||
+        c.name.toLowerCase().includes(q) ||
+        (c.validUntil ?? '').includes(q) ||
+        c.status.toLowerCase().includes(q)
+      )
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  /* helpers pour l’icône ------------------------------------------------- */
+  icon(s: CertStatus)  {
+    return s === 'VALID' ? 'check'
+         : s === 'RENEW' ? 'alert-triangle'
+         : /* NOT_OBTAINED */ 'x';
+  }
+
+  color(s: CertStatus) {
+    return s === 'VALID' ? 'text-emerald-600'
+         : s === 'RENEW' ? 'text-amber-500'
+         :                'text-rose-600';
+  }
 }

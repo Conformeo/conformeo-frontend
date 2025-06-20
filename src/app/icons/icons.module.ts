@@ -1,23 +1,19 @@
 import { NgModule } from '@angular/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 import {
   LucideAngularModule,
-  Check,
-  Clock,
-  AlertTriangle,
-  X,
+  LayoutDashboard, Briefcase, MapPin, Bell, Home, CheckCircle,
+  Check, Clock, X, AlertTriangle                //  👈  ajoutés
 } from 'lucide-angular';
 
-/**
- * Module partageant uniquement les icônes nécessaires à l’app.
- */
 @NgModule({
   imports: [
     LucideAngularModule.pick({
-      Check,
-      Clock,
-      AlertTriangle,
-      X,
+      LayoutDashboard, Briefcase, MapPin, Bell, Home, CheckCircle,
+      Check, Clock, X, AlertTriangle            //  👈  idem
     }),
+    MatSnackBarModule
   ],
   exports: [LucideAngularModule],
 })

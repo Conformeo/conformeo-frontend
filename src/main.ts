@@ -1,29 +1,26 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { importProvidersFrom }   from '@angular/core';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-  withInterceptors,
-} from '@angular/common/http';
 import { provideRouter }         from '@angular/router';
+import { provideHttpClient, withInterceptorsFromDi, withInterceptors } from '@angular/common/http';
 
-import { AppComponent }          from './app/app.component';
-import { routes as appRoutes }   from './app/app.routes';
-import { authInterceptor }       from './app/core/interceptors/auth.interceptor';
+import { AppComponent } from './app/app.component';
+import { routes as appRoutes } from './app/app.routes';
+import { authInterceptor } from './app/core/interceptors/auth.interceptor';
+import { loadingInterceptor } from './app/core/interceptors/loading.interceptor';
 
-import { IconsModule }           from './app/icons/icons.module';  // 👈 reste inchangé
+import { IconsModule } from './app/icons/icons.module';   // ✅
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(appRoutes),
 
-    /* Icônes (via le Module.pick) */
+    // met les icônes à disposition globalement
     importProvidersFrom(IconsModule),
 
-    /* HttpClient + intercepteurs */
     provideHttpClient(
       withInterceptorsFromDi(),
-      withInterceptors([authInterceptor]),
+      withInterceptors([authInterceptor, loadingInterceptor]),
     ),
   ],
 }).catch(err => console.error(err));
+

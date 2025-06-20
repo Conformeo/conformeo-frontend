@@ -1,29 +1,41 @@
-<h1 class="text-2xl font-semibold mb-4">Sécurité & certifications</h1>
+<h1 class="text-2xl font-semibold mb-6">Sécurité & certifications</h1>
 
-<div class="grid md:grid-cols-2 gap-6">
+<!-- ====== Extincteurs ====== -->
+<section class="mb-8">
+  <button class="btn-primary mb-4" (click)="onAddExt()">+ Ajouter un extincteur</button>
 
-  <!-- Extincteurs -->
-  <section>
-    <h2 class="font-medium mb-2">Extincteurs</h2>
+  <!-- Formulaire (modal-inline) -->
+  <app-extinguisher-form
+      *ngIf="editingExt"
+      [extinguisher]="editingExt"
+      (saved)="reload(); editingExt = null">
+  </app-extinguisher-form>
 
-    <app-search-input (searchChange)="extFilter = $event"></app-search-input>
+  <!-- Tableau -->
+  <ng-container *ngIf="exts$ | async as exts; else extSkel">
+    <app-extinguisher-table [data]="exts"></app-extinguisher-table>
+  </ng-container>
+  <ng-template #extSkel>
+    <app-skeleton height="8rem"></app-skeleton>
+  </ng-template>
+</section>
 
-    <ng-container *ngIf="extinguishers$ | async as exts; else extSkeleton">
-      <app-extinguisher-table [data]="applyFilter(exts, extFilter)"></app-extinguisher-table>
-    </ng-container>
-    <ng-template #extSkeleton><app-skeleton></app-skeleton></ng-template>
-  </section>
+<!-- ====== Certifications ====== -->
+<section>
+  <button class="btn-primary mb-4" (click)="onAddCert()">+ Ajouter une certification</button>
 
-  <!-- Certifications -->
-  <section>
-    <h2 class="font-medium mb-2">Certifications</h2>
+  <!-- Formulaire -->
+  <app-certification-form
+      *ngIf="editingCert"
+      [cert]="editingCert"
+      (saved)="reload(); editingCert = null">
+  </app-certification-form>
 
-    <app-search-input (searchChange)="certFilter = $event"></app-search-input>
-
-    <ng-container *ngIf="certifications$ | async as certs; else certSkeleton">
-      <app-certification-table [data]="applyFilter(certs, certFilter)"></app-certification-table>
-    </ng-container>
-    <ng-template #certSkeleton><app-skeleton></app-skeleton></ng-template>
-  </section>
-
-</div>
+  <!-- Tableau -->
+  <ng-container *ngIf="certs$ | async as certs; else certSkel">
+    <app-certification-table [data]="certs"></app-certification-table>
+  </ng-container>
+  <ng-template #certSkel>
+    <app-skeleton height="8rem"></app-skeleton>
+  </ng-template>
+</section>

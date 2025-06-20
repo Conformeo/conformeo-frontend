@@ -1,34 +1,45 @@
 import { Component } from '@angular/core';
-import { TitleService } from '../../services/title.service';   // chemin à ajuster
-import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import {
   RouterModule,
-  RouterLinkActive,
   RouterOutlet,
   RouterLink,
+  RouterLinkActive,
 } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { IconsModule }  from '../../../icons/icons.module';
+import { LucideAngularModule } from 'lucide-angular';
+
+import { TitleService }  from '../../services/title.service';
+import { LoaderService } from '../../services/loader.service';
+import { Observable }    from 'rxjs';
+import { GlobalLoaderComponent } from '../../../shared/loader/global-loader.component';
+import { IconsModule } from '../../../icons/icons.module';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
   imports: [
-    CommonModule,
-    RouterModule,
-    RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
-    IconsModule,
-  ],
+  CommonModule,
+  RouterModule,
+  RouterOutlet,
+  RouterLink,
+  RouterLinkActive,
+  IconsModule,             // ⬅️ remplace LucideAngularModule par IconsModule
+  GlobalLoaderComponent,
+],
+
   templateUrl: './app-shell.component.html',
-  styleUrl: './app-shell.component.scss',
+  styleUrl:   './app-shell.component.scss',
 })
 export class AppShellComponent {
-  title$: Observable<string>;
+  /** Flux pour le titre de page et l’état de chargement global */
+  title$!:   Observable<string>;
+  loading$!: Observable<boolean>;
 
-  constructor(private titleSvc: TitleService) {
-    this.title$ = this.titleSvc.title$;
+  constructor(
+    private titleSvc: TitleService,
+    private loader:   LoaderService,
+  ) {
+    this.title$   = this.titleSvc.title$;
+    this.loading$ = this.loader.loading$;
   }
-
 }
