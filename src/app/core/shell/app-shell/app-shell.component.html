@@ -1,35 +1,62 @@
-<!-- Header -->
-<header class="flex items-center justify-between px-4 h-14 shadow">
-  <h1 class="font-semibold">Conforméo</h1>
+<!-- Wrapper flex: sidebar + main -->
+<div class="flex h-screen bg-slate-50">
 
-  <!-- Burger (visible uniquement < md) -->
-  <button class="md:hidden" (click)="menuOpen = !menuOpen">
-    <lucide-icon name="menu" class="w-6 h-6"></lucide-icon>
-  </button>
-</header>
+  <!-- ===== Sidebar ===== -->
+  <aside class="w-60 shrink-0 bg-slate-900 text-slate-200 flex flex-col">
+    <!-- Logo -->
+    <div class="h-16 flex items-center px-6 text-xl font-bold">
+      <span class="text-white">Conforméo</span><span class="text-cyan-400"> BTP+</span>
+    </div>
 
-<!-- Layout principal -->
-<div class="flex">
+    <!-- Menu -->
+    <nav class="flex-1 overflow-y-auto py-2 space-y-1 text-sm">
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="bg-slate-800 text-white"
+        class="flex items-center px-6 py-2 hover:bg-slate-800 transition">
+        <lucide-icon name="layout-dashboard" class="mr-2" size="16"></lucide-icon>
+        Tableau de bord
+      </a>
 
-  <!-- Side-nav -->
-  <nav
-    class="bg-slate-100 w-56 p-4 space-y-2 transform transition-transform duration-200
-           fixed inset-y-14 left-0
-           md:static md:translate-x-0
-           "
-    [class.-translate-x-full]="!menuOpen">
+      <a routerLink="/company" routerLinkActive="bg-slate-800 text-white"
+         class="flex items-center px-6 py-2 hover:bg-slate-800 transition">
+        <lucide-icon name="briefcase" class="mr-2" size="16"></lucide-icon>
+        Entreprise
+      </a>
 
-    <a *ngFor="let l of links"
-       routerLinkActive="font-semibold bg-primary/10"
-       [routerLink]="l.path"
-       class="flex items-center gap-2 rounded px-3 py-2 hover:bg-primary/10">
-      <lucide-icon [name]="l.icon" class="w-4 h-4"></lucide-icon>
-      {{ l.label }}
-    </a>
-  </nav>
+      <!-- Ajoutez ici d’autres liens vers vos feature-modules -->
+      <a routerLink="/sites" routerLinkActive="bg-slate-800 text-white"
+         class="flex items-center px-6 py-2 hover:bg-slate-800 transition">
+        <lucide-icon name="map-pin" class="mr-2" size="16"></lucide-icon>
+        Chantiers
+      </a>
 
-  <!-- Contenu -->
-  <main class="flex-1 p-6 md:ml-56">
-    <router-outlet></router-outlet>
-  </main>
+      <a routerLink="/alerts" routerLinkActive="bg-slate-800 text-white"
+         class="flex items-center px-6 py-2 hover:bg-slate-800 transition">
+        <lucide-icon name="bell" class="mr-2" size="16"></lucide-icon>
+        Alertes
+      </a>
+
+      <!-- … -->
+    </nav>
+
+    <!-- Footer badge -->
+    <div class="py-3 text-center text-xs text-slate-400">© 2025 Conforméo</div>
+  </aside>
+
+  <!-- ===== Main column ===== -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Top bar -->
+    <header class="h-16 shrink-0 flex items-center justify-between px-6 shadow bg-white">
+      <h1 class="text-lg font-semibold">{{pageTitle | titlecase}}</h1>
+      <div class="w-8 h-8 rounded-full bg-slate-300"></div>
+    </header>
+
+    <!-- Routable content -->
+    <main class="flex-1 overflow-y-auto p-6">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
 </div>

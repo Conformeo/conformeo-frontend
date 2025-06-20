@@ -1,34 +1,47 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule }     from '@angular/common';
-import { Certification }       from '../../../../models/certification.model';
-import { TableWrapperComponent } from '../../../../shared/table-wrapper/table-wrapper.component';
+
+import { TableWrapperComponent }   from '../../../../shared/table-wrapper/table-wrapper.component';
+import { Certification }           from '../../../../models/certification.model';
+import { IconsModule }  from '../../../../icons/icons.module';
 
 @Component({
   selector: 'app-certification-table',
   standalone: true,
-  imports: [CommonModule, TableWrapperComponent],
+  imports: [
+    CommonModule,
+    TableWrapperComponent,
+    IconsModule
+  ],
   template: `
     <app-table-wrapper>
-      <table>
-        <thead>
-          <tr><th>Certification</th><th>Valide jusqu’au</th><th>Statut</th></tr>
+      <table class="w-full text-sm">
+        <thead class="bg-slate-100">
+          <tr>
+            <th>Certification</th>
+            <th>Valide jusqu’au</th>
+            <th class="text-center">Statut</th>
+          </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let c of data">
+          <tr *ngFor="let c of rows" class="border-b">
             <td>{{ c.name }}</td>
             <td>{{ c.validUntil }}</td>
-            <td>
-              <span [ngClass]="{
-                    'text-green-600' : c.status==='VALID',
-                    'text-yellow-600': c.status==='RENEW',
-                    'text-red-600'   : c.status==='NOT_OBTAINED'
-                  }">
-                {{
-                  c.status==='VALID'        ? 'OK' :
-                  c.status==='RENEW'        ? 'À renouveler' :
-                  'Manquante'
-                }}
-              </span>
+            <td class="text-center">
+              <lucide-icon name="check"
+                           *ngIf="c.status==='VALID'"
+                           class="text-green-600 inline" size="16">
+              </lucide-icon>
+
+              <lucide-icon name="alert-triangle"
+                           *ngIf="c.status==='RENEW'"
+                           class="text-yellow-500 inline" size="16">
+              </lucide-icon>
+
+              <lucide-icon name="x"
+                           *ngIf="c.status==='NOT_OBTAINED'"
+                           class="text-red-600 inline" size="16">
+              </lucide-icon>
             </td>
           </tr>
         </tbody>
@@ -38,6 +51,5 @@ import { TableWrapperComponent } from '../../../../shared/table-wrapper/table-wr
 })
 export class CertificationTableComponent {
   @Input() data: Certification[] | null = [];
-  get rows(): Certification[] { return this.data ?? []; }
-
+  get rows() { return this.data ?? []; }
 }

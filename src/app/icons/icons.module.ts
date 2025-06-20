@@ -1,16 +1,24 @@
 import { NgModule } from '@angular/core';
-import { LucideAngularModule,
-         Home, AlertTriangle, CheckCircle,
-         LayoutDashboard, BriefcaseBusiness, Building } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  Check,
+  Clock,
+  AlertTriangle,
+  X,
+} from 'lucide-angular';
 
+/**
+ * Module partageant uniquement les icônes nécessaires à l’app.
+ */
 @NgModule({
   imports: [
-    /** on “pick” une seule fois les icônes de l’app */
     LucideAngularModule.pick({
-        Home, AlertTriangle, CheckCircle,
-        LayoutDashboard, BriefcaseBusiness, Building
-    })
+      Check,
+      Clock,
+      AlertTriangle,
+      X,
+    }),
   ],
-  exports: [ LucideAngularModule ]
+  exports: [LucideAngularModule],
 })
 export class IconsModule {}

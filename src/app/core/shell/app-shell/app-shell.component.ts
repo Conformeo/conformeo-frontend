@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
+import {
+  RouterModule,
+  RouterLinkActive,
+  RouterOutlet,
+  RouterLink,
+} from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { LucideAngularModule } from 'lucide-angular';
+import { IconsModule }  from '../../../icons/icons.module';
 
 @Component({
   selector: 'app-shell',
@@ -9,21 +14,15 @@ import { LucideAngularModule } from 'lucide-angular';
   imports: [
     CommonModule,
     RouterModule,
-    LucideAngularModule       // ← rend disponible <lucide-icon>
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    IconsModule,
   ],
   templateUrl: './app-shell.component.html',
-  styleUrls: ['./app-shell.component.scss']
+  styleUrl: './app-shell.component.scss',
 })
 export class AppShellComponent {
-  /** ouverture/fermeture du burger en mode mobile */
-  menuOpen = false;
+    pageTitle = 'Conformeo';
 
-  /** liens du side-nav (icône = nom Lucide déjà « pické » dans IconsModule) */
-  links = [
-    { path: '/dashboard', label: 'Dashboard',  icon: 'layout-dashboard' },
-    { path: '/company',   label: 'Company',    icon: 'briefcase-business' },
-    { path: '/sites',     label: 'Sites',      icon: 'map-pin' },
-    { path: '/inspections', label: 'Inspections', icon: 'clipboard-check' },
-    // …
-  ];
 }
