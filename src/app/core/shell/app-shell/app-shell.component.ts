@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { TitleService } from '../../services/title.service';   // chemin à ajuster
+import { Observable } from 'rxjs';
 import {
   RouterModule,
   RouterLinkActive,
@@ -23,6 +25,10 @@ import { IconsModule }  from '../../../icons/icons.module';
   styleUrl: './app-shell.component.scss',
 })
 export class AppShellComponent {
-    pageTitle = 'Conformeo';
+  title$: Observable<string>;
+
+  constructor(private titleSvc: TitleService) {
+    this.title$ = this.titleSvc.title$;
+  }
 
 }

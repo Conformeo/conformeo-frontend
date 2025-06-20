@@ -43,3 +43,5 @@ Thumbs.db
 
 # Personal files
 .memo
+*storybook.log
+storybook-static
