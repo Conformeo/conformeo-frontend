@@ -12,6 +12,12 @@
   --color-danger:    #dc3545;
   /* … */
 }
+.btn-primary {
+  @apply inline-flex items-center gap-1 bg-cyan-600 text-white px-3 py-1.5 rounded
+         hover:bg-cyan-700 active:bg-cyan-800 transition;
+}
+
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+

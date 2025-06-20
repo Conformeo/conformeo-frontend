@@ -1,73 +1,64 @@
+// src/app/features/company/components/certification-form/certification-form.component.ts
 import {
-  Component, Input, Output, EventEmitter, OnInit, inject,
-}                     from '@angular/core';      // ← inject !
+  Component, Input, Output, EventEmitter, OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  FormBuilder, ReactiveFormsModule, Validators,
-}                     from '@angular/forms';
-import { MatSnackBar }  from '@angular/material/snack-bar';
+  ReactiveFormsModule, Validators,
+  NonNullableFormBuilder, FormGroup, FormControl,
+} from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IconsModule }  from '../../../../icons/icons.module';
 
-import { Certification }  from '../../../../models/certification.model';
+import { Certification } from '../../../../models/certification.model';
 import { CertificationApi } from '../../../../core/api/certification.api';
 
-/* ------------------------------------------------------------------ */
-/*  Types                                                             */
-/* ------------------------------------------------------------------ */
-
-export type CertStatus = 'VALID' | 'RENEW' | 'NOT_OBTAINED';
-
-type EditableCertKey = Extract<
-  keyof Certification,
-  'name' | 'validUntil' | 'status'
->;
-export type CertificationDto = Pick<Certification, EditableCertKey>;
-
-/* ------------------------------------------------------------------ */
-/*  Composant                                                         */
-/* ------------------------------------------------------------------ */
+/* Champs éditables --------------------------------------------------- */
+type EditableKey = Extract<keyof Certification, 'name' | 'validUntil'>;
+type CertificationDto = Pick<Certification, EditableKey>;
 
 @Component({
   selector   : 'app-certification-form',
   standalone : true,
   imports    : [CommonModule, ReactiveFormsModule, IconsModule],
   templateUrl: './certification-form.component.html',
-  styleUrls  : ['./certification-form.component.scss'],
 })
 export class CertificationFormComponent implements OnInit {
-  @Input()  cert?: Certification;
+
+  @Input()  certification?: Certification;
   @Output() saved = new EventEmitter<void>();
 
-  private readonly fb    = inject(FormBuilder);
-  private readonly api   = inject(CertificationApi);
-  private readonly snack = inject(MatSnackBar);
+  form!: FormGroup<{
+    name      : FormControl<string>;
+    validUntil: FormControl<string>;
+  }>;
 
-  form = this.fb.nonNullable.group({
-    name      : ['', Validators.required],
-    validUntil: ['', Validators.required],   // yyyy-MM-dd
-    status    : ['NOT_OBTAINED' as CertStatus],
-  });
+  constructor(
+    private fb   : NonNullableFormBuilder,
+    private api  : CertificationApi,
+    private snack: MatSnackBar,
+  ) { this.createForm(); }
 
-  ngOnInit(): void {
-    if (this.cert) this.form.patchValue(this.cert);
+  private createForm() {
+    this.form = this.fb.group({
+      name      : ['', Validators.required],
+      validUntil: ['', Validators.required],  // yyyy-MM-dd
+    });
   }
 
-  /* ---------------- helpers ------------------- */
-  cancel(): void { this.saved.emit(); }
-
-  isInvalid(ctrl: keyof CertificationDto): boolean {
-    const c = this.form.get(ctrl as string)!;
-    return c.invalid && (c.dirty || c.touched);
+  ngOnInit() {
+    if (this.certification) this.form.patchValue(this.certification);
   }
 
-  /* ---------------- submit -------------------- */
-  submit(): void {
+  cancel() { this.saved.emit(); }
+
+  submit() {
     if (this.form.invalid) return;
 
     const dto: CertificationDto = this.form.getRawValue();
 
-    const obs = this.cert
-      ? this.api.update(this.cert.id!, dto)
+    const obs = this.certification
+      ? this.api.update(this.certification.id!, dto)
       : this.api.create(dto);
 
     obs.subscribe({
@@ -75,13 +66,9 @@ export class CertificationFormComponent implements OnInit {
         this.snack.open('Certification enregistrée ✅', 'Fermer', { duration: 3000 });
         this.saved.emit();
       },
-      error: (err: unknown) => {
-        const msg = (err as { message?: string })?.message ?? 'Erreur serveur';
-        this.snack.open(msg, 'Fermer', {
-          duration  : 4000,
-          panelClass: ['bg-rose-600', 'text-white'],
-        });
-      },
+      error: (err: any) =>
+        this.snack.open(err?.message || 'Erreur serveur', 'Fermer',
+          { duration: 4000, panelClass: ['bg-rose-600', 'text-white'] }),
     });
   }
 }

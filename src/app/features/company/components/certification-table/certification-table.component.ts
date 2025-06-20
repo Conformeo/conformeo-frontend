@@ -1,11 +1,11 @@
-// features/company/components/certification-table/certification-table.component.ts
-import { Component, Input } from '@angular/core';
-import { CommonModule }     from '@angular/common';
-import { FormsModule }      from '@angular/forms';
-import { IconsModule }      from '../../../../icons/icons.module';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule }  from '@angular/common';
+import { FormsModule }   from '@angular/forms';
+import { IconsModule }   from '../../../../icons/icons.module';
+import { Certification } from '../../../../models/certification.model';
 
-import { Certification }    from '../../../../models/certification.model';
-import { CertStatus }       from '../../../../models/certification.model'; // ou votre enum
+/* mêmes statuts que pour Extincteurs */
+export type CertStatus = 'VALID' | 'RENEW' | 'NOT_OBTAINED';
 
 @Component({
   selector   : 'app-certification-table',
@@ -14,34 +14,39 @@ import { CertStatus }       from '../../../../models/certification.model'; // ou
   templateUrl: './certification-table.component.html',
 })
 export class CertificationTableComponent {
-
   @Input() data: Certification[] = [];
 
-  /* ---------------- barre de recherche ---------------- */
+  /** signale l’élément sélectionné pour édition */
+  @Output() edit = new EventEmitter<Certification>();
+
+  /* ---------------- recherche ---------------- */
   query = '';
 
   get filtered(): Certification[] {
-    const q = this.query.toLowerCase().trim();
+    const q = this.query.trim().toLowerCase();
     return this.data
       .filter(c =>
         !q ||
         c.name.toLowerCase().includes(q) ||
-        (c.validUntil ?? '').includes(q) ||
         c.status.toLowerCase().includes(q)
       )
       .sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  /* helpers pour l’icône ------------------------------------------------- */
+  /* ---------------- helpers UI ---------------- */
   icon(s: CertStatus)  {
-    return s === 'VALID' ? 'check'
+    return s === 'VALID' ? 'check-circle'
          : s === 'RENEW' ? 'alert-triangle'
-         : /* NOT_OBTAINED */ 'x';
+         : /* NOT_OBTAINED */ 'x-circle';
   }
-
   color(s: CertStatus) {
     return s === 'VALID' ? 'text-emerald-600'
          : s === 'RENEW' ? 'text-amber-500'
-         :                'text-rose-600';
+         : /* NOT_OBTAINED */ 'text-rose-600';
+  }
+
+  /* ---------------- événement édition ---------------- */
+  emitEdit(cert: Certification) {
+    this.edit.emit(cert);
   }
 }

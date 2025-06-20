@@ -1,7 +1,8 @@
 export interface FireExtinguisher {
-  id?: string;                 // ← ajouté
-  location:      string;
-  lastControl:   string;          //  ou Date
-  nextControl:   string;          //  ou Date
-  status:        'OK' | 'TO_SCHEDULE' | 'DUE';
+  id?: string;
+  location: string;
+  serialNumber: string;
+  lastControl: string;   // ISO yyyy-MM-dd
+  nextControl: string;   // ISO yyyy-MM-dd ou '—'
+  status: 'OK' | 'DUE' | 'TO_SCHEDULE';
 }

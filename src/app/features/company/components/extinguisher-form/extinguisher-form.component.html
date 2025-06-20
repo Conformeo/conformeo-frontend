@@ -1,48 +1,56 @@
-<p>extinguisher-form.component.ts works!</p>
-<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4 w-96">
+<!-- .../extinguisher-form.component.html -->
+<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4 w-full">
+  <!-- Location -->
+  <div>
+    <label class="block text-sm font-medium mb-1">Emplacement</label>
+    <input type="text"
+           formControlName="location"
+           class="input w-full"
+           [class.border-rose-600]="invalid('location')" />
 
-  <h2 class="text-lg font-semibold mb-2">
-    {{ extinguisher ? 'Modifier un extincteur' : 'Nouvel extincteur' }}
-  </h2>
+    <p *ngIf="errMsg('location')" class="text-rose-600 text-xs mt-1">
+      {{ errMsg('location') }}
+    </p>
+  </div>
 
-  <!-- Emplacement -->
-  <label class="block">
-    <span class="block text-sm font-medium">Emplacement</span>
-    <input type="text" formControlName="location"
-           class="mt-1 w-full rounded-lg border px-3 py-2" autofocus>
-  </label>
+  <!-- Serial -->
+  <div>
+    <label class="block text-sm font-medium mb-1">N° de série</label>
+    <input type="text"
+           formControlName="serialNumber"
+           class="input w-full"
+           placeholder="AB123456"
+           [class.border-rose-600]="invalid('serialNumber')" />
 
-  <!-- N° de série -->
-  <label class="block">
-    <span class="block text-sm font-medium">N° de série</span>
-    <input type="text" formControlName="serialNumber"
-           class="mt-1 w-full rounded-lg border px-3 py-2">
-  </label>
+    <p *ngIf="errMsg('serialNumber')" class="text-rose-600 text-xs mt-1">
+      {{ errMsg('serialNumber') }}
+    </p>
+  </div>
 
-  <div class="grid grid-cols-2 gap-4">
-    <!-- Dernier contrôle -->
-    <label>
-      <span class="block text-sm font-medium">Dernier contrôle</span>
+  <!-- Dates -->
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <label class="block text-sm font-medium mb-1">Dernier contrôle</label>
       <input type="date" formControlName="lastControl"
-             class="mt-1 w-full rounded-lg border px-3 py-2">
-    </label>
-
-    <!-- Prochain contrôle -->
-    <label>
-      <span class="block text-sm font-medium">Prochain contrôle</span>
+             class="input w-full"
+             [class.border-rose-600]="invalid('lastControl')" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-1">Prochain contrôle</label>
       <input type="date" formControlName="nextControl"
-             class="mt-1 w-full rounded-lg border px-3 py-2">
-    </label>
+             class="input w-full"
+             [class.border-rose-600]="invalid('nextControl')" />
+    </div>
   </div>
+  <p *ngIf="form.errors?.['dateOrder']" class="text-rose-600 text-xs mt-1">
+    La prochaine date doit être postérieure à la dernière.
+  </p>
 
-  <!-- Boutons -->
-  <div class="flex justify-end space-x-3 pt-2">
-    <button type="button" (click)="cancel()"
-            class="px-4 py-2 rounded-lg border">Annuler</button>
-    <button type="submit" [disabled]="form.invalid"
-            class="px-4 py-2 rounded-lg bg-cyan-600 text-white">
-      {{ extinguisher ? 'Enregistrer' : 'Créer' }}
-    </button>
+  <!-- Actions -->
+  <div class="flex justify-end gap-2 pt-4">
+    <button type="button" class="btn" (click)="cancel()">Annuler</button>
+    <button type="submit"
+            class="btn-primary"
+            [disabled]="form.invalid">Enregistrer</button>
   </div>
-
 </form>

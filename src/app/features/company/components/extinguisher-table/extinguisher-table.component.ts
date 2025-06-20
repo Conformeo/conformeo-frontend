@@ -1,4 +1,4 @@
-import { Component, Input }  from '@angular/core';
+import { Component, Input, Output, EventEmitter }  from '@angular/core';
 import { CommonModule }      from '@angular/common';
 import { FormsModule }       from '@angular/forms';
 import { IconsModule }       from '../../../../icons/icons.module';
@@ -15,6 +15,8 @@ type ExtStatus = FireExtinguisher['status'];   // ← derive du modèle
 export class ExtinguisherTableComponent {
 
   @Input({ required: true }) data: FireExtinguisher[] = [];
+  @Output() edit = new EventEmitter<FireExtinguisher>();
+
   query = '';
 
   get filtered(): FireExtinguisher[] {
@@ -28,6 +30,8 @@ export class ExtinguisherTableComponent {
       .slice()
       .sort((a, b) => a.location.localeCompare(b.location));
   }
+
+  emitEdit(e: FireExtinguisher) { this.edit.emit(e); }
 
   icon(s: ExtStatus) {
     switch (s) {
