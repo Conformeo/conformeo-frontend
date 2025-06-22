@@ -1,5 +1,4 @@
-// src/app/features/sites/components/site-filter/site-filter.component.ts
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,11 +8,15 @@ import { CommonModule } from '@angular/common';
   template: `
     <input
       type="text"
-      class="border rounded px-3 py-1 w-full"
       placeholder="Rechercher un site…"
-      (input)="searchChange.emit($any($event.target).value)" />
-  `
+      class="input input-sm w-full max-w-md mb-4"
+      (input)="onInput($event)"
+    />
+  `,
 })
 export class SiteFilterComponent {
   @Output() searchChange = new EventEmitter<string>();
+  onInput(e: Event) {
+    this.searchChange.emit((e.target as HTMLInputElement).value);
+  }
 }

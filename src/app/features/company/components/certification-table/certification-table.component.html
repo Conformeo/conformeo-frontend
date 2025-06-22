@@ -1,15 +1,14 @@
-<!-- ────────── Barre de recherche ────────── -->
+<!-- Barre de recherche -->
 <div>
   <input
     type="text"
     [(ngModel)]="query"
     placeholder="Rechercher (nom ou statut)…"
-    class="w-full mb-4 rounded-lg border border-slate-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-2
-              focus:ring-cyan-500"
+    class="w-full mb-4 rounded-lg border border-slate-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
   />
 </div>
 
-<!-- ────────── Tableau ────────── -->
+<!-- Tableau -->
 <table class="w-full text-sm border-collapse rounded-lg overflow-hidden">
   <thead class="bg-slate-100 text-slate-700 font-semibold uppercase">
     <tr>
@@ -19,7 +18,6 @@
       <th class="px-4 py-2 w-10"></th>
     </tr>
   </thead>
-
   <tbody *ngIf="filtered.length; else empty">
     <tr
       *ngFor="let c of filtered"
@@ -27,17 +25,15 @@
       class="border-t hover:bg-slate-50 cursor-pointer"
     >
       <td class="px-4 py-2">{{ c.name }}</td>
-      <td class="px-4 py-2">{{ c.validUntil | date:'yyyy-MM' }}</td>
-
-      <!-- icône statut (couleur / pictogramme identiques à Extincteurs) -->
+      <td class="px-4 py-2">
+        {{ isValidDate(c.validUntil) ? (c.validUntil | date:'yyyy-MM') : '—' }}
+      </td>
       <td class="px-4 py-2 text-center">
         <lucide-icon
           [name]="icon(c.status)"
           [class]="color(c.status) + ' w-5 h-5'"
         ></lucide-icon>
       </td>
-
-      <!-- petite icône ✏️ pour l’édition (au cas où) -->
       <td class="px-4 py-2 text-center">
         <button
           type="button"
@@ -51,7 +47,6 @@
   </tbody>
 </table>
 
-<!-- État vide -------------------------------------------------------------->
 <ng-template #empty>
   <div class="text-sm text-slate-400 text-center py-4">
     Aucune certification trouvée.

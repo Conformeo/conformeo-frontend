@@ -1,0 +1,39 @@
+<!-- src/app/features/sites/components/site-extinguisher-table/site-extinguisher-table.component.html -->
+<div class="mb-3">
+  <input
+    type="text"
+    [(ngModel)]="query"
+    placeholder="Rechercher un extincteur…"
+    class="input input-sm w-full max-w-xs border rounded px-3 py-1"
+  />
+</div>
+
+<table class="min-w-full border bg-white rounded-md shadow-sm">
+  <thead class="bg-slate-100 text-xs uppercase text-slate-500">
+    <tr>
+      <th class="px-3 py-2 text-left">Localisation</th>
+      <th class="px-3 py-2 text-center">Numéro de série</th>
+      <th class="px-3 py-2 text-center">Dernier contrôle</th>
+      <th class="px-3 py-2 text-center">Prochain contrôle</th>
+      <th class="px-3 py-2 text-center">Statut</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="filtered.length; else empty">
+    <tr *ngFor="let e of filtered" class="border-t hover:bg-slate-50 text-sm">
+      <td class="px-3 py-2">{{ e.location }}</td>
+      <td class="px-3 py-2 text-center">{{ e.serialNumber }}</td>
+      <td class="px-3 py-2 text-center">{{ e.lastControl | date:'yyyy-MM-dd' }}</td>
+      <td class="px-3 py-2 text-center">{{ e.nextControl | date:'yyyy-MM-dd' }}</td>
+      <td class="px-3 py-2 text-center">
+        <!-- Ajoute une icône si tu veux, style : -->
+        {{ e.status }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #empty>
+  <div class="text-sm text-slate-400 text-center py-4">
+    Aucun extincteur trouvé.
+  </div>
+</ng-template>

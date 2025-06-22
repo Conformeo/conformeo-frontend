@@ -1,1 +1,17 @@
-<p>sites-page works!</p>
+<h1 class="text-2xl font-semibold mb-4">Chantiers</h1>
+
+<button class="btn-primary mb-4" (click)="openForm()">Ajouter un site</button>
+
+<ng-container *ngIf="sites$ | async as sites; else loading">
+  <app-site-table [sites]="sites" [search]="search" (edit)="openForm($event)"></app-site-table>
+</ng-container>
+<ng-template #loading>
+  <app-skeleton height="10rem"></app-skeleton>
+</ng-template>
+
+<app-site-form
+  *ngIf="editingSite"
+  [site]="editingSite"
+  (saved)="onSiteSaved($event)"
+  (cancelled)="closeForm()">
+</app-site-form>

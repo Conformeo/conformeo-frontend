@@ -1,0 +1,14 @@
+<!-- src/app/features/sites/pages/site-detail-page/site-detail-page.component.html -->
+<ng-container *ngIf="site$ | async as site; else loading">
+  <div class="p-6 bg-white rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">Chantier : {{ site.name }}</h2>
+    <p><strong>Adresse :</strong> {{ site.address }}</p>
+    <p><strong>Ville :</strong> {{ site.city }}</p>
+    <p><strong>Code postal :</strong> {{ site.zipCode }}</p>
+    <p><strong>Score :</strong> {{ site.score ?? '-' }}</p>
+    <!-- Ajoute ici d'autres infos liées au chantier -->
+  </div>
+</ng-container>
+<ng-template #loading>
+  <div class="text-slate-400">Chargement du chantier…</div>
+</ng-template>

@@ -1,1 +1,25 @@
-<p>sidebar works!</p>
+<nav class="sidebar bg-slate-900 text-white h-full w-64 flex flex-col">
+  <div class="logo px-6 py-4 font-bold text-xl">Conforméo<span class="text-cyan-400">BTP+</span></div>
+  <ul class="flex flex-col gap-2 mt-6">
+    <li>
+      <a routerLink="/dashboard" routerLinkActive="active" class="flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded transition">
+        <span>📊</span> Tableau de bord
+      </a>
+    </li>
+    <li>
+      <a routerLink="/company" routerLinkActive="active" class="flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded transition">
+        <span>🏢</span> Entreprise
+      </a>
+    </li>
+    <li>
+      <a routerLink="/sites" routerLinkActive="active" class="flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded transition">
+        <span>📍</span> Chantiers
+      </a>
+    </li>
+    <li>
+      <a routerLink="/alerts" routerLinkActive="active" class="flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded transition">
+        <span>🔔</span> Alertes
+      </a>
+    </li>
+  </ul>
+</nav>

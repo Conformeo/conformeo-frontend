@@ -19,6 +19,8 @@ export class CertificationTableComponent {
   /** signale l’élément sélectionné pour édition */
   @Output() edit = new EventEmitter<Certification>();
 
+  
+
   /* ---------------- recherche ---------------- */
   query = '';
 
@@ -49,4 +51,9 @@ export class CertificationTableComponent {
   emitEdit(cert: Certification) {
     this.edit.emit(cert);
   }
+
+  isValidDate(val: any): boolean {
+    return !!val && !isNaN(Date.parse(val));
+  }
+
 }

@@ -1,0 +1,31 @@
+<!-- src/app/features/sites/components/site-insurance-table/site-insurance-table.component.html -->
+<div class="mb-3">
+  <input
+    type="text"
+    [(ngModel)]="query"
+    placeholder="Rechercher une assurance…"
+    class="input input-sm w-full max-w-xs border rounded px-3 py-1"
+  />
+</div>
+
+<table class="min-w-full border bg-white rounded-md shadow-sm">
+  <thead class="bg-slate-100 text-xs uppercase text-slate-500">
+    <tr>
+      <th class="px-3 py-2 text-left">Fournisseur</th>
+      <th class="px-3 py-2 text-center">Valide jusqu’au</th>
+      <th class="px-3 py-2 text-center">Type</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="filtered.length; else empty">
+    <tr *ngFor="let ins of filtered" class="border-t hover:bg-slate-50 text-sm">
+      <td class="px-3 py-2">{{ ins.provider }}</td>
+      <td class="px-3 py-2 text-center">{{ ins.validUntil | date:'yyyy-MM-dd' }}</td>
+      <td class="px-3 py-2 text-center">{{ ins.type }}</td>
+    </tr>
+  </tbody>
+</table>
+<ng-template #empty>
+  <div class="text-sm text-slate-400 text-center py-4">
+    Aucune assurance trouvée.
+  </div>
+</ng-template>

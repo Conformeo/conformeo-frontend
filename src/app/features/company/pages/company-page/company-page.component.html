@@ -1,4 +1,3 @@
-<!-- src/app/features/company/pages/company-page/company-page.component.html -->
 <h1 class="text-2xl font-semibold mb-6">Sécurité & certifications</h1>
 
 <div class="grid md:grid-cols-2 gap-10">
@@ -7,7 +6,7 @@
   <section>
     <div class="flex items-center justify-between mb-2">
       <h2 class="font-medium">Extincteurs</h2>
-      <button class="btn-primary" (click)="openExtForm()">+ Ajouter</button>
+      <button class="btn-primary" (click)="openExtForm()"> Ajouter</button>
     </div>
 
     <!-- liste -->
@@ -24,7 +23,7 @@
   <section>
     <div class="flex items-center justify-between mb-2">
       <h2 class="font-medium">Certifications</h2>
-      <button class="btn-primary" (click)="openCertForm()">+ Ajouter</button>
+      <button class="btn-primary" (click)="openCertForm()"> Ajouter</button>
     </div>
 
     <ng-container *ngIf="certs$ | async as certs; else certSkel">
@@ -35,23 +34,89 @@
       <app-skeleton height="8rem"></app-skeleton>
     </ng-template>
   </section>
+
+  <!-- ========================================================= Caméras -->
+  <section>
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="font-medium">Caméras</h2>
+      <button class="btn-primary" (click)="openCameraForm()"> Ajouter</button>
+    </div>
+    <ng-container *ngIf="cameras$ | async as cams; else camSkel">
+      <app-camera-table [data]="cams"
+                        (edit)="openCameraForm($event)"></app-camera-table>
+    </ng-container>
+    <ng-template #camSkel><app-skeleton height="8rem"></app-skeleton></ng-template>
+  </section>
+
+  <!-- =============================================== Trousse & DEA -->
+  <section>
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="font-medium">Trousse de secours & DEA</h2>
+      <button class="btn-primary" (click)="openKitForm()"> Ajouter</button>
+    </div>
+    <ng-container *ngIf="kits$ | async as kits; else kitSkel">
+      <app-kit-table [data]="kits"
+                     (edit)="openKitForm($event)"></app-kit-table>
+    </ng-container>
+    <ng-template #kitSkel><app-skeleton height="8rem"></app-skeleton></ng-template>
+  </section>
+
+  <!-- ========================================== Assurances & légales -->
+  <section>
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="font-medium">Assurances & légales</h2>
+      <button class="btn-primary" (click)="openInsuranceForm()"> Ajouter</button>
+    </div>
+    <ng-container *ngIf="insurances$ | async as ins; else insSkel">
+      <app-insurance-table [data]="ins"
+                            (edit)="openInsuranceForm($event)"></app-insurance-table>
+    </ng-container>
+    <ng-template #insSkel><app-skeleton height="8rem"></app-skeleton></ng-template>
+  </section>
 </div>
 
 <!-- -------------------------- Modaux ------------------------- -->
 <app-modal *ngIf="editingExt"
            title="Extincteur"
-           (closed)="editingExt = null">
+           (closed)="closeExtForm()">
   <app-extinguisher-form
         [extinguisher]="editingExt"
-        (saved)="reload(); editingExt = null">
+        (saved)="onSaved(); closeExtForm()">
   </app-extinguisher-form>
 </app-modal>
 
 <app-modal *ngIf="editingCert"
            title="Certification"
-           (closed)="editingCert = null">
+           (closed)="closeCertForm()">
   <app-certification-form
         [certification]="editingCert"
-        (saved)="reload(); editingCert = null">
+        (saved)="onSaved(); closeCertForm()">
   </app-certification-form>
+</app-modal>
+
+<app-modal *ngIf="editingCam"
+           title="Caméra"
+           (closed)="closeCameraForm()">
+  <app-camera-form
+        [camera]="editingCam"
+        (saved)="onSaved(); closeCameraForm()">
+  </app-camera-form>
+</app-modal>
+
+<app-modal *ngIf="editingKit"
+           title="Trousse de secours"
+           (closed)="closeKitForm()">
+  <app-kit-form
+        [kit]="editingKit"
+        (saved)="onSaved(); closeKitForm()">
+  </app-kit-form>
+</app-modal>
+
+<app-modal *ngIf="editingIns"
+           title="Assurance"
+           (closed)="closeInsuranceForm()">
+  <app-insurance-form
+        [insurance]="editingIns"
+        (saved)="onSaved(); closeInsuranceForm()">
+  </app-insurance-form>
 </app-modal>

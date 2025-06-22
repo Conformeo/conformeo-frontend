@@ -1,1 +1,28 @@
-<p>site-table works!</p>
+<!-- Barre de recherche intégrée possible ici aussi si tu veux -->
+<table class="min-w-full border bg-white rounded-md shadow-sm">
+  <thead class="bg-slate-100 text-xs uppercase text-slate-500">
+    <tr>
+      <th class="px-3 py-2 text-left">Nom</th>
+      <th class="px-3 py-2 text-left">Adresse</th>
+      <th class="px-3 py-2 text-left">Ville</th>
+      <th class="px-3 py-2 text-left">Code postal</th>
+      <th class="px-3 py-2 text-center">Score</th>
+      <th class="px-3 py-2 text-center"></th>
+    </tr>
+  </thead>
+  <tbody *ngIf="filtered.length; else empty">
+    <tr *ngFor="let site of filtered" class="border-t hover:bg-slate-50 text-sm">
+      <td class="px-3 py-2">{{ site.name }}</td>
+      <td class="px-3 py-2">{{ site.address }}</td>
+      <td class="px-3 py-2">{{ site.city }}</td>
+      <td class="px-3 py-2">{{ site.zipCode }}</td>
+      <td class="px-3 py-2 text-center">{{ site.score ?? '—' }}</td>
+      <td class="px-3 py-2 text-center">
+        <button class="btn btn-sm btn-outline" (click)="edit.emit(site)">✏️</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<ng-template #empty>
+  <div class="text-center text-slate-400 py-4">Aucun site trouvé.</div>
+</ng-template>

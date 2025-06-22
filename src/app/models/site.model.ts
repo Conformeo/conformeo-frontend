@@ -1,7 +1,8 @@
-// src/app/models/site.model.ts
 export interface Site {
   id: string;
   name: string;
   address: string;
-  score: number;          // 0-100
+  city: string;
+  zipCode: string;
+  score?: number | null;
 }
