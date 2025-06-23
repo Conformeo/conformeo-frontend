@@ -1,1 +1,25 @@
-<p>equipments-page works!</p>
+<!-- Bouton d'ajout -->
+<div class="flex items-center justify-between mb-4">
+  <h2 class="text-xl font-bold">Équipements</h2>
+  <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded" (click)="openForm()">
+    + Ajouter un équipement
+  </button>
+</div>
+
+<!-- Modal d'ajout/modif -->
+<app-modal *ngIf="editingEquipment"
+           title="{{ editingEquipment.id ? 'Modifier' : 'Ajouter' }} un équipement"
+           (closed)="closeForm()">
+  <app-equipment-form
+    [equipment]="editingEquipment"
+    (save)="onEquipmentSaved($event)"
+    (cancel)="closeForm()">
+  </app-equipment-form>
+</app-modal>
+
+<!-- Tableau -->
+<app-equipment-table
+  [equipments]="equipments"
+  (edit)="openForm($event)"
+  (delete)="onEquipmentDeleted($event)">
+</app-equipment-table>

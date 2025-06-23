@@ -1,0 +1,31 @@
+<form (ngSubmit)="onSubmit()" #form="ngForm" class="space-y-4 p-4 w-full max-w-md mx-auto">
+  <div>
+    <label class="block text-sm font-medium mb-1">Nom</label>
+    <input [(ngModel)]="equipment.name" name="name" required class="border rounded p-2 w-full focus:ring focus:border-blue-300"/>
+  </div>
+  <div>
+    <label class="block text-sm font-medium mb-1">Type</label>
+    <input [(ngModel)]="equipment.type" name="type" required class="border rounded p-2 w-full focus:ring focus:border-blue-300"/>
+  </div>
+  <div>
+    <label class="block text-sm font-medium mb-1">Numéro de série</label>
+    <input [(ngModel)]="equipment.serial" name="serial" class="border rounded p-2 w-full focus:ring focus:border-blue-300"/>
+  </div>
+  <div>
+    <label class="block text-sm font-medium mb-1">Status</label>
+    <select [(ngModel)]="equipment.status" name="status" class="border rounded p-2 w-full focus:ring focus:border-blue-300">
+      <option value="">—</option>
+      <option>En service</option>
+      <option>À contrôler</option>
+      <option>Hors service</option>
+    </select>
+  </div>
+  <div class="flex gap-3 pt-4 justify-end">
+    <button type="button" (click)="cancel.emit()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded">
+      Annuler
+    </button>
+    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold">
+      {{ equipment.id ? 'Enregistrer' : 'Créer' }}
+    </button>
+  </div>
+</form>

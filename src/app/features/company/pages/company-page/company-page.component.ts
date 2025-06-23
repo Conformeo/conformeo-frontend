@@ -21,14 +21,12 @@ import { KitFormComponent }            from '../../components/kit-form/kit-form.
 import { InsuranceTableComponent }      from '../../components/insurance-table/insurance-table.component';
 import { InsuranceFormComponent }      from '../../components/insurance-form/insurance-form.component';
 import { ModalComponent }               from '../../../../shared/modal/modal.component';
-import { SkeletonComponent }            from '../../../../shared/skeleton/skeleton/skeleton.component';
 
 @Component({
   selector   : 'app-company-page',
   standalone : true,
   imports    : [
     CommonModule,
-    SkeletonComponent,
     ExtinguisherTableComponent,
     CertificationTableComponent,
     CameraTableComponent,

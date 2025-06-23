@@ -1,0 +1,24 @@
+<form (ngSubmit)="onSubmit()" #form="ngForm" class="space-y-2">
+  <div>
+    <label>Nom</label>
+    <input [(ngModel)]="worker.lastName" name="lastName" required class="border rounded p-1 w-full"/>
+  </div>
+  <div>
+    <label>Prénom</label>
+    <input [(ngModel)]="worker.firstName" name="firstName" required class="border rounded p-1 w-full"/>
+  </div>
+  <div>
+    <label>Rôle</label>
+    <input [(ngModel)]="worker.role" name="role" required class="border rounded p-1 w-full"/>
+  </div>
+  <div>
+    <label>Téléphone</label>
+    <input [(ngModel)]="worker.phone" name="phone" class="border rounded p-1 w-full"/>
+  </div>
+  <div class="flex gap-2 mt-3">
+    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">
+      {{ worker.id ? 'Enregistrer' : 'Créer' }}
+    </button>
+    <button type="button" (click)="cancel.emit()" class="bg-gray-300 px-3 py-1 rounded">Annuler</button>
+  </div>
+</form>

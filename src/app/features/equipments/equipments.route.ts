@@ -1,15 +1,6 @@
 import { Routes } from '@angular/router';
-import { EquipmentsPageComponent } from './pages/equipments-page/equipments-page.component'
-import { authGuard } from '../../core/guards/auth.guard';
+import { EquipmentsPageComponent } from './pages/equipments-page/equipments-page.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: EquipmentsPageComponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', redirectTo: 'list', pathMatch: 'full' },
-
-    ]
-  }
+  { path: '', component: EquipmentsPageComponent }
 ];

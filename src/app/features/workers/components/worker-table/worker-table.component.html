@@ -1,1 +1,23 @@
-<p>worker-table works!</p>
+<table class="min-w-full table-auto">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Rôle</th>
+      <th>Téléphone</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let worker of workers">
+      <td>{{ worker.lastName }}</td>
+      <td>{{ worker.firstName }}</td>
+      <td>{{ worker.role }}</td>
+      <td>{{ worker.phone ?? '—' }}</td>
+      <td>
+        <button (click)="edit.emit(worker)">Modifier</button>
+        <button (click)="delete.emit(worker)">Supprimer</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

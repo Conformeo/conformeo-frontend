@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Equipment } from '../../../../models/equipment.model';
 
 @Component({
   selector: 'app-equipment-table',
-  imports: [],
   templateUrl: './equipment-table.component.html',
-  styleUrl: './equipment-table.component.scss'
+  standalone: true,
+  imports: [CommonModule],
 })
 export class EquipmentTableComponent {
-
+  @Input() equipments: Equipment[] = [];
+  @Output() edit = new EventEmitter<Equipment>();
+  @Output() delete = new EventEmitter<string>();
 }

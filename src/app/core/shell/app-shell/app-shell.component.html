@@ -36,6 +36,22 @@
         Chantiers
       </a>
 
+      <a routerLink="/equipments"
+         routerLinkActive="bg-slate-800 text-white"
+         [routerLinkActiveOptions]="{ exact: true }"
+         class="flex items-center px-6 py-2 hover:bg-slate-800 transition">
+        <lucide-icon name="map-pin" class="mr-2" size="16"></lucide-icon>
+        Équipements
+      </a>
+
+      <a routerLink="/workers"
+         routerLinkActive="bg-slate-800 text-white"
+         [routerLinkActiveOptions]="{ exact: true }"
+         class="flex items-center px-6 py-2 hover:bg-slate-800 transition">
+        <lucide-icon name="map-pin" class="mr-2" size="16"></lucide-icon>
+        Ouvriers
+      </a>
+
       <a routerLink="/alerts"
          routerLinkActive="bg-slate-800 text-white"
          [routerLinkActiveOptions]="{ exact: true }"

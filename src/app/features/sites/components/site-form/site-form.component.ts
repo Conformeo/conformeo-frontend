@@ -1,43 +1,25 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Site } from '../../../../models/site.model';
 
 @Component({
   selector: 'app-site-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './site-form.component.html',
+  imports: [CommonModule, FormsModule],
 })
-export class SiteFormComponent implements OnChanges {
-  @Input() site?: Site;
-  @Output() saved = new EventEmitter<Site>();
-  @Output() cancelled = new EventEmitter<void>();
+export class SiteFormComponent implements OnInit {
+  @Input() site: Site = { id: '', name: '', address: '', city: '', zipCode: '', score: 0 };
+  @Output() save = new EventEmitter<Site>();
+  @Output() cancel = new EventEmitter<void>();
 
-  form: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      address: ['', Validators.required],
-      city: ['', Validators.required],
-      zipCode: ['', Validators.required],
-      score: [null]
-    });
+  ngOnInit() {
+    // Pour l’édition, il faut cloner l’objet pour éviter de modifier la liste en live
+    this.site = { ...this.site };
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['site'] && this.site) {
-      this.form.patchValue(this.site);
-    } else if (changes['site'] && !this.site) {
-      this.form.reset();
-    }
-  }
-
-  submit() {
-    if (this.form.valid) {
-      // On propage l’id s’il existe, sinon le back l’ajoutera
-      this.saved.emit({ ...this.site, ...this.form.getRawValue() });
-    }
+  onSubmit() {
+    this.save.emit(this.site);
   }
 }

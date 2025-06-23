@@ -2,7 +2,8 @@ export interface Worker {
   id: string;
   lastName: string;
   firstName: string;
-  qualification: string;
-  hireDate: string; // ou Date
-  active: boolean;
+  role: string;
+  phone?: string;
+  email?: string;
+  siteId?: string; // Optionnel : rattachement à un chantier (site)
 }

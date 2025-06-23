@@ -1,1 +1,40 @@
-<p>workers-page works!</p>
+<div class="flex items-center justify-between mb-4">
+  <h2 class="text-xl font-bold">Ouvriers</h2>
+  <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded" (click)="openForm()">
+    + Ajouter un ouvrier
+  </button>
+</div>
+
+<!-- Modal formulaire ouvrier -->
+<app-modal *ngIf="editingWorker"
+           title="{{ editingWorker?.id ? 'Modifier' : 'Ajouter' }} un ouvrier"
+           (closed)="closeForm()">
+  <app-worker-form
+    [worker]="editingWorker ?? { id: '', firstName: '', lastName: '', role: '' }"
+    (save)="onWorkerSaved($event)"
+    (cancel)="closeForm()">
+  </app-worker-form>
+</app-modal>
+
+<app-modal *ngIf="workerToDelete"
+           title="Supprimer cet ouvrier ?"
+           (closed)="cancelDeleteWorker()">
+  <div class="space-y-4 text-center">
+    <p class="text-lg">Confirmer la suppression de <b>{{ workerToDelete?.firstName }} {{ workerToDelete?.lastName }}</b> ?</p>
+    <div class="flex justify-center gap-4 pt-4">
+      <button (click)="confirmDeleteWorker()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold">
+        Oui, supprimer
+      </button>
+      <button (click)="cancelDeleteWorker()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded">
+        Annuler
+      </button>
+    </div>
+  </div>
+</app-modal>
+
+<app-worker-table
+  [workers]="workers"
+  (edit)="openForm($event)"
+  (delete)="openDeleteWorker($event)">
+</app-worker-table>
+

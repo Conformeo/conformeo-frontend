@@ -4,5 +4,5 @@ export interface Site {
   address: string;
   city: string;
   zipCode: string;
-  score?: number | null;
+  score?: number;
 }

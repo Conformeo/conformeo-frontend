@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SkeletonComponent } from './skeleton.component';
+import { WorkerFormComponent } from './worker-form.component';
 
-describe('SkeletonComponent', () => {
-  let component: SkeletonComponent;
-  let fixture: ComponentFixture<SkeletonComponent>;
+describe('WorkerFormComponent', () => {
+  let component: WorkerFormComponent;
+  let fixture: ComponentFixture<WorkerFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkeletonComponent]
+      imports: [WorkerFormComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SkeletonComponent);
+    fixture = TestBed.createComponent(WorkerFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,34 +1,28 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4 p-4 bg-white rounded-md shadow-md">
+<form (ngSubmit)="onSubmit()" #form="ngForm" class="space-y-2">
   <div>
-    <label class="block font-medium mb-1">Nom du site</label>
-    <input type="text" class="input input-bordered w-full" formControlName="name">
-    <div class="text-xs text-rose-600" *ngIf="form.controls['name'].invalid && form.controls['name'].touched">
-      Le nom est requis.
-    </div>
+    <label>Nom du chantier</label>
+    <input [(ngModel)]="site.name" name="name" required class="border rounded p-1 w-full"/>
   </div>
   <div>
-    <label class="block font-medium mb-1">Adresse</label>
-    <input type="text" class="input input-bordered w-full" formControlName="address">
-    <div class="text-xs text-rose-600" *ngIf="form.controls['address'].invalid && form.controls['address'].touched">
-      L'adresse est requise.
-    </div>
-  </div>
-  <div class="flex gap-2">
-    <div class="flex-1">
-      <label class="block font-medium mb-1">Ville</label>
-      <input type="text" class="input input-bordered w-full" formControlName="city">
-    </div>
-    <div class="flex-1">
-      <label class="block font-medium mb-1">Code Postal</label>
-      <input type="text" class="input input-bordered w-full" formControlName="zipCode">
-    </div>
+    <label>Adresse</label>
+    <input [(ngModel)]="site.address" name="address" required class="border rounded p-1 w-full"/>
   </div>
   <div>
-    <label class="block font-medium mb-1">Score (optionnel)</label>
-    <input type="number" class="input input-bordered w-full" formControlName="score">
+    <label>Ville</label>
+    <input [(ngModel)]="site.city" name="city" required class="border rounded p-1 w-full"/>
   </div>
-  <div class="flex justify-end gap-2 mt-4">
-    <button type="button" class="btn btn-outline" (click)="cancelled.emit()">Annuler</button>
-    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Enregistrer</button>
+  <div>
+    <label>Code postal</label>
+    <input [(ngModel)]="site.zipCode" name="zipCode" required class="border rounded p-1 w-full"/>
+  </div>
+  <div>
+    <label>Score conformité</label>
+    <input type="number" [(ngModel)]="site.score" name="score" min="0" max="100" class="border rounded p-1 w-full"/>
+  </div>
+  <div class="flex gap-2 mt-3">
+    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">
+      {{ site.id ? 'Enregistrer' : 'Créer' }}
+    </button>
+    <button type="button" (click)="cancel.emit()" class="bg-gray-300 px-3 py-1 rounded">Annuler</button>
   </div>
 </form>

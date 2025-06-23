@@ -2,80 +2,78 @@
 
 <div class="grid md:grid-cols-2 gap-10">
 
-  <!-- ========================================================= Extincteurs -->
+  <!-- Extincteurs -->
   <section>
     <div class="flex items-center justify-between mb-2">
       <h2 class="font-medium">Extincteurs</h2>
       <button class="btn-primary" (click)="openExtForm()"> Ajouter</button>
     </div>
-
-    <!-- liste -->
-    <ng-container *ngIf="exts$ | async as exts; else extSkel">
-      <app-extinguisher-table [data]="exts"
-                              (edit)="openExtForm($event)"></app-extinguisher-table>
+    <ng-container *ngIf="exts$ | async as exts; else extLoading">
+      <app-extinguisher-table [data]="exts" (edit)="openExtForm($event)"></app-extinguisher-table>
     </ng-container>
-    <ng-template #extSkel>
-      <app-skeleton height="8rem"></app-skeleton>
+    <ng-template #extLoading>
+      <div class="p-4 text-center text-gray-400">Chargement des extincteurs...</div>
     </ng-template>
   </section>
 
-  <!-- ====================================================== Certifications -->
+  <!-- Certifications -->
   <section>
     <div class="flex items-center justify-between mb-2">
       <h2 class="font-medium">Certifications</h2>
       <button class="btn-primary" (click)="openCertForm()"> Ajouter</button>
     </div>
-
-    <ng-container *ngIf="certs$ | async as certs; else certSkel">
-      <app-certification-table [data]="certs"
-                               (edit)="openCertForm($event)"></app-certification-table>
+    <ng-container *ngIf="certs$ | async as certs; else certLoading">
+      <app-certification-table [data]="certs" (edit)="openCertForm($event)"></app-certification-table>
     </ng-container>
-    <ng-template #certSkel>
-      <app-skeleton height="8rem"></app-skeleton>
+    <ng-template #certLoading>
+      <div class="p-4 text-center text-gray-400">Chargement des certifications...</div>
     </ng-template>
   </section>
 
-  <!-- ========================================================= Caméras -->
+  <!-- Caméras -->
   <section>
     <div class="flex items-center justify-between mb-2">
       <h2 class="font-medium">Caméras</h2>
       <button class="btn-primary" (click)="openCameraForm()"> Ajouter</button>
     </div>
-    <ng-container *ngIf="cameras$ | async as cams; else camSkel">
-      <app-camera-table [data]="cams"
-                        (edit)="openCameraForm($event)"></app-camera-table>
+    <ng-container *ngIf="cameras$ | async as cams; else camLoading">
+      <app-camera-table [data]="cams" (edit)="openCameraForm($event)"></app-camera-table>
     </ng-container>
-    <ng-template #camSkel><app-skeleton height="8rem"></app-skeleton></ng-template>
+    <ng-template #camLoading>
+      <div class="p-4 text-center text-gray-400">Chargement des caméras...</div>
+    </ng-template>
   </section>
 
-  <!-- =============================================== Trousse & DEA -->
+  <!-- Trousse & DEA -->
   <section>
     <div class="flex items-center justify-between mb-2">
       <h2 class="font-medium">Trousse de secours & DEA</h2>
       <button class="btn-primary" (click)="openKitForm()"> Ajouter</button>
     </div>
-    <ng-container *ngIf="kits$ | async as kits; else kitSkel">
-      <app-kit-table [data]="kits"
-                     (edit)="openKitForm($event)"></app-kit-table>
+    <ng-container *ngIf="kits$ | async as kits; else kitLoading">
+      <app-kit-table [data]="kits" (edit)="openKitForm($event)"></app-kit-table>
     </ng-container>
-    <ng-template #kitSkel><app-skeleton height="8rem"></app-skeleton></ng-template>
+    <ng-template #kitLoading>
+      <div class="p-4 text-center text-gray-400">Chargement des trousses & DEA...</div>
+    </ng-template>
   </section>
 
-  <!-- ========================================== Assurances & légales -->
+  <!-- Assurances & légales -->
   <section>
     <div class="flex items-center justify-between mb-2">
       <h2 class="font-medium">Assurances & légales</h2>
       <button class="btn-primary" (click)="openInsuranceForm()"> Ajouter</button>
     </div>
-    <ng-container *ngIf="insurances$ | async as ins; else insSkel">
-      <app-insurance-table [data]="ins"
-                            (edit)="openInsuranceForm($event)"></app-insurance-table>
+    <ng-container *ngIf="insurances$ | async as ins; else insLoading">
+      <app-insurance-table [data]="ins" (edit)="openInsuranceForm($event)"></app-insurance-table>
     </ng-container>
-    <ng-template #insSkel><app-skeleton height="8rem"></app-skeleton></ng-template>
+    <ng-template #insLoading>
+      <div class="p-4 text-center text-gray-400">Chargement des assurances...</div>
+    </ng-template>
   </section>
 </div>
 
-<!-- -------------------------- Modaux ------------------------- -->
+<!-- Modaux -->
 <app-modal *ngIf="editingExt"
            title="Extincteur"
            (closed)="closeExtForm()">
