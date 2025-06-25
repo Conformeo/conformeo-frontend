@@ -1,16 +1,44 @@
-<h2 class="text-xl font-bold mb-4">Chantiers</h2>
-<button (click)="openForm()" class="bg-green-600 text-white px-3 py-1 rounded mb-2">Ajouter un chantier</button>
+<div class="flex items-center justify-between mb-4">
+  <h2 class="text-xl font-bold">Chantiers</h2>
+  <button
+    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded"
+    (click)="openForm()">
+    + Ajouter un chantier
+  </button>
+</div>
 
-<app-site-form
-  *ngIf="editingSite"
-  [site]="editingSite"
-  (save)="onSiteSaved($event)"
-  (cancel)="closeForm()">
-</app-site-form>
+<!-- Modal Ajout/Édition chantier -->
+<app-modal *ngIf="editingSite"
+           [title]="editingSite.id ? 'Modifier' : 'Ajouter' + ' un chantier'"
+           (closed)="closeForm()">
+  <app-site-form
+    *ngIf="editingSite"
+    [site]="editingSite"
+    (save)="onSiteSaved($event)"
+    (cancel)="closeForm()">
+  </app-site-form>
+</app-modal>
+
+
+<!-- Modal Confirmation Suppression -->
+<app-modal *ngIf="siteToDelete"
+           title="Supprimer ce chantier ?"
+           (closed)="cancelDeleteSite()">
+  <div class="space-y-4 text-center">
+    <p class="text-lg">Confirmer la suppression de <b>{{ siteToDelete.name }}</b> ?</p>
+    <div class="flex justify-center gap-4 pt-4">
+      <button (click)="confirmDeleteSite()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold">
+        Oui, supprimer
+      </button>
+      <button (click)="cancelDeleteSite()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded">
+        Annuler
+      </button>
+    </div>
+  </div>
+</app-modal>
 
 <app-site-table
-  *ngIf="!editingSite"
   [sites]="sites"
   (edit)="openForm($event)"
-  (delete)="onSiteDeleted($event)">
+  (delete)="openDeleteSite($event)">
 </app-site-table>

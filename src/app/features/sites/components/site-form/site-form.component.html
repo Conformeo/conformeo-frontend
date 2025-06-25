@@ -1,28 +1,35 @@
-<form (ngSubmit)="onSubmit()" #form="ngForm" class="space-y-2">
+<form (ngSubmit)="onSubmit()" #form="ngForm" class="space-y-4 w-full max-w-md mx-auto">
   <div>
-    <label>Nom du chantier</label>
-    <input [(ngModel)]="site.name" name="name" required class="border rounded p-1 w-full"/>
+    <label class="block font-semibold mb-1">Nom du chantier</label>
+    <input [(ngModel)]="site.name" name="name" required class="input-primary" placeholder="Ex : Chantier lycée Victor Hugo" />
   </div>
   <div>
-    <label>Adresse</label>
-    <input [(ngModel)]="site.address" name="address" required class="border rounded p-1 w-full"/>
+    <label class="block font-semibold mb-1">Adresse</label>
+    <input [(ngModel)]="site.address" name="address" required class="input-primary" placeholder="Ex : 8 rue de la Paix" />
+  </div>
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <label class="block font-semibold mb-1">Ville</label>
+      <input [(ngModel)]="site.city" name="city" required class="input-primary" placeholder="Ex : Chartres" />
+    </div>
+    <div>
+      <label class="block font-semibold mb-1">Code postal</label>
+      <input [(ngModel)]="site.zipCode" name="zipCode" required class="input-primary" placeholder="28000" />
+    </div>
   </div>
   <div>
-    <label>Ville</label>
-    <input [(ngModel)]="site.city" name="city" required class="border rounded p-1 w-full"/>
+    <label class="block font-semibold mb-1">Score</label>
+    <input type="number" min="0" max="100" [(ngModel)]="site.score" name="score" class="input-primary" placeholder="Score conformité" />
   </div>
-  <div>
-    <label>Code postal</label>
-    <input [(ngModel)]="site.zipCode" name="zipCode" required class="border rounded p-1 w-full"/>
-  </div>
-  <div>
-    <label>Score conformité</label>
-    <input type="number" [(ngModel)]="site.score" name="score" min="0" max="100" class="border rounded p-1 w-full"/>
-  </div>
-  <div class="flex gap-2 mt-3">
-    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">
+  <div class="flex gap-2 justify-end pt-2">
+    <button type="submit"
+            [disabled]="form.invalid"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold">
       {{ site.id ? 'Enregistrer' : 'Créer' }}
     </button>
-    <button type="button" (click)="cancel.emit()" class="bg-gray-300 px-3 py-1 rounded">Annuler</button>
+    <button type="button" (click)="cancel.emit()"
+            class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded">
+      Annuler
+    </button>
   </div>
 </form>

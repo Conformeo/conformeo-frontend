@@ -1,6 +1,6 @@
 export interface Insurance {
   id: string;
-  type: 'RC_PRO' | 'DECENNALE';
+  type: string;
   provider: string;
-  validUntil: string;   // ISO date yyyy-MM-dd
+  validUntil: string;
 }

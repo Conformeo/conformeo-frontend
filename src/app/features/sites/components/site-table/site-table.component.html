@@ -1,28 +1,43 @@
-<table class="min-w-full table-auto">
+<table class="min-w-full table-auto border-separate [border-spacing:0] rounded-xl overflow-hidden shadow">
   <thead>
-    <tr>
-      <th>Nom du chantier</th>
-      <th>Adresse</th>
-      <th>Ville</th>
-      <th>Code postal</th>
-      <th>Score</th>
-      <th>Actions</th>
+    <tr class="bg-gray-50">
+      <th class="px-4 py-3 text-left text-xs font-bold text-gray-700">Nom du chantier</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-gray-700">Adresse</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-gray-700">Ville</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-gray-700">Code postal</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-gray-700">Score</th>
+      <th class="px-4 py-3 text-center text-xs font-bold text-gray-700">Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let site of sites">
-      <td>
-        <a [routerLink]="['/sites', site.id]" class="text-blue-600 underline">
+    <tr *ngFor="let site of sites; let odd = odd"
+        [class.bg-gray-50]="odd"
+        class="transition hover:bg-green-50">
+      <!-- 👉 Nom du chantier cliquable -->
+      <td class="font-semibold px-4 py-2">
+        <a [routerLink]="['/sites', site.id]" class="text-blue-700 hover:underline hover:text-green-600 transition font-bold">
           {{ site.name }}
         </a>
       </td>
-      <td>{{ site.address }}</td>
-      <td>{{ site.city }}</td>
-      <td>{{ site.zipCode }}</td>
-      <td>{{ site.score ?? '—' }}</td>
-      <td>
-        <button (click)="edit.emit(site)">Modifier</button>
-        <button (click)="delete.emit(site.id)">Supprimer</button>
+      <td class="px-4 py-2">{{ site.address }}</td>
+      <td class="px-4 py-2">{{ site.city }}</td>
+      <td class="px-4 py-2">{{ site.zipCode }}</td>
+      <td class="px-4 py-2">
+        <span *ngIf="site.score !== undefined" 
+              class="px-2 py-1 rounded bg-green-100 text-green-800 font-semibold text-xs">
+          {{ site.score }} %
+        </span>
+        <span *ngIf="site.score === undefined || site.score === null">—</span>
+      </td>
+      <td class="px-4 py-2 flex gap-2">
+        <button class="border border-blue-600 text-blue-600 rounded px-3 py-1 hover:bg-blue-50"
+                (click)="edit.emit(site)">
+          Modifier
+        </button>
+        <button class="border border-red-500 text-red-600 rounded px-3 py-1 hover:bg-red-50"
+                (click)="delete.emit(site)">
+          Supprimer
+        </button>
       </td>
     </tr>
   </tbody>

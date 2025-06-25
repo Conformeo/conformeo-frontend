@@ -1,45 +1,38 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IconsModule }  from '../../icons/icons.module';
 
 @Component({
-  selector   : 'app-modal',
-  standalone : true,
-  imports    : [CommonModule, IconsModule],
+  selector: 'app-modal',
+  standalone: true,
   template: `
-    <!-- Backdrop -->
-    <div class="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
-         (click)="closed.emit()"></div>
-
-    <!-- Card -->
-    <div
-      class="fixed inset-0 flex items-start justify-center z-50"
-      style="animation: fadeIn .2s ease-out"
-    >
-      <div
-        class="mt-24 w-full max-w-lg bg-white rounded-lg shadow-xl border"
-        (click)="$event.stopPropagation()"
-      >
-        <!-- Header -->
-        <header class="flex items-center justify-between px-6 py-3 border-b">
-          <h3 class="font-semibold text-lg">{{ title }}</h3>
-          <button (click)="closed.emit()">
-            <lucide-icon name="x" size="20"></lucide-icon>
-          </button>
-        </header>
-
-        <!-- Content -->
-        <section class="p-6">
-          <ng-content></ng-content>
-        </section>
-      </div>
+  <div class="modal-backdrop" (click)="close()"></div>
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h2 class="modal-title">{{ title }}</h2>
+      <button class="modal-close" (click)="close()">&times;</button>
     </div>
+    <div class="modal-body">
+      <ng-content></ng-content>
+    </div>
+  </div>
   `,
-  styles: [
-    `@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1}}`
-  ]
+  styles: [`
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.18); z-index: 40;
+    }
+    .modal-panel {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      background: white; padding: 2rem; border-radius: 1rem;
+      min-width: 320px; max-width: 98vw; z-index: 50; box-shadow: 0 8px 40px #0002;
+    }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .modal-title { font-size: 1.1rem; font-weight: 600; }
+    .modal-close { border: none; background: none; font-size: 2rem; cursor: pointer; line-height: 1; }
+    .modal-body { max-height: 70vh; overflow: auto; }
+  `]
 })
 export class ModalComponent {
-  @Input()  title = '';
+  @Input() title = '';
   @Output() closed = new EventEmitter<void>();
+  close() { this.closed.emit(); }
 }

@@ -1,19 +1,14 @@
-// src/app/features/company/components/camera-form/camera-form.component.ts
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators, FormGroup, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IconsModule } from '../../../../icons/icons.module';
 import { Camera } from '../../../../models/camera.model';
 import { CameraApi } from '../../../../core/api/camera.api';
 
-type EditableKey = Extract<keyof Camera, 'label' | 'location' | 'lastCheck' | 'zoneCovered' | 'photoUrl'>;
-type CameraDto = Pick<Camera, EditableKey>;
-
-@Component({  
+@Component({
   selector: 'app-camera-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IconsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './camera-form.component.html',
   styleUrls: ['./camera-form.component.scss'],
 })
@@ -25,6 +20,8 @@ export class CameraFormComponent implements OnInit {
     label: FormControl<string>;
     location: FormControl<string>;
     lastCheck: FormControl<string>;
+    nextCheck: FormControl<string>;
+    status: FormControl<'OK' | 'KO'>;
     zoneCovered: FormControl<string>;
     photoUrl: FormControl<string>;
   }>;
@@ -35,42 +32,38 @@ export class CameraFormComponent implements OnInit {
     private snack: MatSnackBar
   ) {
     this.form = this.fb.group({
-      label: ['', Validators.required],
-      location: ['', Validators.required],
-      lastCheck: ['', Validators.required],
-      zoneCovered: ['', Validators.required],
-      photoUrl: [''],
+      label:        this.fb.control('', Validators.required),
+      location:     this.fb.control('', Validators.required),
+      lastCheck:    this.fb.control('', Validators.required),
+      nextCheck:    this.fb.control('', Validators.required),
+      status:       this.fb.control<'OK'|'KO'>('OK', Validators.required),
+      zoneCovered:  this.fb.control(''),
+      photoUrl:     this.fb.control(''),
     });
   }
 
   ngOnInit() {
-    if (this.camera) {
-      this.form.patchValue(this.camera as any);
-    }
+    if (this.camera) this.form.patchValue(this.camera as any);
   }
 
-  cancel() {
-    this.saved.emit();
-  }
+  cancel() { this.saved.emit(); }
 
   submit() {
     if (this.form.invalid) return;
-    const dto: CameraDto = this.form.getRawValue();
-    const obs = this.camera
-      ? this.api.update(this.camera.id!, dto)
-      : this.api.create(dto);
-    obs.subscribe({
+    const value = this.form.getRawValue();
+    const cam: Camera = {
+      id: this.camera?.id ?? Math.random().toString(36).slice(2,9),
+      ...value
+    };
+    const req$ = this.camera
+      ? this.api.update(cam.id, cam)
+      : this.api.create(cam);
+    req$.subscribe({
       next: () => {
-        this.snack.open('Caméra enregistrée ✅', 'Fermer', { duration: 3000 });
+        this.snack.open('Caméra enregistrée ✅', '', { duration: 2000 });
         this.saved.emit();
       },
-      error: (err: any) => {
-        this.snack.open(
-          err?.message || 'Erreur serveur',
-          'Fermer',
-          { duration: 4000, panelClass: ['bg-rose-600', 'text-white'] }
-        );
-      }
+      error: err => this.snack.open(err?.message || 'Erreur serveur', '', { duration: 3000 }),
     });
   }
 }

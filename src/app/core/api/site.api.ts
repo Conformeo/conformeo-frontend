@@ -5,7 +5,7 @@ import { Site } from '../../models/site.model';
 
 @Injectable({ providedIn: 'root' })
 export class SiteApi {
-  private baseUrl = '/api/sites';
+  private baseUrl = '/api/sites/';
 
   constructor(private http: HttpClient) {}
 
@@ -18,6 +18,6 @@ export class SiteApi {
   }
 
   update(id: string, dto: Partial<Site>): Observable<Site> {
-    return this.http.put<Site>(`${this.baseUrl}/${id}`, dto);
+    return this.http.put<Site>(`${this.baseUrl}${id}`, dto);
   }
 }

@@ -10,11 +10,12 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
 })
 export class WorkerFormComponent implements OnInit {
-  @Input() worker: Worker = { id: '', lastName: '', firstName: '', role: '' };
+  @Input() worker!: Worker;
   @Output() save = new EventEmitter<Worker>();
   @Output() cancel = new EventEmitter<void>();
 
   ngOnInit() {
+    // Pour éviter de modifier l'objet d'origine lors de l'édition
     this.worker = { ...this.worker };
   }
 

@@ -12,5 +12,5 @@ import { Site } from '../../../../models/site.model';
 export class SiteTableComponent {
   @Input() sites: Site[] = [];
   @Output() edit = new EventEmitter<Site>();
-  @Output() delete = new EventEmitter<string>();
+  @Output() delete = new EventEmitter<Site>(); // Bon, attend un objet Site
 }

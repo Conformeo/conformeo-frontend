@@ -1,32 +1,36 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Worker } from '../../../../models/worker.model';
+import { WorkerService } from '../../../../core/services/worker.service';
 import { ModalComponent } from '../../../../shared/modal/modal.component';
 import { WorkerFormComponent } from '../../components/worker-form/worker-form.component';
 import { WorkerTableComponent } from '../../components/worker-table/worker-table.component';
-import { Worker } from '../../../../models/worker.model';
-import { WorkerService } from '../../../../core/services/worker.service';
 
 @Component({
   selector: 'app-workers-page',
   standalone: true,
-  imports: [ModalComponent, WorkerFormComponent, WorkerTableComponent],
+  imports: [CommonModule, ModalComponent, WorkerFormComponent, WorkerTableComponent],
   templateUrl: './workers-page.component.html',
 })
 export class WorkersPageComponent {
   workers: Worker[] = [];
-  editingWorker?: Worker;
-  workerToDelete?: Worker;
+  editingWorker: Worker | null = null;
+  workerToDelete: Worker | null = null;
 
   constructor(private service: WorkerService) {}
 
-  ngOnInit() { this.reload(); }
+  ngOnInit() {
+    this.reload();
+  }
+
   reload() {
     this.service.getAll().subscribe(list => this.workers = list ?? []);
   }
-  openForm(worker?: Worker) {
-    this.editingWorker = worker ? { ...worker } : { id: '', firstName: '', lastName: '', role: '' };
-  }
-  closeForm() { this.editingWorker = undefined; }
 
+  openForm(worker?: Worker) {
+    this.editingWorker = worker ? { ...worker } : { id: '', lastName: '', firstName: '', role: '', phone: '' };
+  }
+  closeForm() { this.editingWorker = null; }
   onWorkerSaved(worker: Worker) {
     const obs = worker.id
       ? this.service.update(worker)
@@ -34,11 +38,8 @@ export class WorkersPageComponent {
     obs.subscribe(() => { this.reload(); this.closeForm(); });
   }
 
-  openDeleteWorker(worker: Worker) {
-    this.workerToDelete = worker;
-  }
-
-  cancelDeleteWorker() { this.workerToDelete = undefined; }
+  openDeleteWorker(worker: Worker) { this.workerToDelete = worker; }
+  cancelDeleteWorker() { this.workerToDelete = null; }
   confirmDeleteWorker() {
     if (!this.workerToDelete) return;
     this.service.delete(this.workerToDelete.id).subscribe(() => {

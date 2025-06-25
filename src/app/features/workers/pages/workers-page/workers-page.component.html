@@ -1,26 +1,29 @@
 <div class="flex items-center justify-between mb-4">
   <h2 class="text-xl font-bold">Ouvriers</h2>
-  <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded" (click)="openForm()">
-    + Ajouter un ouvrier
-  </button>
+  <button class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded" (click)="openForm()">+ Ajouter un ouvrier</button>
 </div>
+<!-- Le reste identique à la modale équipement/chantiers -->
 
-<!-- Modal formulaire ouvrier -->
+
+<!-- Modal Ajout/Edition -->
 <app-modal *ngIf="editingWorker"
-           title="{{ editingWorker?.id ? 'Modifier' : 'Ajouter' }} un ouvrier"
+           [title]="editingWorker.id ? 'Modifier' : 'Ajouter' + ' un ouvrier'"
            (closed)="closeForm()">
   <app-worker-form
-    [worker]="editingWorker ?? { id: '', firstName: '', lastName: '', role: '' }"
+    [worker]="editingWorker"
     (save)="onWorkerSaved($event)"
     (cancel)="closeForm()">
   </app-worker-form>
 </app-modal>
 
+<!-- Modal Suppression -->
 <app-modal *ngIf="workerToDelete"
            title="Supprimer cet ouvrier ?"
            (closed)="cancelDeleteWorker()">
   <div class="space-y-4 text-center">
-    <p class="text-lg">Confirmer la suppression de <b>{{ workerToDelete?.firstName }} {{ workerToDelete?.lastName }}</b> ?</p>
+    <p class="text-lg">
+      Confirmer la suppression de <b>{{ workerToDelete.lastName }} {{ workerToDelete.firstName }}</b> ?
+    </p>
     <div class="flex justify-center gap-4 pt-4">
       <button (click)="confirmDeleteWorker()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold">
         Oui, supprimer
@@ -37,4 +40,3 @@
   (edit)="openForm($event)"
   (delete)="openDeleteWorker($event)">
 </app-worker-table>
-

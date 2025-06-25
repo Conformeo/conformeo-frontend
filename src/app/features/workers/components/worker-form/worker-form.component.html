@@ -1,24 +1,24 @@
-<form (ngSubmit)="onSubmit()" #form="ngForm" class="space-y-2">
+<form (ngSubmit)="onSubmit()" #form="ngForm" class="space-y-4 w-full max-w-md">
   <div>
-    <label>Nom</label>
-    <input [(ngModel)]="worker.lastName" name="lastName" required class="border rounded p-1 w-full"/>
+    <label class="block text-sm font-medium mb-1">Nom</label>
+    <input [(ngModel)]="worker.lastName" name="lastName" required class="input input-bordered w-full" />
   </div>
   <div>
-    <label>Prénom</label>
-    <input [(ngModel)]="worker.firstName" name="firstName" required class="border rounded p-1 w-full"/>
+    <label class="block text-sm font-medium mb-1">Prénom</label>
+    <input [(ngModel)]="worker.firstName" name="firstName" required class="input input-bordered w-full" />
   </div>
   <div>
-    <label>Rôle</label>
-    <input [(ngModel)]="worker.role" name="role" required class="border rounded p-1 w-full"/>
+    <label class="block text-sm font-medium mb-1">Poste</label>
+    <input [(ngModel)]="worker.role" name="role" required class="input input-bordered w-full" />
   </div>
   <div>
-    <label>Téléphone</label>
-    <input [(ngModel)]="worker.phone" name="phone" class="border rounded p-1 w-full"/>
+    <label class="block text-sm font-medium mb-1">Téléphone</label>
+    <input [(ngModel)]="worker.phone" name="phone" class="input input-bordered w-full" />
   </div>
-  <div class="flex gap-2 mt-3">
-    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">
+  <div class="flex gap-2 mt-4">
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded font-semibold">
       {{ worker.id ? 'Enregistrer' : 'Créer' }}
     </button>
-    <button type="button" (click)="cancel.emit()" class="bg-gray-300 px-3 py-1 rounded">Annuler</button>
+    <button type="button" (click)="cancel.emit()" class="bg-gray-200 px-4 py-2 rounded">Annuler</button>
   </div>
 </form>

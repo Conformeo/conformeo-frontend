@@ -1,28 +1,41 @@
-<!-- Champ recherche -->
-<input type="text"
-       [(ngModel)]="query"
-       placeholder="Rechercher un extincteur..."
-       class="w-full mb-4 rounded-lg border border-slate-300 px-4 py-2 shadow-sm focus:outline-none focus:ring-2
-              focus:ring-cyan-500"/>
-
-<table class="w-full text-sm rounded-lg overflow-hidden border border-slate-200">
-  <thead class="bg-slate-100 font-semibold">
-    <tr>
-      <th class="px-3 py-2 text-left">Emplacement</th>
-      <th class="px-3 py-2">Dernier</th>
-      <th class="px-3 py-2">Prochain</th>
-      <th class="px-3 py-2">Statut</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let e of filtered" (click)="edit.emit(e)" class="cursor-pointer hover:bg-slate-50">
-      <td class="px-3 py-2">{{ e.location }}</td>
-      <td class="px-3 py-2 text-center">{{ e.lastControl | date:'yyyy-MM' }}</td>
-      <td class="px-3 py-2 text-center">{{ e.nextControl | date:'yyyy-MM' }}</td>
-      <td class="px-3 py-2 text-center">
-        <lucide-icon [name]="icon(e.status)" [class]="color(e.status)"></lucide-icon>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<section class="bg-white rounded-xl shadow p-5 mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-lg font-semibold">Extincteurs</h3>
+    <button class="btn-primary">Ajouter</button>
+  </div>
+  <input class="input input-bordered mb-4 w-full" placeholder="Rechercher un extincteur…" />
+  <table class="min-w-full table-auto">
+    <thead>
+      <tr class="bg-gray-50">
+        <th class="px-3 py-2 text-xs font-semibold">Emplacement</th>
+        <th class="px-3 py-2 text-xs font-semibold">Dernier</th>
+        <th class="px-3 py-2 text-xs font-semibold">Prochain</th>
+        <th class="px-3 py-2 text-xs font-semibold">Statut</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b hover:bg-gray-50">
+        <td class="px-3 py-2">Atelier</td>
+        <td class="px-3 py-2">2024-04</td>
+        <td class="px-3 py-2">2025-04</td>
+        <td class="px-3 py-2">
+          <span class="inline-flex items-center px-2 py-1 rounded bg-green-100 text-green-700 text-xs font-semibold">
+            <svg class="w-4 h-4 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            OK
+          </span>
+        </td>
+      </tr>
+      <tr class="border-b hover:bg-gray-50">
+        <td class="px-3 py-2">Entrepôt</td>
+        <td class="px-3 py-2">2023-12</td>
+        <td class="px-3 py-2"></td>
+        <td class="px-3 py-2">
+          <span class="inline-flex items-center px-2 py-1 rounded bg-yellow-100 text-yellow-700 text-xs font-semibold">
+            <svg class="w-4 h-4 mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01"></path></svg>
+            À contrôler
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

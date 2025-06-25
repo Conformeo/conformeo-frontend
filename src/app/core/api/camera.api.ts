@@ -1,23 +1,26 @@
+// src/app/core/api/camera.api.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { Camera } from '../../models/camera.model';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CameraApi {
-  private baseUrl = '/api/cameras';
+  private url = environment.apiUrl + '/cameras/';
 
   constructor(private http: HttpClient) {}
 
   list(): Observable<Camera[]> {
-    return this.http.get<Camera[]>(this.baseUrl);
+    return this.http.get<Camera[]>(this.url);
   }
-
-  create(dto: Partial<Camera>): Observable<Camera> {
-    return this.http.post<Camera>(this.baseUrl, dto);
+  create(cam: Camera): Observable<Camera> {
+    return this.http.post<Camera>(this.url, cam);
   }
-
-  update(id: string, dto: Partial<Camera>): Observable<Camera> {
-    return this.http.put<Camera>(`${this.baseUrl}/${id}`, dto);
+  update(id: string, cam: Camera): Observable<Camera> {
+    return this.http.put<Camera>(`${this.url}${id}`, cam);
+  }
+  delete(id: string): Observable<any> {
+    return this.http.delete(`${this.url}${id}`);
   }
 }

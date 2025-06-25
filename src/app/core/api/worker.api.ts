@@ -8,7 +8,7 @@ export class WorkerApi {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Worker[]> {
-    return this.http.get<Worker[]>('/api/workers');
+    return this.http.get<Worker[]>('/api/workers/');
   }
 
   getById(id: string): Observable<Worker> {

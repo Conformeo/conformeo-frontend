@@ -1,15 +1,6 @@
 import { Routes } from '@angular/router';
-import { WorkersPageComponent } from './pages/workers-page/workers-page.component'
-import { authGuard } from '../../core/guards/auth.guard';
+import { WorkersPageComponent } from './pages/workers-page/workers-page.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: WorkersPageComponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', redirectTo: 'list', pathMatch: 'full' },
-
-    ]
-  }
+  { path: '', component: WorkersPageComponent }
 ];

@@ -1,8 +1,9 @@
+export type FireExtinguisherStatus = 'OK' | 'DUE' | 'TO_SCHEDULE';
 export interface FireExtinguisher {
-  id?: string;
+  id: string;
   location: string;
   serialNumber: string;
-  lastControl: string;   // ISO yyyy-MM-dd
-  nextControl: string;   // ISO yyyy-MM-dd ou '—'
-  status: 'OK' | 'DUE' | 'TO_SCHEDULE';
+  lastControl: string;
+  nextControl: string;
+  status: FireExtinguisherStatus;
 }

@@ -1,19 +1,17 @@
-<!-- .../extinguisher-form.component.html -->
 <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4 w-full">
-  <!-- Location -->
+  <!-- Emplacement -->
   <div>
     <label class="block text-sm font-medium mb-1">Emplacement</label>
     <input type="text"
            formControlName="location"
            class="input w-full"
            [class.border-rose-600]="invalid('location')" />
-
     <p *ngIf="errMsg('location')" class="text-rose-600 text-xs mt-1">
       {{ errMsg('location') }}
     </p>
   </div>
 
-  <!-- Serial -->
+  <!-- N° de série -->
   <div>
     <label class="block text-sm font-medium mb-1">N° de série</label>
     <input type="text"
@@ -21,11 +19,24 @@
            class="input w-full"
            placeholder="AB123456"
            [class.border-rose-600]="invalid('serialNumber')" />
-
     <p *ngIf="errMsg('serialNumber')" class="text-rose-600 text-xs mt-1">
       {{ errMsg('serialNumber') }}
     </p>
   </div>
+
+  <!-- Statut -->
+  <div>
+    <label class="block text-sm font-medium mb-1">Statut</label>
+    <select formControlName="status" class="input w-full" [class.border-rose-600]="invalid('status')">
+      <option value="OK">OK</option>
+      <option value="DUE">À échéance</option>
+      <option value="TO_SCHEDULE">À planifier</option>
+    </select>
+    <p *ngIf="errMsg('status')" class="text-rose-600 text-xs mt-1">
+      {{ errMsg('status') }}
+    </p>
+  </div>
+
 
   <!-- Dates -->
   <div class="grid md:grid-cols-2 gap-4">
@@ -34,12 +45,18 @@
       <input type="date" formControlName="lastControl"
              class="input w-full"
              [class.border-rose-600]="invalid('lastControl')" />
+      <p *ngIf="errMsg('lastControl')" class="text-rose-600 text-xs mt-1">
+        {{ errMsg('lastControl') }}
+      </p>
     </div>
     <div>
       <label class="block text-sm font-medium mb-1">Prochain contrôle</label>
       <input type="date" formControlName="nextControl"
              class="input w-full"
              [class.border-rose-600]="invalid('nextControl')" />
+      <p *ngIf="errMsg('nextControl')" class="text-rose-600 text-xs mt-1">
+        {{ errMsg('nextControl') }}
+      </p>
     </div>
   </div>
   <p *ngIf="form.errors?.['dateOrder']" class="text-rose-600 text-xs mt-1">

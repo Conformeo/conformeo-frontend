@@ -17,6 +17,13 @@
          hover:bg-cyan-700 active:bg-cyan-800 transition;
 }
 
+.input {
+  @apply border rounded p-2 w-full focus:ring focus:border-blue-500 transition;
+}
+.input-bordered {
+  @apply border-gray-300;
+}
+
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -8,7 +8,7 @@ export class EquipmentApi {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Equipment[]> {
-    return this.http.get<Equipment[]>('/api/equipments');
+    return this.http.get<Equipment[]>('/api/equipments/');
   }
   getById(id: string): Observable<Equipment> {
     return this.http.get<Equipment>(`/api/equipments/${id}`);

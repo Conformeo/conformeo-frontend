@@ -1,8 +1,7 @@
-<!-- src/app/features/company/components/camera-form/camera-form.component.html -->
 <form [formGroup]="form" (ngSubmit)="submit()">
   <div class="grid grid-cols-1 gap-4">
     <div>
-      <label class="block text-sm font-medium">Label</label>
+      <label class="block text-sm font-medium">Nom de la caméra</label>
       <input formControlName="label" class="input w-full" />
     </div>
     <div>
@@ -10,16 +9,27 @@
       <input formControlName="location" class="input w-full" />
     </div>
     <div>
-      <label class="block text-sm font-medium">Dernier contrôle</label>
-      <input type="date" formControlName="lastCheck" class="input w-full" />
-    </div>
-    <div>
       <label class="block text-sm font-medium">Zone couverte</label>
       <input formControlName="zoneCovered" class="input w-full" />
     </div>
     <div>
-      <label class="block text-sm font-medium">Photo URL</label>
+      <label class="block text-sm font-medium">Dernier contrôle</label>
+      <input type="date" formControlName="lastCheck" class="input w-full" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium">Prochain contrôle</label>
+      <input type="date" formControlName="nextCheck" class="input w-full" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium">Photo (URL)</label>
       <input formControlName="photoUrl" class="input w-full" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium">Statut</label>
+      <select formControlName="status" class="input w-full">
+        <option value="OK">OK</option>
+        <option value="KO">HS</option>
+      </select>
     </div>
   </div>
   <div class="flex justify-end mt-4 space-x-2">

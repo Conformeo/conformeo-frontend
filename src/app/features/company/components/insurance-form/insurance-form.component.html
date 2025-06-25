@@ -1,6 +1,9 @@
-<!-- src/app/features/company/components/insurance-form/insurance-form.component.html -->
 <form [formGroup]="form" (ngSubmit)="submit()">
   <div class="grid grid-cols-1 gap-4">
+    <div>
+      <label class="block text-sm font-medium">Type</label>
+      <input formControlName="type" class="input w-full" />
+    </div>
     <div>
       <label class="block text-sm font-medium">Fournisseur</label>
       <input formControlName="provider" class="input w-full" />

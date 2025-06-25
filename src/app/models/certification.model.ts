@@ -1,6 +1,7 @@
+export type CertificationStatus = 'VALID' | 'RENEW' | 'NOT_OBTAINED';
 export interface Certification {
-  id?: string;
+  id: string;
   name: string;
-  validUntil: string;          // yyyy-MM-dd ou '—'
-  status: 'VALID' | 'RENEW' | 'NOT_OBTAINED';
+  validUntil: string;
+  status: CertificationStatus;
 }

@@ -6,7 +6,7 @@ import { FireExtinguisher } from '../../models/fire-extinguisher.model'
 
 @Injectable({ providedIn: 'root' })
 export class ExtinguisherApi {
-  private url = `${environment.apiUrl}/extinguishers`;
+  private url = `${environment.apiUrl}/extinguishers/`;
 
   constructor(private http: HttpClient) {}
 
@@ -21,10 +21,10 @@ export class ExtinguisherApi {
   }
 
   update(id: string, dto: Partial<FireExtinguisher>) {
-    return this.http.put<FireExtinguisher>(`${this.url}/${id}`, dto);
+    return this.http.put<FireExtinguisher>(`${this.url}${id}`, dto);
   }
 
   remove(id: string) {
-    return this.http.delete<void>(`${this.url}/${id}`);
+    return this.http.delete<void>(`${this.url}${id}`);
   }
 }
