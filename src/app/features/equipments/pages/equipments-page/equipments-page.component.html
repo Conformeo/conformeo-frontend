@@ -1,9 +1,12 @@
-<!-- Bouton d'ajout -->
 <div class="flex items-center justify-between mb-4">
   <h2 class="text-xl font-bold">Équipements</h2>
   <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded" (click)="openForm()">
     + Ajouter un équipement
   </button>
+</div>
+
+<div class="mb-4">
+  <input class="input w-80" placeholder="Rechercher (nom, type, S/N)..." [(ngModel)]="searchEquip" />
 </div>
 
 <!-- Modal d'ajout/modif -->
@@ -19,7 +22,7 @@
 
 <!-- Tableau -->
 <app-equipment-table
-  [equipments]="equipments"
+  [equipments]="filteredEquipments"
   (edit)="openForm($event)"
   (delete)="onEquipmentDeleted($event)">
 </app-equipment-table>

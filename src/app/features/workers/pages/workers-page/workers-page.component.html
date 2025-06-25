@@ -2,8 +2,10 @@
   <h2 class="text-xl font-bold">Ouvriers</h2>
   <button class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded" (click)="openForm()">+ Ajouter un ouvrier</button>
 </div>
-<!-- Le reste identique à la modale équipement/chantiers -->
 
+<div class="mb-4">
+  <input class="input w-80" placeholder="Rechercher (nom, prénom, poste, téléphone)..." [(ngModel)]="searchWorker" />
+</div>
 
 <!-- Modal Ajout/Edition -->
 <app-modal *ngIf="editingWorker"
@@ -36,7 +38,7 @@
 </app-modal>
 
 <app-worker-table
-  [workers]="workers"
+  [workers]="filteredWorkers"
   (edit)="openForm($event)"
   (delete)="openDeleteWorker($event)">
 </app-worker-table>

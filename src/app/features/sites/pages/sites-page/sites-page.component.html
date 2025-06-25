@@ -7,6 +7,10 @@
   </button>
 </div>
 
+<div class="mb-4">
+  <input class="input w-80" placeholder="Rechercher (nom, ville, code postal)..." [(ngModel)]="searchSite" />
+</div>
+
 <!-- Modal Ajout/Édition chantier -->
 <app-modal *ngIf="editingSite"
            [title]="editingSite.id ? 'Modifier' : 'Ajouter' + ' un chantier'"
@@ -18,7 +22,6 @@
     (cancel)="closeForm()">
   </app-site-form>
 </app-modal>
-
 
 <!-- Modal Confirmation Suppression -->
 <app-modal *ngIf="siteToDelete"
@@ -38,7 +41,7 @@
 </app-modal>
 
 <app-site-table
-  [sites]="sites"
+  [sites]="filteredSites"
   (edit)="openForm($event)"
   (delete)="openDeleteSite($event)">
 </app-site-table>

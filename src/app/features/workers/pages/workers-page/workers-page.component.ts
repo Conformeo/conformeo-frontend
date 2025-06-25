@@ -5,17 +5,31 @@ import { WorkerService } from '../../../../core/services/worker.service';
 import { ModalComponent } from '../../../../shared/modal/modal.component';
 import { WorkerFormComponent } from '../../components/worker-form/worker-form.component';
 import { WorkerTableComponent } from '../../components/worker-table/worker-table.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-workers-page',
   standalone: true,
-  imports: [CommonModule, ModalComponent, WorkerFormComponent, WorkerTableComponent],
+  imports: [CommonModule, FormsModule, ModalComponent, WorkerFormComponent, WorkerTableComponent],
   templateUrl: './workers-page.component.html',
 })
 export class WorkersPageComponent {
   workers: Worker[] = [];
   editingWorker: Worker | null = null;
   workerToDelete: Worker | null = null;
+  
+  searchWorker = '';
+
+  get filteredWorkers() {
+    const q = this.searchWorker?.toLowerCase() ?? '';
+    return this.workers.filter(w =>
+      (w.lastName ?? '').toLowerCase().includes(q) ||
+      (w.firstName ?? '').toLowerCase().includes(q) ||
+      (w.role ?? '').toLowerCase().includes(q) ||
+      (w.phone ?? '').toLowerCase().includes(q)
+    );
+  }
+
 
   constructor(private service: WorkerService) {}
 

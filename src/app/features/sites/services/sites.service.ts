@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, map } from 'rxjs';
 import { Site } from '../../../models/site.model';
+import { SitePhoto } from '../../../models/site-photo'
+import { HttpClient } from '@angular/common/http';
+import { SiteDocument } from '../../../models/site-photo';
 
 const STORAGE_KEY = 'conformeo_sites';
 
@@ -15,6 +18,8 @@ function setToStorage(sites: Site[]) {
 
 @Injectable({ providedIn: 'root' })
 export class SitesService {
+
+  constructor(private http: HttpClient) {}
 
   getAll(): Observable<Site[]> {
     return of(getFromStorage());
@@ -56,4 +61,27 @@ export class SitesService {
     ];
     setToStorage(demo);
   }
+
+  /** Upload une photo pour un chantier (site) */
+  uploadPhoto(siteId: string, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{fileUrl: string, uploadedAt: string}>(`/api/sites/${siteId}/photos`, formData);
+  }
+
+  getPhotos(siteId: string) {
+    return this.http.get<any[]>(`/api/sites/${siteId}/photos`);
+  }
+
+  getDocuments(siteId: string): Observable<SiteDocument[]> {
+    return this.http.get<SiteDocument[]>(`/api/sites/${siteId}/documents`);
+  }
+
+  uploadDocument(siteId: string, file: File): Observable<SiteDocument> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<SiteDocument>(`/api/sites/${siteId}/documents`, formData);
+  }
+
+  
 }

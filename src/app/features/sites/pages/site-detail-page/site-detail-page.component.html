@@ -1,14 +1,29 @@
-<!-- src/app/features/sites/pages/site-detail-page/site-detail-page.component.html -->
 <ng-container *ngIf="site$ | async as site; else loading">
-  <div class="p-6 bg-white rounded shadow">
-    <h2 class="text-2xl font-bold mb-4">Chantier : {{ site.name }}</h2>
-    <p><strong>Adresse :</strong> {{ site.address }}</p>
-    <p><strong>Ville :</strong> {{ site.city }}</p>
-    <p><strong>Code postal :</strong> {{ site.zipCode }}</p>
-    <p><strong>Score :</strong> {{ site.score ?? '-' }}</p>
-    <!-- Ajoute ici d'autres infos liées au chantier -->
+  <h1 class="text-2xl font-semibold mb-4">{{ site.name }}</h1>
+  <div class="mb-2 text-sm text-slate-600">
+    <span class="font-semibold">Adresse :</span> {{ site.address }}, {{ site.zipCode }} {{ site.city }}
+  </div>
+  <div class="mb-4">
+    <span class="font-semibold">Score conformité :</span> <span class="badge">{{ site.score ?? '—' }}</span>
+  </div>
+
+  <!-- Ajout d'une photo -->
+  <div class="mb-4 flex items-center gap-3">
+    <input type="file" accept="image/*" (change)="onPhotoSelected($event)" />
+    <button *ngIf="photoToUpload" (click)="uploadPhoto()" class="btn btn-primary">Uploader la photo</button>
+  </div>
+
+  <!-- Liste des photos -->
+  <div *ngIf="photos.length > 0">
+    <div *ngFor="let p of photos" class="flex items-center gap-4 mb-3">
+      <img [src]="p.fileUrl" class="w-24 h-24 object-cover rounded shadow" />
+      <div>
+        <div class="text-xs text-gray-600">Ajoutée le {{ p.uploadedAt | date:'short' }}</div>
+        <a [href]="p.fileUrl" download target="_blank" class="text-blue-500 underline">Télécharger</a>
+      </div>
+    </div>
   </div>
 </ng-container>
 <ng-template #loading>
-  <div class="text-slate-400">Chargement du chantier…</div>
+  <div class="text-slate-400">Chargement du chantier...</div>
 </ng-template>

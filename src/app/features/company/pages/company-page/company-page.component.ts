@@ -16,6 +16,7 @@ import { CameraFormComponent } from '../../components/camera-form/camera-form.co
 import { KitFormComponent } from '../../components/kit-form/kit-form.component';
 import { InsuranceFormComponent } from '../../components/insurance-form/insurance-form.component';
 import { ModalComponent } from '../../../../shared/modal/modal.component';
+import { TabGroupComponent } from '../../../../shared/tab/tab.component';
 
 // APIs
 import { ExtinguisherApi } from '../../../../core/api/extinguisher.api';
@@ -41,6 +42,11 @@ import { InsuranceApi } from '../../../../core/api/insurance.api';
   styleUrls: ['./company-page.component.scss'],
 })
 export class CompanyPageComponent {
+
+  // Onglets
+  tabIndex = 0;
+  tabNames = ['Extincteurs', 'Certifications', 'Caméras', 'Secours', 'Assurances'];
+
   // Extincteurs
   extinguishers: FireExtinguisher[] = [];
   searchExt = '';

@@ -1,8 +1,18 @@
-<!-- Sécurité & certifications -->
 <h1 class="text-2xl font-semibold mb-6">Sécurité & certifications</h1>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-  <!-- EXTINCTEURS -->
+<!-- ONGLET NAVIGATION -->
+<nav class="flex gap-3 mb-7">
+  <button *ngFor="let tab of tabNames; let i = index"
+          (click)="tabIndex = i"
+          [class.active]="tabIndex === i"
+          class="px-4 py-1 border border-sky-500 rounded-2xl text-sky-600 font-semibold bg-white"
+          [ngClass]="{ 'bg-sky-500 text-white': tabIndex === i }">
+    {{ tab }}
+  </button>
+</nav>
+
+<!-- EXTINCTEURS -->
+<div *ngIf="tabIndex === 0">
   <section class="bg-white rounded-xl shadow p-5 mb-6">
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-semibold">Extincteurs</h3>
@@ -33,22 +43,36 @@
             <span *ngIf="ext.status === 'DUE'" class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">À contrôler</span>
           </td>
           <td class="px-4 py-2 flex gap-2">
-            <button class="btn btn-outline-primary" (click)="openExtForm(ext)">Modifier</button>
-            <button class="btn btn-outline-danger" (click)="openDeleteExt(ext)">Supprimer</button>
+            <button class="border border-blue-600 text-blue-600 rounded px-3 py-1 hover:bg-blue-50" (click)="openExtForm(ext)">Modifier</button>
+            <button class="border border-red-500 text-red-600 rounded px-3 py-1 hover:bg-red-50" (click)="openDeleteExt(ext)">Supprimer</button>
           </td>
         </tr>
       </tbody>
     </table>
   </section>
+  <!-- MODALS -->
+  <app-modal *ngIf="showExtModal" [title]="editingExt ? 'Modifier un extincteur' : 'Ajouter un extincteur'" (closed)="closeExtForm()">
+    <app-extinguisher-form [extinguisher]="editingExt" (saved)="onExtSaved()"></app-extinguisher-form>
+  </app-modal>
+  <app-modal *ngIf="showDeleteExtModal" title="Supprimer cet extincteur ?" (closed)="cancelDeleteExt()">
+    <div class="space-y-4 text-center">
+      <p>Confirmer la suppression de <b>{{ editingExt?.location }}</b> ?</p>
+      <div class="flex justify-center gap-4 pt-4">
+        <button (click)="confirmDeleteExt()" class="btn btn-danger">Oui, supprimer</button>
+        <button (click)="cancelDeleteExt()" class="btn">Annuler</button>
+      </div>
+    </div>
+  </app-modal>
+</div>
 
-  <!-- CERTIFICATIONS -->
+<!-- CERTIFICATIONS -->
+<div *ngIf="tabIndex === 1">
   <section class="bg-white rounded-xl shadow p-5 mb-6">
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-semibold">Certifications</h3>
       <button class="btn btn-primary" (click)="openCertForm()">+ Ajouter</button>
     </div>
     <input class="input w-full mb-4" placeholder="Rechercher (nom, statut)" [(ngModel)]="searchCert" />
-
     <table class="min-w-full table-auto">
       <thead>
         <tr>
@@ -68,22 +92,36 @@
             <span *ngIf="cert.status === 'NOT_OBTAINED'" class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">Non obtenue</span>
           </td>
           <td class="px-4 py-2 flex gap-2">
-            <button class="btn btn-outline-primary" (click)="openCertForm(cert)">Modifier</button>
-            <button class="btn btn-outline-danger" (click)="openDeleteCert(cert)">Supprimer</button>
+            <button class="border border-blue-600 text-blue-600 rounded px-3 py-1 hover:bg-blue-50" (click)="openCertForm(cert)">Modifier</button>
+            <button class="border border-red-500 text-red-600 rounded px-3 py-1 hover:bg-red-50" (click)="openDeleteCert(cert)">Supprimer</button>
           </td>
         </tr>
       </tbody>
     </table>
   </section>
+  <!-- MODALS -->
+  <app-modal *ngIf="showCertModal" [title]="editingCert ? 'Modifier une certification' : 'Ajouter une certification'" (closed)="closeCertForm()">
+    <app-certification-form [certification]="editingCert" (saved)="onCertSaved()"></app-certification-form>
+  </app-modal>
+  <app-modal *ngIf="showDeleteCertModal" title="Supprimer cette certification ?" (closed)="cancelDeleteCert()">
+    <div class="space-y-4 text-center">
+      <p>Confirmer la suppression de <b>{{ editingCert?.name }}</b> ?</p>
+      <div class="flex justify-center gap-4 pt-4">
+        <button (click)="confirmDeleteCert()" class="btn btn-danger">Oui, supprimer</button>
+        <button (click)="cancelDeleteCert()" class="btn">Annuler</button>
+      </div>
+    </div>
+  </app-modal>
+</div>
 
-  <!-- CAMÉRAS -->
+<!-- CAMÉRAS -->
+<div *ngIf="tabIndex === 2">
   <section class="bg-white rounded-xl shadow p-5 mb-6">
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-semibold">Caméras</h3>
       <button class="btn btn-primary" (click)="openCameraForm()">+ Ajouter</button>
     </div>
     <input class="input w-full mb-4" placeholder="Rechercher (nom, lieu)" [(ngModel)]="searchCam" />
-
     <table class="min-w-full table-auto">
       <thead>
         <tr>
@@ -106,22 +144,36 @@
             <span *ngIf="cam.status === 'KO'" class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">HS</span>
           </td>
           <td class="px-4 py-2 flex gap-2">
-            <button class="btn btn-outline-primary" (click)="openCameraForm(cam)">Modifier</button>
-            <button class="btn btn-outline-danger" (click)="openDeleteCam(cam)">Supprimer</button>
+            <button class="border border-blue-600 text-blue-600 rounded px-3 py-1 hover:bg-blue-50" (click)="openCameraForm(cam)">Modifier</button>
+            <button class="border border-red-500 text-red-600 rounded px-3 py-1 hover:bg-red-50" (click)="openDeleteCam(cam)">Supprimer</button>
           </td>
         </tr>
       </tbody>
     </table>
   </section>
+  <!-- MODALS -->
+  <app-modal *ngIf="showCamModal" [title]="editingCam ? 'Modifier une caméra' : 'Ajouter une caméra'" (closed)="closeCameraForm()">
+    <app-camera-form [camera]="editingCam" (saved)="onCameraSaved()"></app-camera-form>
+  </app-modal>
+  <app-modal *ngIf="showDeleteCamModal" title="Supprimer cette caméra ?" (closed)="cancelDeleteCam()">
+    <div class="space-y-4 text-center">
+      <p>Confirmer la suppression de <b>{{ editingCam?.label }}</b> ?</p>
+      <div class="flex justify-center gap-4 pt-4">
+        <button (click)="confirmDeleteCam()" class="btn btn-danger">Oui, supprimer</button>
+        <button (click)="cancelDeleteCam()" class="btn">Annuler</button>
+      </div>
+    </div>
+  </app-modal>
+</div>
 
-  <!-- TROUSSES & DEA -->
+<!-- TROUSSE DE SECOURS & DEA -->
+<div *ngIf="tabIndex === 3">
   <section class="bg-white rounded-xl shadow p-5 mb-6">
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-semibold">Trousse de secours & DEA</h3>
       <button class="btn btn-primary" (click)="openKitForm()">+ Ajouter</button>
     </div>
     <input class="input w-full mb-4" placeholder="Rechercher (site)" [(ngModel)]="searchKit" />
-
     <table class="min-w-full table-auto">
       <thead>
         <tr>
@@ -140,22 +192,36 @@
             <span *ngIf="kit.state === 'EXPIRED'" class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">Expirée</span>
           </td>
           <td class="px-4 py-2 flex gap-2">
-            <button class="btn btn-outline-primary" (click)="openKitForm(kit)">Modifier</button>
-            <button class="btn btn-outline-danger" (click)="openDeleteKit(kit)">Supprimer</button>
+            <button class="border border-blue-600 text-blue-600 rounded px-3 py-1 hover:bg-blue-50" (click)="openKitForm(kit)">Modifier</button>
+            <button class="border border-red-500 text-red-600 rounded px-3 py-1 hover:bg-red-50" (click)="openDeleteKit(kit)">Supprimer</button>
           </td>
         </tr>
       </tbody>
     </table>
   </section>
+  <!-- MODALS -->
+  <app-modal *ngIf="showKitModal" [title]="editingKit ? 'Modifier une trousse ou DEA' : 'Ajouter une trousse ou DEA'" (closed)="closeKitForm()">
+    <app-kit-form [kit]="editingKit" (saved)="onKitSaved()"></app-kit-form>
+  </app-modal>
+  <app-modal *ngIf="showDeleteKitModal" title="Supprimer cette trousse ou DEA ?" (closed)="cancelDeleteKit()">
+    <div class="space-y-4 text-center">
+      <p>Confirmer la suppression de <b>{{ editingKit?.site }}</b> ?</p>
+      <div class="flex justify-center gap-4 pt-4">
+        <button (click)="confirmDeleteKit()" class="btn btn-danger">Oui, supprimer</button>
+        <button (click)="cancelDeleteKit()" class="btn">Annuler</button>
+      </div>
+    </div>
+  </app-modal>
+</div>
 
-  <!-- ASSURANCES & LÉGALES -->
+<!-- ASSURANCES & LÉGALES -->
+<div *ngIf="tabIndex === 4">
   <section class="bg-white rounded-xl shadow p-5 mb-6">
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-semibold">Assurances & légales</h3>
       <button class="btn btn-primary" (click)="openInsuranceForm()">+ Ajouter</button>
     </div>
     <input class="input w-full mb-4" placeholder="Rechercher (type, assureur)" [(ngModel)]="searchIns" />
-
     <table class="min-w-full table-auto">
       <thead>
         <tr>
@@ -171,94 +237,29 @@
           <td class="px-4 py-2">{{ ins.provider }}</td>
           <td class="px-4 py-2">{{ ins.validUntil }}</td>
           <td class="px-4 py-2 flex gap-2">
-            <button class="btn btn-outline-primary" (click)="openInsuranceForm(ins)">Modifier</button>
-            <button class="btn btn-outline-danger" (click)="openDeleteIns(ins)">Supprimer</button>
+            <button class="border border-blue-600 text-blue-600 rounded px-3 py-1 hover:bg-blue-50" (click)="openInsuranceForm(ins)">Modifier</button>
+            <button class="border border-red-500 text-red-600 rounded px-3 py-1 hover:bg-red-50" (click)="openDeleteIns(ins)">Supprimer</button>
           </td>
         </tr>
       </tbody>
     </table>
   </section>
+  <!-- MODALS -->
+  <app-modal *ngIf="showInsModal" [title]="editingIns ? 'Modifier une assurance' : 'Ajouter une assurance'" (closed)="closeInsuranceForm()">
+    <app-insurance-form [insurance]="editingIns" (saved)="onInsuranceSaved()"></app-insurance-form>
+  </app-modal>
+  <app-modal *ngIf="showDeleteInsModal" title="Supprimer cette assurance ?" (closed)="cancelDeleteIns()">
+    <div class="space-y-4 text-center">
+      <p>
+        Confirmer la suppression de
+        <b>{{ editingIns?.type }}</b>
+        <span *ngIf="editingIns?.provider">({{ editingIns?.provider }})</span>
+        ?
+      </p>
+      <div class="flex justify-center gap-4 pt-4">
+        <button (click)="confirmDeleteIns()" class="btn btn-danger">Oui, supprimer</button>
+        <button (click)="cancelDeleteIns()" class="btn">Annuler</button>
+      </div>
+    </div>
+  </app-modal>
 </div>
-
-<!-- Extincteurs -->
-<app-modal *ngIf="showExtModal" [title]="editingExt ? 'Modifier un extincteur' : 'Ajouter un extincteur'" (closed)="closeExtForm()">
-  <app-extinguisher-form [extinguisher]="editingExt" (saved)="onExtSaved()"></app-extinguisher-form>
-</app-modal>
-
-<app-modal *ngIf="showDeleteExtModal" title="Supprimer cet extincteur ?" (closed)="cancelDeleteExt()">
-  <div class="space-y-4 text-center">
-    <p>Confirmer la suppression de <b>{{ editingExt?.location }}</b> ?</p>
-    <div class="flex justify-center gap-4 pt-4">
-      <button (click)="confirmDeleteExt()" class="btn btn-danger">Oui, supprimer</button>
-      <button (click)="cancelDeleteExt()" class="btn">Annuler</button>
-    </div>
-  </div>
-</app-modal>
-
-<!-- Certifications -->
- <app-modal *ngIf="showCertModal" [title]="editingCert ? 'Modifier une certification' : 'Ajouter une certification'" (closed)="closeCertForm()">
-  <app-certification-form [certification]="editingCert" (saved)="onCertSaved()"></app-certification-form>
-</app-modal>
-
-<app-modal *ngIf="showDeleteCertModal" title="Supprimer cette certification ?" (closed)="cancelDeleteCert()">
-  <div class="space-y-4 text-center">
-    <p>Confirmer la suppression de <b>{{ editingCert?.name }}</b> ?</p>
-    <div class="flex justify-center gap-4 pt-4">
-      <button (click)="confirmDeleteCert()" class="btn btn-danger">Oui, supprimer</button>
-      <button (click)="cancelDeleteCert()" class="btn">Annuler</button>
-    </div>
-  </div>
-</app-modal>
-
-<!-- Caméras -->
- <app-modal *ngIf="showCamModal"  (closed)="closeCameraForm()">
-  <app-camera-form [camera]="editingCam" (saved)="onCameraSaved()"></app-camera-form>
-</app-modal>
-<!-- Pareil pour extincteur, kit, assurance, certif -->
-
-
-<app-modal *ngIf="showDeleteCamModal" title="Supprimer cette caméra ?" (closed)="cancelDeleteCam()">
-  <div class="space-y-4 text-center">
-    <p>Confirmer la suppression de <b>{{ editingCam?.label }}</b> ?</p>
-    <div class="flex justify-center gap-4 pt-4">
-      <button (click)="confirmDeleteCam()" class="btn btn-danger">Oui, supprimer</button>
-      <button (click)="cancelDeleteCam()" class="btn">Annuler</button>
-    </div>
-  </div>
-</app-modal>
-
-<!-- Trousse de secours & DEA -->
- <app-modal *ngIf="showKitModal" [title]="editingKit ? 'Modifier une trousse ou DEA' : 'Ajouter une trousse ou DEA'" (closed)="closeKitForm()">
-  <app-kit-form [kit]="editingKit" (saved)="onKitSaved()"></app-kit-form>
-</app-modal>
-
-<app-modal *ngIf="showDeleteKitModal" title="Supprimer cette trousse ou DEA ?" (closed)="cancelDeleteKit()">
-  <div class="space-y-4 text-center">
-    <p>Confirmer la suppression de <b>{{ editingKit?.site }}</b> ?</p>
-    <div class="flex justify-center gap-4 pt-4">
-      <button (click)="confirmDeleteKit()" class="btn btn-danger">Oui, supprimer</button>
-      <button (click)="cancelDeleteKit()" class="btn">Annuler</button>
-    </div>
-  </div>
-</app-modal>
-
-<!-- Assurances & légales -->
-<app-modal *ngIf="showInsModal" [title]="editingIns ? 'Modifier une assurance' : 'Ajouter une assurance'" (closed)="closeInsuranceForm()">
-  <app-insurance-form [insurance]="editingIns" (saved)="onInsuranceSaved()"></app-insurance-form>
-</app-modal>
-
-<app-modal *ngIf="showDeleteInsModal" title="Supprimer cette assurance ?" (closed)="cancelDeleteIns()">
-  <div class="space-y-4 text-center">
-    <p>
-      Confirmer la suppression de
-      <b>{{ editingIns?.type }}</b>
-      <span *ngIf="editingIns?.provider">({{ editingIns?.provider }})</span>
-
-      ?
-    </p>
-    <div class="flex justify-center gap-4 pt-4">
-      <button (click)="confirmDeleteIns()" class="btn btn-danger">Oui, supprimer</button>
-      <button (click)="cancelDeleteIns()" class="btn">Annuler</button>
-    </div>
-  </div>
-</app-modal>

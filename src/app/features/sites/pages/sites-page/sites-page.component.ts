@@ -5,17 +5,30 @@ import { SitesService } from '../../services/sites.service';
 import { SiteFormComponent } from '../../components/site-form/site-form.component';
 import { SiteTableComponent } from '../../components/site-table/site-table.component';
 import { ModalComponent } from '../../../../shared/modal/modal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sites-page',
   standalone: true,
-  imports: [CommonModule, ModalComponent, SiteFormComponent, SiteTableComponent],
+  imports: [CommonModule, FormsModule, ModalComponent, SiteFormComponent, SiteTableComponent],
   templateUrl: './sites-page.component.html'
 })
 export class SitesPageComponent implements OnInit {
   sites: Site[] = [];
   editingSite: Site | null = null;
   siteToDelete: Site | null = null;
+
+  searchSite = '';
+
+  get filteredSites() {
+    const q = this.searchSite?.toLowerCase() ?? '';
+    return this.sites.filter(site =>
+      (site.name ?? '').toLowerCase().includes(q) ||
+      (site.address ?? '').toLowerCase().includes(q) ||
+      (site.city ?? '').toLowerCase().includes(q) ||
+      (site.zipCode ?? '').toString().includes(q)
+    );
+  }
 
   constructor(private service: SitesService) {}
 
