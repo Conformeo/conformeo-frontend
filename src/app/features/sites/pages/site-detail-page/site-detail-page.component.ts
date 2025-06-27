@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-site-detail-page',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './site-detail-page.component.html', // Utilise un fichier .html si c'est plus lisible !
+  templateUrl: './site-detail-page.component.html',
 })
 export class SiteDetailPageComponent implements OnInit {
   site$!: Observable<Site | undefined>;
@@ -21,6 +21,8 @@ export class SiteDetailPageComponent implements OnInit {
   photos: SitePhoto[] = [];
   docToUpload?: File;
   documents: SiteDocument[] = [];
+  lightboxOpen = false;
+  selectedPhotoIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,10 +42,13 @@ export class SiteDetailPageComponent implements OnInit {
     );
   }
 
+  // PHOTOS
+
   onPhotoSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) this.photoToUpload = input.files[0];
   }
+
   uploadPhoto() {
     if (!this.siteId || !this.photoToUpload) return;
     this.service.uploadPhoto(this.siteId, this.photoToUpload).subscribe(photo => {
@@ -51,25 +56,63 @@ export class SiteDetailPageComponent implements OnInit {
       this.photoToUpload = undefined;
     });
   }
+
   refreshPhotos() {
     if (!this.siteId) return;
-    this.service.getPhotos(this.siteId).subscribe(list => this.photos = list);
+    this.service.getPhotos(this.siteId).subscribe(list => this.photos = list || []);
   }
 
-  // Documents
+  deletePhoto(photo: SitePhoto) {
+    if (!this.siteId || !photo.filename) return;
+    this.service.deletePhoto(this.siteId, photo.filename).subscribe(() => {
+      this.photos = this.photos.filter(p => p.filename !== photo.filename);
+    });
+  }
+
+  // -- Visionneuse
+  openLightbox(index: number) {
+    this.selectedPhotoIndex = index;
+    this.lightboxOpen = true;
+  }
+  closeLightbox() {
+    this.lightboxOpen = false;
+  }
+  prevPhoto() {
+    if (this.photos.length === 0) return;
+    this.selectedPhotoIndex = (this.selectedPhotoIndex - 1 + this.photos.length) % this.photos.length;
+  }
+  nextPhoto() {
+    if (this.photos.length === 0) return;
+    this.selectedPhotoIndex = (this.selectedPhotoIndex + 1) % this.photos.length;
+  }
+
+  
+  // DOCUMENTS
+
   onDocSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files?.length) this.docToUpload = input.files[0];
+    if (input.files && input.files[0]) {
+      this.docToUpload = input.files[0];
+    }
   }
-  uploadDocument(siteId: string, file: File): Observable<SiteDocument> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.http.post<SiteDocument>(`/api/sites/${siteId}/documents`, formData);
+
+  uploadDocument() {
+    if (!this.docToUpload || !this.siteId) return;
+    this.service.uploadDocument(this.siteId, this.docToUpload).subscribe(doc => {
+      this.documents.unshift(doc);
+      this.docToUpload = undefined;
+    });
   }
 
   refreshDocuments() {
     if (!this.siteId) return;
-    this.service.getDocuments(this.siteId).subscribe(list => this.documents = list);
+    this.service.getDocuments(this.siteId).subscribe(list => this.documents = list || []);
   }
 
+  deleteDocument(doc: SiteDocument) {
+    if (!this.siteId || !doc.filename) return;
+    this.service.deleteDocument(this.siteId, doc.filename).subscribe(() => {
+      this.documents = this.documents.filter(d => d.filename !== doc.filename);
+    });
+  }
 }

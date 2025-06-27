@@ -13,17 +13,56 @@
     <button *ngIf="photoToUpload" (click)="uploadPhoto()" class="btn btn-primary">Uploader la photo</button>
   </div>
 
-  <!-- Liste des photos -->
-  <div *ngIf="photos.length > 0">
-    <div *ngFor="let p of photos" class="flex items-center gap-4 mb-3">
-      <img [src]="p.fileUrl" class="w-24 h-24 object-cover rounded shadow" />
-      <div>
+  <!-- Galerie des photos -->
+  <div *ngIf="photos.length > 0" class="mb-8">
+  <h3 class="font-semibold mb-2 text-base">Photos du chantier</h3>
+    <div class="flex flex-wrap gap-4">
+      <div *ngFor="let p of photos; let i = index" class="flex flex-col items-center mb-3">
+        <img
+          [src]="p.fileUrl"
+          class="w-24 h-24 object-cover rounded shadow mb-1 cursor-pointer"
+          (click)="openLightbox(i)"
+          alt="Photo chantier"
+        />
         <div class="text-xs text-gray-600">Ajoutée le {{ p.uploadedAt | date:'short' }}</div>
-        <a [href]="p.fileUrl" download target="_blank" class="text-blue-500 underline">Télécharger</a>
+        <div class="flex gap-2">
+          <a [href]="p.fileUrl" download target="_blank" class="text-blue-500 underline">Télécharger</a>
+          <button class="btn btn-danger btn-xs" (click)="deletePhoto(p)">Supprimer</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- LIGHTBOX / VISIONNEUSE D'IMAGES -->
+  <div *ngIf="lightboxOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+    <button class="absolute top-5 right-7 text-white text-4xl font-bold" (click)="closeLightbox()">&times;</button>
+    <button class="absolute left-5 text-white text-3xl" (click)="prevPhoto()">&#8592;</button>
+    <img
+      [src]="photos[selectedPhotoIndex].fileUrl"
+      class="max-h-[80vh] max-w-[90vw] rounded-xl shadow-lg border-4 border-white"
+      alt="Photo agrandie"
+    />
+    <button class="absolute right-5 text-white text-3xl" (click)="nextPhoto()">&#8594;</button>
+  </div>
+
+
+  <!-- Ajout d’un document -->
+  <div class="mb-4 flex items-center gap-3">
+    <input type="file" (change)="onDocSelected($event)" />
+    <button *ngIf="docToUpload" (click)="uploadDocument()" class="btn btn-primary">Uploader le document</button>
+  </div>
+
+  <!-- Liste des documents -->
+  <div *ngIf="documents.length > 0">
+    <h3 class="font-semibold mb-2 text-base">Documents associés</h3>
+    <div *ngFor="let doc of documents" class="flex items-center gap-4 mb-3">
+      <a [href]="doc.fileUrl" target="_blank" class="text-blue-600 underline">{{ doc.filename }}</a>
+      <span class="text-xs text-gray-600">Ajouté le {{ doc.uploadedAt | date:'short' }}</span>
+      <button class="btn btn-danger btn-xs" (click)="deleteDocument(doc)">Supprimer</button>
+    </div>
+  </div>
 </ng-container>
+
 <ng-template #loading>
   <div class="text-slate-400">Chargement du chantier...</div>
 </ng-template>
