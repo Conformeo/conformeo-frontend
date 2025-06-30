@@ -1,3 +1,6 @@
+ng serve --proxy-config proxy.conf.json
+
+
 npm run test -- --watch=false --browsers=ChromeHeadless
 # Avant commit : 
 ng lint && ng test --watch=false --browsers=ChromiumHeadless

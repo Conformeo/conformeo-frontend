@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Site } from '../../../models/site.model';
 import { SitePhoto, SiteDocument } from '../../../models/site-photo';
 
-// LOCALSTORAGE demo key
 const STORAGE_KEY = 'conformeo_sites';
 
 // Simulateurs en mémoire (non persistant, reset à chaque F5)
@@ -15,27 +14,21 @@ function getFromStorage(): Site[] {
   const data = localStorage.getItem(STORAGE_KEY);
   return data ? JSON.parse(data) as Site[] : [];
 }
-
 function setToStorage(sites: Site[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(sites));
 }
 
 @Injectable({ providedIn: 'root' })
 export class SitesService {
-  private apiUrl = '/api/sites'; // adapte à ton backend si besoin
+  private apiUrl = '/api/sites';
 
   constructor(private http: HttpClient) {}
 
-  /** Helper : si API down, fallback local */
   private fallback<T>(obs: Observable<T>, local: () => T): Observable<T> {
     return obs.pipe(
       catchError(() => of(local()))
     );
   }
-
-  // =====================
-  //      SITES CRUD
-  // =====================
 
   getAll(): Observable<Site[]> {
     return this.fallback(
@@ -88,18 +81,12 @@ export class SitesService {
     );
   }
 
-  // =========================
-  // PHOTOS & DOCUMENTS
-  // (API → sinon mock local)
-  // =========================
-
   // --- PHOTOS ---
   uploadPhoto(siteId: string, file: File): Observable<SitePhoto> {
     const formData = new FormData();
     formData.append('file', file);
     return this.http.post<SitePhoto>(`${this.apiUrl}/${siteId}/photos`, formData).pipe(
       catchError(() => {
-        // Mock local si API indispo
         const url = URL.createObjectURL(file);
         const photo: SitePhoto = {
           fileUrl: url,
@@ -119,11 +106,10 @@ export class SitesService {
     );
   }
 
-  deletePhoto(siteId: string, fileUrl: string): Observable<void> {
-    // Le paramètre 'fileUrl' permet de supprimer une photo précise en mode mock
-    return this.http.delete<void>(`${this.apiUrl}/${siteId}/photos/${encodeURIComponent(fileUrl)}`).pipe(
+  deletePhoto(siteId: string, filename: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${siteId}/photos/${encodeURIComponent(filename)}`).pipe(
       catchError(() => {
-        mockPhotos[siteId] = (mockPhotos[siteId] || []).filter(p => p.fileUrl !== fileUrl);
+        mockPhotos[siteId] = (mockPhotos[siteId] || []).filter(p => p.filename !== filename);
         return of(void 0);
       })
     );
