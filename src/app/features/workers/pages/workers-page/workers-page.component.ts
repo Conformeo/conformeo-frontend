@@ -1,64 +1,98 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Worker } from '../../../../models/worker.model';
-import { WorkerService } from '../../../../core/services/worker.service';
-import { ModalComponent } from '../../../../shared/modal/modal.component';
-import { WorkerFormComponent } from '../../components/worker-form/worker-form.component';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule }   from '@angular/common';
+import { FormsModule }    from '@angular/forms';
+
+import { Worker }          from '../../../../models/worker.model';
+import { WorkerService }   from '../../../../core/services/worker.service';
+
 import { WorkerTableComponent } from '../../components/worker-table/worker-table.component';
-import { FormsModule } from '@angular/forms';
+import { WorkerFormComponent }  from '../../components/worker-form/worker-form.component';
+import { ModalComponent }       from '../../../../shared/modal/modal.component';
 
 @Component({
-  selector: 'app-workers-page',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ModalComponent, WorkerFormComponent, WorkerTableComponent],
+  selector   : 'app-workers-page',
+  standalone : true,
+  imports    : [
+    CommonModule,
+    FormsModule,
+    WorkerTableComponent,
+    WorkerFormComponent,
+    ModalComponent,
+  ],
   templateUrl: './workers-page.component.html',
 })
-export class WorkersPageComponent {
+export class WorkersPageComponent implements OnInit {
+
+  /* ░░ Données ░░ */
   workers: Worker[] = [];
-  editingWorker: Worker | null = null;
-  workerToDelete: Worker | null = null;
-  
-  searchWorker = '';
+  teams  : string[] = [];
 
-  get filteredWorkers() {
-    const q = this.searchWorker?.toLowerCase() ?? '';
-    return this.workers.filter(w =>
-      (w.lastName ?? '').toLowerCase().includes(q) ||
-      (w.firstName ?? '').toLowerCase().includes(q) ||
-      (w.role ?? '').toLowerCase().includes(q) ||
-      (w.phone ?? '').toLowerCase().includes(q)
-    );
+  /* ░░ UI state ░░ */
+  selectedTeam = '';      // '' = tous
+  search       = '';
+
+  editing : Worker | null = null;
+  toDelete: Worker | null = null;
+
+  /* ———————————————————————————————— */
+
+  constructor(private svc: WorkerService) {}
+
+  ngOnInit() { this.load(); }
+
+  /* Chargement + maj équipes --------------------------------- */
+  private load() {
+    this.svc.getAll().subscribe(list => {
+      this.workers = list ?? [];
+      const set = new Set(
+        this.workers
+          .map(w => w.equipe)
+          .filter(Boolean)        // exclut '' / null
+      );
+      this.teams = [...set];
+    });
   }
 
-
-  constructor(private service: WorkerService) {}
-
-  ngOnInit() {
-    this.reload();
+  /* Getter pour le *ngFor (évite le spread …) */
+  get teamsList(): string[] {
+    return ['Tous', ...this.teams];
   }
 
-  reload() {
-    this.service.getAll().subscribe(list => this.workers = list ?? []);
+  /* Filtrage temps-réel -------------------------------------- */
+  selectTeam(t: string) { this.selectedTeam = t; }
+
+  get filteredWorkers(): Worker[] {
+    const term = this.search.toLowerCase().trim();
+    return this.workers
+      .filter(w => this.selectedTeam ? w.equipe === this.selectedTeam : true)
+      .filter(w =>
+        (`${w.nom} ${w.prenom} ${w.poste} ${w.telephone}`.toLowerCase())
+          .includes(term)
+      );
   }
 
-  openForm(worker?: Worker) {
-    this.editingWorker = worker ? { ...worker } : { id: '', lastName: '', firstName: '', role: '', phone: '' };
+  /* CRUD ------------------------------------------------------ */
+  openForm(w?: Worker) {
+    this.editing = w
+      ? { ...w }
+      : { id: '', nom:'', prenom:'', poste:'', equipe:'', telephone:'', email:'', siteId:'' };
   }
-  closeForm() { this.editingWorker = null; }
-  onWorkerSaved(worker: Worker) {
+  closeForm() { this.editing = null; }
+
+  onSave(worker: Worker) {
     const obs = worker.id
-      ? this.service.update(worker)
-      : this.service.add({ ...worker, id: Date.now().toString() });
-    obs.subscribe(() => { this.reload(); this.closeForm(); });
+      ? this.svc.update(worker)
+      : this.svc.add({ ...worker, id: Date.now().toString() });
+
+    obs.subscribe(() => { this.load(); this.closeForm(); });
   }
 
-  openDeleteWorker(worker: Worker) { this.workerToDelete = worker; }
-  cancelDeleteWorker() { this.workerToDelete = null; }
-  confirmDeleteWorker() {
-    if (!this.workerToDelete) return;
-    this.service.delete(this.workerToDelete.id).subscribe(() => {
-      this.reload();
-      this.cancelDeleteWorker();
+  openDeleteWorker(w: Worker) { this.toDelete = w; }
+  confirmDelete() {
+    if (!this.toDelete) return;
+    this.svc.delete(this.toDelete.id).subscribe(() => {
+      this.load();
+      this.toDelete = null;
     });
   }
 }

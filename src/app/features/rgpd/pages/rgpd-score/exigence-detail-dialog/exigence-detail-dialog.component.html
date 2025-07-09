@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Détail de l’exigence</h2>
+<div mat-dialog-content>
+  <p><b>Exigence :</b> {{data.label}}</p>
+  <p><b>Réponse :</b> {{data.answer}}</p>
+  <p><b>Critique :</b> <span [ngClass]="{'text-danger': data.critical}">{{data.critical ? 'Oui' : 'Non'}}</span></p>
+  <p *ngIf="data.advice"><b>Conseil :</b> {{data.advice}}</p>
+  <p *ngIf="data.comment"><b>Commentaire :</b> {{data.comment}}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Fermer</button>
+</div>

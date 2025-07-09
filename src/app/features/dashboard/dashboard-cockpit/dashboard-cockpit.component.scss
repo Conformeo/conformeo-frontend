@@ -1,0 +1,12 @@
+.dashboard-cockpit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 32px;
+  margin: 32px 8px 0 8px;
+}
+.dashboard-block {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px #0c24410e;
+  padding: 24px 18px 18px 18px;
+}

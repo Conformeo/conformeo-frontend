@@ -1,6 +1,6 @@
 export interface DashboardStat {
-  label:  string;
-  value:  string | number;
-  variant?: 'risk';         // ← rouge
-  icon?:   string;          // ← nom d’icône Lucide (optionnel)
+  label: string;
+  value: number | string;
+  icon?: string;
+  variant?: 'risk' | 'default' | string;
 }

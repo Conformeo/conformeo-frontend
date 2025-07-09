@@ -1,0 +1,21 @@
+<div class="dashboard-securite-container">
+  <h2>Sécurité</h2>
+  <div>
+    <div>Nb contrôles : {{stats.nb_controles}}</div>
+    <div>Non-conformités en cours : {{stats.nb_nc}}</div>
+    <div>Dernier contrôle : {{stats.last_ctrl | date:'shortDate'}}</div>
+    <button mat-raised-button color="primary" (click)="voirDetail()">Voir détail</button>
+  </div>
+  <div style="margin-top:24px;">
+    <ngx-charts-line-chart
+      [results]="[{ name: 'Non-conformités', series: timelineData }]"
+      [xAxis]="true"
+      [yAxis]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      xAxisLabel="Date"
+      yAxisLabel="NC"
+      scheme="vivid"
+      *ngIf="timelineData.length"></ngx-charts-line-chart>
+  </div>
+</div>

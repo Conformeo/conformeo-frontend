@@ -1,0 +1,61 @@
+<mat-form-field appearance="outline" style="width: 100%; margin-bottom: 10px;">
+  <mat-label>Recherche exigence…</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Filtrer">
+</mat-form-field>
+
+<mat-checkbox [(ngModel)]="showCriticalOnly" (change)="filterTable()" style="margin-bottom: 10px;">
+  Afficher seulement les critiques
+</mat-checkbox>
+
+<h2 *ngIf="score">Score RGPD : {{score.score}}%</h2>
+<p *ngIf="score">{{score.conforme}} / {{score.total}} conformes</p>
+<p *ngIf="score && score.critical_ko">Points critiques non conformes : {{score.critical_ko.length}}</p>
+
+<mat-table [dataSource]="dataSource" class="mat-elevation-z2" *ngIf="score">
+  <ng-container matColumnDef="label">
+    <mat-header-cell *matHeaderCellDef>Exigence</mat-header-cell>
+    <mat-cell *matCellDef="let el">{{el.label}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="answer">
+    <mat-header-cell *matHeaderCellDef>Réponse</mat-header-cell>
+    <mat-cell *matCellDef="let el">{{el.answer}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="critical">
+    <mat-header-cell *matHeaderCellDef>Critique</mat-header-cell>
+    <mat-cell *matCellDef="let el">
+      <span [ngClass]="{'text-danger': el.critical, 'text-success': !el.critical}">
+        {{el.critical ? 'Oui' : 'Non'}}
+      </span>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="advice">
+    <mat-header-cell *matHeaderCellDef>Conseil</mat-header-cell>
+    <mat-cell *matCellDef="let el"><span style="font-size:0.95em">{{el.advice}}</span></mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetail(row)" style="cursor:pointer;"></mat-row>
+</mat-table>
+
+<div style="margin-top:20px;">
+  <button mat-raised-button color="accent" (click)="copierMarkdown()">Copier le rapport Markdown</button>
+  <button mat-raised-button color="accent" (click)="copierHTML()">Copier le rapport HTML</button>
+  <button mat-raised-button color="primary" (click)="downloadPDF()">Télécharger PDF</button>
+  <button mat-raised-button (click)="downloadCSV()">Exporter CSV</button>
+  <button mat-stroked-button color="accent" (click)="refaireTest()">Refaire l’auto-évaluation RGPD</button>
+</div>
+
+<ngx-charts-pie-chart
+  [view]="[220, 180]"
+  [results]="[
+    { name: 'Conforme', value: score.conforme || 0 },
+    { name: 'Non conforme', value: score.non_conforme || 0 }
+  ]"
+  [doughnut]="true"
+  [legend]="true"
+  [labels]="true"
+  [gradient]="false"
+  [scheme]="colorScheme"
+  style="max-width: 220px; margin:16px 0 24px 0"
+  *ngIf="score">
+</ngx-charts-pie-chart>

@@ -1,0 +1,36 @@
+.landing-hero {
+  text-align: center;
+  padding: 56px 12px 32px;
+  background: linear-gradient(90deg, #e9f7fd 0%, #fff 100%);
+  h1 { font-size: 2.2rem; margin-bottom: 10px; }
+  .text-primary { color: #1976d2; }
+}
+
+.why-section {
+  background: #fff;
+  border-radius: 12px;
+  margin: 32px auto 0;
+  padding: 32px 24px;
+  max-width: 600px;
+  ul { margin: 0; padding-left: 20px;}
+  .chiffre { font-size: 1.2em; color: #1976d2; margin-top: 20px; }
+}
+
+.test-section {
+  max-width: 550px; margin: 32px auto;
+  .test-card, .test-result { padding: 22px 16px; }
+  h2, h3 { margin-top: 0; }
+  .warn { color: #d32f2f; }
+  .danger { color: #b71c1c; }
+  .ok { color: #388e3c; }
+}
+
+.faq-section {
+  max-width: 600px; margin: 40px auto 20px; padding: 10px;
+}
+
+footer {
+  text-align: center; padding: 20px; font-size: 0.9em; color: #666;
+  background: #f7f7f7;
+  a { margin-left: 18px; color: #1976d2; text-decoration: underline; }
+}

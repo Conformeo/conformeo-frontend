@@ -1,1 +1,24 @@
 @use "variables" as *;
+/* ---------- PILLS / TABS ------------------------------------------------- */
+.pill {
+  @apply px-6 py-2 rounded-full border transition
+          font-semibold text-sm select-none;
+
+  /* état par défaut = bord bleu, texte bleu */
+  @apply border-blue-500 text-blue-500 hover:bg-blue-50;
+}
+
+/* état “actif” (onglet sélectionné) = bleu plein */
+.pill--active {
+  @apply bg-blue-600 text-white;
+}
+
+/* variante “accent” (bouton + / action) = vert plein */
+.pill--accent {
+  @apply bg-green-600 text-white hover:bg-green-700;
+}
+
+/* si besoin d’une version outline verte : */
+.pill--accent-outline {
+  @apply border-green-600 text-green-600 hover:bg-green-50;
+}

@@ -1,0 +1,81 @@
+<div class="dashboard-rgpd-stats" style="display:flex;gap:28px;margin-bottom:24px;">
+  <div class="stat">
+    <div class="value">{{ stats.scoreMoyen }}%</div>
+    <div class="label">Score moyen (6 mois)</div>
+  </div>
+  <div class="stat">
+    <div class="value">{{ stats.tauxConforme }}%</div>
+    <div class="label">% audits sans critique</div>
+  </div>
+  <div class="stat">
+    <div class="value">{{ stats.audits }}</div>
+    <div class="label">Nb audits RGPD</div>
+  </div>
+  <div class="stat">
+    <div class="value">{{ stats.dernierAudit | date:'shortDate' }}</div>
+    <div class="label">Dernier audit</div>
+  </div>
+
+  <!-- VISUELS -->
+  <div class="dashboard-rgpd-container">
+  <div style="display:flex;gap:48px;align-items:flex-start;">
+    <div>
+      <ngx-charts-pie-chart
+        [view]="[220, 180]"
+        [results]="scoreChartData"
+        [doughnut]="true"
+        [legend]="true"
+        [labels]="true"
+        [gradient]="false"
+        scheme="vivid"
+        style="max-width: 220px; margin:16px 0 24px 0"
+        *ngIf="scoreChartData.length"></ngx-charts-pie-chart>
+    </div>
+    <div>
+      <h2 style="margin:0;">Score RGPD : {{score.score}}%</h2>
+      <p>{{score.conforme}} / {{score.total}} conformes</p>
+      <div *ngIf="alertesCritiques.length" style="color:#d32f2f;font-weight:bold;">
+        ⚠️ {{alertesCritiques.length}} non-conformités critiques !
+        <ul>
+          <li *ngFor="let item of alertesCritiques">{{item}}</li>
+        </ul>
+      </div>
+      <button mat-raised-button (click)="voirDetailAudit()">Voir détail</button>
+
+
+      <div style="margin-top:12px;">
+        <button mat-raised-button color="primary" (click)="downloadPDF()">Télécharger PDF</button>
+        <button mat-raised-button color="primary" (click)="downloadCSV()">Exporter CSV</button>
+        <button mat-raised-button color="accent" (click)="refaireAudit()">Refaire l’audit RGPD</button>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:40px;">
+    <ngx-charts-line-chart
+      [results]="timelineData"
+      [xAxis]="true"
+      [yAxis]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      xAxisLabel="Date"
+      yAxisLabel="Score RGPD"
+      scheme="cool"
+      *ngIf="timelineData.length"></ngx-charts-line-chart>
+  </div>
+</div>
+
+
+  <!-- Timeline -->
+  <div style="margin-top:40px;">
+    <ngx-charts-line-chart
+      [results]="[{ name: 'Score RGPD', series: timelineData }]"
+      [xAxis]="true"
+      [yAxis]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      xAxisLabel="Date"
+      yAxisLabel="Score RGPD"
+      scheme="cool"
+      *ngIf="timelineData.length"></ngx-charts-line-chart>
+  </div>
+</div>

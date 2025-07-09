@@ -7,11 +7,9 @@ import { Worker } from '../../../../models/worker.model';
   templateUrl: './worker-table.component.html',
   standalone: true,
   imports: [CommonModule],
-
 })
 export class WorkerTableComponent {
   @Input() workers: Worker[] = [];
   @Output() edit = new EventEmitter<Worker>();
   @Output() delete = new EventEmitter<Worker>();
-
 }

@@ -1,0 +1,47 @@
+<div class="duerp-detail-container">
+  <button mat-stroked-button (click)="retourCockpit()">
+    ← Retour cockpit
+  </button>
+  <h2>Détail DUERP – Risques & Mesures</h2>
+
+  <mat-form-field appearance="outline" style="width: 240px; margin-bottom: 10px;">
+    <mat-label>Recherche…</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filtrer">
+  </mat-form-field>
+
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z2" style="margin-bottom:24px;">
+    <ng-container matColumnDef="site">
+      <mat-header-cell *matHeaderCellDef>Site</mat-header-cell>
+      <mat-cell *matCellDef="let el">{{el.site}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="risque">
+      <mat-header-cell *matHeaderCellDef>Risque</mat-header-cell>
+      <mat-cell *matCellDef="let el">{{el.risque}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="gravite">
+      <mat-header-cell *matHeaderCellDef>Gravité</mat-header-cell>
+      <mat-cell *matCellDef="let el">{{el.gravite}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="mesure">
+      <mat-header-cell *matHeaderCellDef>Mesure</mat-header-cell>
+      <mat-cell *matCellDef="let el">{{el.mesure}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="etat">
+      <mat-header-cell *matHeaderCellDef>État</mat-header-cell>
+      <mat-cell *matCellDef="let el">
+        <span [ngClass]="{
+            'text-danger': el.etat === 'Non conforme',
+            'text-success': el.etat === 'Conforme',
+            'text-warning': el.etat === 'À revoir'
+          }">{{el.etat}}</span>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <div style="margin-bottom:24px;">
+    <button mat-raised-button color="primary" (click)="exportPDF()">Télécharger PDF</button>
+    <button mat-raised-button color="primary" (click)="exportCSV()">Exporter CSV</button>
+  </div>
+</div>

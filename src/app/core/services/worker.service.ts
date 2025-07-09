@@ -1,75 +1,76 @@
 import { Injectable } from '@angular/core';
-import { WorkerApi } from '../api/worker.api';
-import { Worker } from '../../models/worker.model';
 import { Observable, of } from 'rxjs';
+import { Worker } from '../../models/worker.model';
+import { WorkerApi } from '../api/worker.api';
 import { environment } from '../../../environments/environment';
+import { map } from 'rxjs/operators';
 
-const STORAGE_KEY = 'conformeo_workers';
-
-function getFromStorage(): Worker[] {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) as Worker[] : [];
-}
-
-function setToStorage(workers: Worker[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(workers));
-}
+const LS_KEY = 'conformeo_workers';
 
 @Injectable({ providedIn: 'root' })
 export class WorkerService {
   constructor(private api: WorkerApi) {}
 
+  /* -------------- MOCK helpers -------------- */
+  private ls(): Worker[] {
+    const d = localStorage.getItem(LS_KEY);
+    return d ? JSON.parse(d) as Worker[] : [];
+  }
+  private saveLS(list: Worker[]) { localStorage.setItem(LS_KEY, JSON.stringify(list)); }
+
+  /* -------------- CRUD -------------- */
   getAll(): Observable<Worker[]> {
-    if (environment.useMock) {
-      return of(getFromStorage());
-    }
-    return this.api.getAll();
+    return environment.useMock ? of(this.ls()) : this.api.getAll();
   }
 
-  getById(id: string): Observable<Worker | undefined> {
+  add(w: Worker): Observable<Worker> {
     if (environment.useMock) {
-      return of(getFromStorage().find(w => w.id === id));
+      const list = this.ls(); list.push(w); this.saveLS(list);
+      return of(w);
     }
-    return this.api.getById(id);
+    return this.api.add(w);
   }
 
-  add(worker: Worker): Observable<Worker> {
+  update(w: Worker): Observable<Worker> {
     if (environment.useMock) {
-      const workers = getFromStorage();
-      workers.push(worker);
-      setToStorage(workers);
-      return of(worker);
+      const list = this.ls();
+      const i = list.findIndex(x => x.id === w.id);
+      if (i !== -1) list[i] = w;
+      this.saveLS(list);
+      return of(w);
     }
-    return this.api.add(worker);
-  }
-
-  update(worker: Worker): Observable<Worker> {
-    if (environment.useMock) {
-      const workers = getFromStorage();
-      const idx = workers.findIndex(w => w.id === worker.id);
-      if (idx >= 0) workers[idx] = worker;
-      setToStorage(workers);
-      return of(worker);
-    }
-    return this.api.update(worker);
+    return this.api.update(w);
   }
 
   delete(id: string): Observable<void> {
     if (environment.useMock) {
-      let workers = getFromStorage();
-      workers = workers.filter(w => w.id !== id);
-      setToStorage(workers);
-      return of();
+      this.saveLS(this.ls().filter(w => w.id !== id));
+      return of(void 0);
     }
     return this.api.delete(id);
   }
 
-  // Pour la démo : reset mock data
-  resetDemoData(): void {
-    const demo: Worker[] = [
-      { id: '1', firstName: 'Marie', lastName: 'Dupont', role: 'Chef de chantier', phone: '0612345678', siteId: '1' },
-      { id: '2', firstName: 'Alex', lastName: 'Martin', role: 'Ouvrier', siteId: '2' }
-    ];
-    setToStorage(demo);
+  /** Regroupe les ouvriers par équipe puis par siteId */
+  getGroupedByTeam(): Observable<Record<string, Record<string, Worker[]>>> {
+    return this.getAll().pipe(
+      map(list => {
+        const grouped: Record<string, Record<string, Worker[]>> = {};
+        for (const w of list) {
+          const team = w.equipe || '—';
+          const site = w.siteId || '—';
+          grouped[team] ??= {};
+          grouped[team][site] ??= [];
+          grouped[team][site].push(w);
+        }
+        return grouped;
+      })
+    );
+  }
+  /* -------------- Démo rapide -------------- */
+  resetDemo() {
+    this.saveLS([
+      { id: '1', nom: 'Dupont', prenom: 'Marie', poste: 'Chef',        telephone: '06 11 22 33 44', email: '', siteId: '', equipe: 'A' },
+      { id: '2', nom: 'Martin', prenom: 'Jean',  poste: 'Technicien',  telephone: '07 55 66 77 88', email: '', siteId: '', equipe: 'B' },
+    ]);
   }
 }

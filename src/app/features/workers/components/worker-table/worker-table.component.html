@@ -5,22 +5,24 @@
       <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700">Prénom</th>
       <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700">Poste</th>
       <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700">Téléphone</th>
+      <th class="px-4 py-2 text-left text-xs font-semibold text-gray-700">Équipe</th>
       <th class="px-4 py-2 text-center text-xs font-semibold text-gray-700">Actions</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let worker of workers" class="border-b hover:bg-gray-50">
-      <td class="px-4 py-2 font-medium">{{ worker.lastName }}</td>
-      <td class="px-4 py-2">{{ worker.firstName }}</td>
-      <td class="px-4 py-2">{{ worker.role }}</td>
-      <td class="px-4 py-2">{{ worker.phone || '—' }}</td>
+      <td class="px-4 py-2 font-medium">{{ worker.nom }}</td>
+      <td class="px-4 py-2">{{ worker.prenom }}</td>
+      <td class="px-4 py-2">{{ worker.poste || '—' }}</td>
+      <td class="px-4 py-2">{{ worker.telephone || '—' }}</td>
+      <td class="px-4 py-2">{{ worker.equipe || '—' }}</td>
       <td class="px-4 py-2 text-center">
         <button class="text-blue-600 hover:underline font-semibold mr-2" (click)="edit.emit(worker)">Modifier</button>
         <button class="text-red-600 border border-red-600 hover:bg-red-50 font-semibold px-2 py-1 rounded" (click)="delete.emit(worker)">Supprimer</button>
       </td>
     </tr>
     <tr *ngIf="workers.length === 0">
-      <td class="px-4 py-4 text-center text-gray-400" colspan="5">Aucun ouvrier enregistré</td>
+      <td class="px-4 py-4 text-center text-gray-400" colspan="6">Aucun ouvrier enregistré</td>
     </tr>
   </tbody>
 </table>

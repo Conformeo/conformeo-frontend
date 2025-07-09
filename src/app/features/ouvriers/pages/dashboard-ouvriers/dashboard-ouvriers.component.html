@@ -1,0 +1,21 @@
+<div class="dashboard-ouvriers-container">
+  <h2>Ouvriers</h2>
+  <div>
+    <div>Effectif actuel : {{stats.nb_ouvriers}}</div>
+    <div>Formations à faire : {{stats.formations_a_faire}}</div>
+    <div>Dernier recrutement : {{stats.last_hire | date:'shortDate'}}</div>
+    <button mat-raised-button color="primary" (click)="voirDetail()">Voir détail</button>
+  </div>
+  <div style="margin-top:24px;">
+    <ngx-charts-line-chart
+      [results]="[{ name: 'Ouvriers', series: timelineData }]"
+      [xAxis]="true"
+      [yAxis]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      xAxisLabel="Date"
+      yAxisLabel="Effectif"
+      scheme="vivid"
+      *ngIf="timelineData.length"></ngx-charts-line-chart>
+  </div>
+</div>

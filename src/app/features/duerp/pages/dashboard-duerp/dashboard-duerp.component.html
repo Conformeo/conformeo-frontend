@@ -1,0 +1,13 @@
+<!-- ...charts, stats, etc. ... -->
+<button mat-raised-button color="primary" (click)="voirDuerp()">Voir détail DUERP</button>
+<div *ngIf="stats">
+  <div class="stat">{{stats.sites}} sites</div>
+  <div class="stat">{{stats.risques}} risques</div>
+  <div class="stat">{{stats.plansAction}} plans d’action</div>
+  <div class="stat">{{stats.auditsRecents}} audits récents</div>
+</div>
+<div>
+  <ngx-charts-pie-chart [results]="risquesData" scheme="natural"></ngx-charts-pie-chart>
+  <ngx-charts-line-chart [results]="timelineData" scheme="vivid"></ngx-charts-line-chart>
+</div>
+<button mat-raised-button (click)="voirDuerp()">Voir détail DUERP</button>

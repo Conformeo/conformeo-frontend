@@ -1,1 +1,57 @@
-<p>reports-page works!</p>
+<div id="pdf-rapport" *ngIf="report as rep" style="max-width:700px;margin:auto;padding:32px;font-family:sans-serif;border:1px solid #eee;border-radius:16px;">
+  <div style="text-align:center;margin-bottom:32px;">
+    <img src="assets/logo-conformeo.png" alt="Logo Conforméo" width="120" style="margin-bottom:8px;" />
+    <h2 style="margin:0;color:#3165d4;font-weight:900;">Rapport Conformité Express</h2>
+    <div style="color:#666;font-size:16px;">Généré par Conforméo</div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+    <div><b>Raison sociale :</b> {{ rep.company }}</div>
+    <div><b>Date :</b> {{ rep.date }}</div>
+  </div>
+  <div style="font-size:24px;margin-bottom:24px;">
+    <b>Score global :</b>
+    <span [style.color]="rep.score >= 80 ? '#16a34a' : rep.score >= 50 ? '#eab308' : '#ef4444'">
+      {{ rep.score }} %
+    </span>
+  </div>
+
+  <div style="margin-bottom:24px;">
+    <h4 style="margin-bottom:8px;">Synthèse modules</h4>
+    <table style="width:100%;border-collapse:collapse;font-size:16px;">
+      <tr style="background:#f5f5fa;">
+        <th style="text-align:left;padding:6px 8px;">Module</th>
+        <th style="text-align:left;padding:6px 8px;">Statut</th>
+      </tr>
+      <tr *ngFor="let m of rep.modules">
+        <td style="padding:6px 8px;">{{ m.name }}</td>
+        <td style="padding:6px 8px;">{{ m.status }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="margin-bottom:24px;">
+    <h4 style="margin-bottom:8px;">Checklist prioritaire</h4>
+    <ul style="list-style:none;padding-left:0;">
+      <li *ngFor="let c of rep.checklist" style="margin-bottom:4px;">
+        <span style="font-size:20px;color:#3165d4;vertical-align:middle;">☐</span>
+        <span style="vertical-align:middle;">{{ c }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div style="margin-bottom:24px;">
+    <h4 style="margin-bottom:8px;">Recommandations</h4>
+    <ul style="padding-left:18px;">
+      <li *ngFor="let r of rep.recommendations">{{ r }}</li>
+    </ul>
+  </div>
+
+  <div style="text-align:right;color:#999;font-size:13px;margin-top:40px;">
+    Rapport généré le {{ rep.date }} par Conforméo
+  </div>
+</div>
+
+<button (click)="exportPDF()" *ngIf="report" style="margin:24px auto 0;display:block;padding:12px 32px;background:#3165d4;color:#fff;font-size:18px;border:none;border-radius:8px;cursor:pointer;">
+  Exporter en PDF
+</button>

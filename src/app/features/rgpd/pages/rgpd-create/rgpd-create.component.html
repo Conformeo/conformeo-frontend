@@ -1,0 +1,14 @@
+<h2>Nouveau test RGPD</h2>
+<form (ngSubmit)="submit()">
+  <div *ngFor="let e of exigences">
+    <label>{{e.label}} <span *ngIf="e.critical" style="color:red;">*</span></label>
+    <select [(ngModel)]="answers[e.id]" name="answer_{{e.id}}">
+      <option value="oui">Oui</option>
+      <option value="non">Non</option>
+      <option value="partiel">Partiel</option>
+    </select>
+    <span class="article">{{e.article}}</span>
+    <span class="advice" *ngIf="e.advice">({{e.advice}})</span>
+  </div>
+  <button mat-raised-button color="primary" type="submit">Valider l'audit</button>
+</form>

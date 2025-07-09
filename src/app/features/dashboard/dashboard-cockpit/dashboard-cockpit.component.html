@@ -1,0 +1,26 @@
+<div class="dashboard-cockpit-grid">
+  <!-- Bloc RGPD -->
+  <section *ngIf="modulesActive.rgpd" class="dashboard-block">
+    <app-dashboard-rgpd [auditId]="auditId" [userId]="userId"></app-dashboard-rgpd>
+  </section>
+  <!-- Bloc DUERP -->
+  
+  <section *ngIf="modulesActive.duerp" class="dashboard-block">
+    <app-dashboard-duerp [userId]="userId"></app-dashboard-duerp>
+  </section>
+ 
+  <section *ngIf="modulesActive.certif" class="dashboard-block">
+    <app-dashboard-certif [userId]="userId"></app-dashboard-certif>
+  </section>
+  
+  <section *ngIf="modulesActive.ouvriers" class="dashboard-block">
+    <app-dashboard-ouvriers [userId]="userId"></app-dashboard-ouvriers>
+  </section>
+  
+  <section *ngIf="modulesActive.securite" class="dashboard-block">
+    <app-dashboard-securite [userId]="userId"></app-dashboard-securite>
+  </section>
+  
+
+  <!-- Ajoute d'autres blocs ici -->
+</div>

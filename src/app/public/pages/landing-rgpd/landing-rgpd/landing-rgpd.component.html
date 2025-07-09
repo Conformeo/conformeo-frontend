@@ -1,0 +1,78 @@
+<div class="landing-hero">
+  <img src="assets/logo-conformeo.svg" alt="Conforméo" width="160" />
+  <h1>Êtes-vous conforme au <span class="text-primary">RGPD</span> ?</h1>
+  <p>Obtenez en 3 minutes une estimation gratuite de votre conformité.</p>
+  <button mat-raised-button color="primary" (click)="scrollToTest()">Faire le test RGPD</button>
+</div>
+
+<div class="why-section mat-elevation-z2">
+  <h2>Pourquoi le RGPD concerne votre entreprise ?</h2>
+  <ul>
+    <li>Evitez les sanctions financières (jusqu’à 4% du CA)</li>
+    <li>Protégez votre image et gagnez la confiance de vos clients</li>
+    <li>Accédez à des marchés publics ou grands comptes</li>
+  </ul>
+  <p class="chiffre"><b>60%</b> des TPE/PME ne sont pas en conformité en 2024*</p>
+</div>
+
+<div class="test-section" id="test">
+  <h2>Votre baromètre RGPD express</h2>
+  <mat-card class="test-card" *ngIf="!showResult">
+    <form>
+      <mat-list>
+        <mat-list-item *ngFor="let q of questions; let i=index">
+          <span>{{q.label}}</span>
+          <span class="spacer"></span>
+          <mat-radio-group [(ngModel)]="answers[i]" name="q{{i}}">
+            <mat-radio-button value="oui">Oui</mat-radio-button>
+            <mat-radio-button value="non">Non</mat-radio-button>
+          </mat-radio-group>
+        </mat-list-item>
+      </mat-list>
+      <button mat-raised-button color="accent" (click)="estimate()" style="margin-top: 18px;">Voir mon estimation</button>
+    </form>
+  </mat-card>
+  <mat-card class="test-result" *ngIf="showResult">
+    <h3>Votre score RGPD estimé : <span [ngClass]="scoreClass()">{{score}}%</span></h3>
+    <p *ngIf="score < 70" class="warn">Attention, vous êtes probablement non conforme. Demandez votre rapport détaillé gratuit 👇</p>
+    <p *ngIf="score >= 70">Bravo, votre démarche RGPD est déjà avancée !</p>
+    <form (ngSubmit)="submitLead()">
+      <mat-form-field>
+        <input matInput placeholder="Votre e-mail (pour recevoir votre rapport)" [(ngModel)]="email" name="email" required email>
+      </mat-form-field>
+      <button mat-raised-button color="primary">Recevoir mon rapport</button>
+    </form>
+  </mat-card>
+</div>
+
+<div class="why-section mat-elevation-z1">
+  <h2>Pourquoi choisir Conforméo ?</h2>
+  <ul>
+    <li>Solution 100% française, adaptée aux TPE/PME</li>
+    <li>Conseils personnalisés, PDF exportable</li>
+    <li>Aucun engagement, aucune carte bancaire demandée</li>
+  </ul>
+</div>
+
+<div class="faq-section">
+  <h2>Questions fréquentes</h2>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Le RGPD c’est pour qui ?</mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>Toute organisation qui gère des données personnelles, quelle que soit sa taille.</p>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Que risque-t-on ?</mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>Des amendes administratives, la perte de marchés, ou une dégradation de l’image.</p>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+<footer>
+  <p>© {{year}} Conforméo — RGPD made easy</p>
+  <a href="/legal">Mentions légales</a>
+</footer>

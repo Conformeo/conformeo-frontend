@@ -1,7 +1,12 @@
+<h1 class="text-2xl font-semibold mb-4">Tableau de bord</h1>
+
+<!-- Cartes stats classiques (sites, contrôles, etc.) -->
 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
   <app-stat-card
-    *ngFor="let stat of stats$ | async; let i = index"
-    [stat]="stat"
-    [icon]="i % 2 === 0 ? 'home' : 'alert-triangle'">
+    *ngFor="let stat of stats$ | async"
+    [stat]="stat">
   </app-stat-card>
 </div>
+
+<!-- Ton cockpit multi-modules sous forme de blocs : -->
+<app-dashboard-cockpit></app-dashboard-cockpit>

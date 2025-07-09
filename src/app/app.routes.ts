@@ -55,8 +55,8 @@ export const routes: Routes = [
       },
       {
         path: 'workers',
-        loadChildren: () => import('./features/workers/workers.module')
-          .then(m => m.WorkersModule),
+        loadComponent: () => import('./features/workers/pages/workers-page/workers-page.component')
+                              .then(m => m.WorkersPageComponent),
         data: { title: 'Ouvriers' },
       },
       {
@@ -79,8 +79,8 @@ export const routes: Routes = [
       },
       {
         path: 'reports',
-        loadChildren: () => import('./features/reports/reports.module')
-          .then(m => m.ReportsModule),
+        loadComponent: () => import('./features/reports/pages/reports-page/reports-page.component')
+          .then(m => m.ReportsPageComponent),
         data: { title: 'Rapports' },
       },
       {

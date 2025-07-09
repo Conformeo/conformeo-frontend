@@ -1,0 +1,29 @@
+<mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+  <ng-container matColumnDef="label">
+    <mat-header-cell *matHeaderCellDef>Exigence</mat-header-cell>
+    <mat-cell *matCellDef="let el">{{el.label}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="article">
+    <mat-header-cell *matHeaderCellDef>Article</mat-header-cell>
+    <mat-cell *matCellDef="let el">{{el.article}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="scope">
+    <mat-header-cell *matHeaderCellDef>Portée</mat-header-cell>
+    <mat-cell *matCellDef="let el">{{el.scope}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="critical">
+    <mat-header-cell *matHeaderCellDef>Critique</mat-header-cell>
+    <mat-cell *matCellDef="let el">
+      <mat-icon *ngIf="el.critical" color="warn">warning</mat-icon>
+      <span *ngIf="!el.critical">-</span>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="detail">
+    <mat-header-cell *matHeaderCellDef>Détail</mat-header-cell>
+    <mat-cell *matCellDef="let el">
+      <button mat-stroked-button color="primary" (click)="openDetail(el)">Voir</button>
+    </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

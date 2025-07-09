@@ -1,9 +1,11 @@
+// src/app/models/worker.model.ts
 export interface Worker {
   id: string;
-  lastName: string;
-  firstName: string;
-  role: string;
-  phone?: string;
+  nom: string;
+  prenom: string;
+  poste: string;
+  telephone?: string;
   email?: string;
-  siteId?: string; // Optionnel : rattachement à un chantier (site)
+  siteId?: string;   // ← optionnel
+  equipe: string;    // ← obligatoire désormais
 }

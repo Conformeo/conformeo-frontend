@@ -1,0 +1,21 @@
+<div class="dashboard-certif-container">
+  <h2>Certifications</h2>
+  <div>
+    <div>Certificats actifs : {{stats.nb_certifs}}</div>
+    <div>À renouveler sous 30 jours : {{stats.expireSous30j}}</div>
+    <div>Audits récents : {{stats.auditsRecents}}</div>
+    <button mat-raised-button color="primary" (click)="voirDetail()">Voir détail</button>
+  </div>
+  <div style="margin-top:24px;">
+    <ngx-charts-line-chart
+      [results]="[{ name: 'Certifications', series: timelineData }]"
+      [xAxis]="true"
+      [yAxis]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      xAxisLabel="Date"
+      yAxisLabel="Nb certifs"
+      scheme="vivid"
+      *ngIf="timelineData.length"></ngx-charts-line-chart>
+  </div>
+</div>

@@ -1,39 +1,51 @@
+// src/app/core/api/site.api.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Site } from '../../models/site.model';
 
+export interface SitePhoto {
+  filename: string;
+  fileUrl:  string;
+  uploadedAt: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class SiteApi {
-  private baseUrl = '/api/sites/';
+
+  /** Préfixe commun – **sans** slash final */
+  private readonly baseUrl = '/api/sites';
 
   constructor(private http: HttpClient) {}
 
+  /* ──────────────── Sites ──────────────── */
+
   list(): Observable<Site[]> {
-    return this.http.get<Site[]>(this.baseUrl);
+    return this.http.get<Site[]>(`${this.baseUrl}/`);
   }
 
   create(dto: Partial<Site>): Observable<Site> {
-    return this.http.post<Site>(this.baseUrl, dto);
+    return this.http.post<Site>(`${this.baseUrl}/`, dto);
   }
 
-  update(id: string, dto: Partial<Site>): Observable<Site> {
-    return this.http.put<Site>(`${this.baseUrl}${id}`, dto);
+  update(id: string | number, dto: Partial<Site>): Observable<Site> {
+    return this.http.put<Site>(`${this.baseUrl}/${id}`, dto);
   }
 
-  // site.api.ts
-  uploadPhoto(siteId: string, file: File) {
+  /* ──────────────── Photos ─────────────── */
+
+  uploadPhoto(siteId: string | number, file: File): Observable<SitePhoto> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<{id: number, fileUrl: string, uploadedAt: string, uploadedBy: string}>(
-      `/api/sites/${siteId}/photo`, formData
+    return this.http.post<SitePhoto>(
+      `${this.baseUrl}/${siteId}/photos`,
+      formData
     );
   }
 
-  getPhotos(siteId: string) {
-    return this.http.get<Array<{id: number, fileUrl: string, uploadedAt: string, uploadedBy: string}>>(
-      `/api/sites/${siteId}/photos`
-    );
+  getPhotos(siteId: string | number): Observable<SitePhoto[]> {
+    return this.http.get<SitePhoto[]>(`${this.baseUrl}/${siteId}/photos`);
   }
 
+  /* ───── (idem pour documents si besoin) ───── */
 }

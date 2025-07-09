@@ -28,3 +28,59 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+/* -------------------------------------------------------------
+   PILL / TAG button system
+   ------------------------------------------------------------- */
+$pill-border      : #0ea5e9;          /* bleu (tailwind sky-500)  */
+$pill-border-dark : #0284c7;          /* hover / focus outline    */
+$pill-accent      : #16a34a;          /* vert  (tailwind green-600)*/
+$pill-accent-dark : #15803d;          /* hover accent             */
+
+.pill{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding: .55rem 1.7rem;
+  border: 2px solid $pill-border;
+  border-radius: 9999px;              /* full rounded */
+  font-weight: 600;
+  color: $pill-border;
+  background:#fff;
+  transition: background .15s, color .15s, border-color .15s;
+
+  &:hover{ background: rgba($pill-border,.07); }
+  &:focus{ outline:2px solid $pill-border-dark; outline-offset:2px; }
+}
+
+.pill--active{
+  background:$pill-border;
+  color:#fff;
+}
+
+.pill--accent{
+  border-color:$pill-accent;
+  background:$pill-accent;
+  color:#fff;
+
+  &:hover{ background:$pill-accent-dark; border-color:$pill-accent-dark; }
+}
+
+/* -------------------------------------------------------------
+   Generic buttons reused ailleurs (optionnel)
+   ------------------------------------------------------------- */
+.btn{ @extend .pill; padding:.55rem 1.4rem; }
+.btn-danger{
+  border-color:#dc2626;               /* red-600 */
+  color:#dc2626;
+  &:hover{ background:#fee2e2; }
+}
+.btn-danger--fill{
+  background:#dc2626;  color:#fff; border-color:#dc2626;
+  &:hover{ background:#b91c1c; border-color:#b91c1c; }
+}
+
+.pill{@apply inline-flex items-center justify-center px-6 py-2
+             rounded-full border-2 border-sky-500 font-semibold
+             text-sky-500 bg-white transition-colors;}
+.pill:hover   {@apply bg-sky-50;}
+.pill--active {@apply bg-sky-500 text-white;}
+.pill--accent {@apply bg-green-600 text-white border-green-600;}
+.pill--accent:hover{@apply bg-green-700 border-green-700;}

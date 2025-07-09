@@ -1,5 +1,14 @@
-// report.model.ts
+// // report.model.ts
+// export interface Report {
+//   label: string;
+//   type: 'PDF'|'CSV'|'XLSX';
+// }
+
 export interface Report {
-  label: string;
-  type: 'PDF'|'CSV'|'XLSX';
+  company: string;
+  date: string;
+  score: number;
+  modules: { name: string; status: string }[];
+  checklist: string[];
+  recommendations: string[];
 }

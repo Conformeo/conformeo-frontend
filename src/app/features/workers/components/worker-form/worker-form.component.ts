@@ -15,8 +15,7 @@ export class WorkerFormComponent implements OnInit {
   @Output() cancel = new EventEmitter<void>();
 
   ngOnInit() {
-    // Pour éviter de modifier l'objet d'origine lors de l'édition
-    this.worker = { ...this.worker };
+    this.worker = { ...this.worker }; // Pour éditer sans effet de bord
   }
 
   onSubmit() {
