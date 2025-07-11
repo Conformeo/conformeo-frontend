@@ -3,11 +3,16 @@ import { DuerpService } from '../../duerp.service';
 import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { Router } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-dashboard-duerp',
   standalone: true,
-  imports: [CommonModule, NgxChartsModule],
+  imports: [
+    CommonModule, 
+    NgxChartsModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './dashboard-duerp.component.html',
   styleUrls: ['./dashboard-duerp.component.scss']
 })
@@ -19,6 +24,16 @@ export class DashboardDuerpComponent implements OnInit {
   risquesData: any[] = [];
   timelineData: any[] = [];
   loading = true;
+  error = false; 
+  demoStats = {
+    audits: 6,
+    tauxCritique: 22,
+    dernierAudit: '2025-06-14',
+    risquesPrincipaux: [
+      { domaine: 'Chute', nb: 4 },
+      { domaine: 'Électrocution', nb: 2 }
+    ]
+  };
 
   constructor(
     private duerpService: DuerpService,
@@ -45,6 +60,22 @@ export class DashboardDuerpComponent implements OnInit {
       next: (data) => this.timelineData = data,
       error: () => this.timelineData = []
     });
+    this.stats = {
+      audits: 6,
+      tauxCritique: 22,
+      dernierAudit: '2025-06-14',
+      risquesPrincipaux: [
+        { domaine: 'Chute', nb: 4 },
+        { domaine: 'Électrocution', nb: 2 }
+      ]
+    };
+    this.timelineData = [
+      { name: '01/03', value: 40 },
+      { name: '01/04', value: 60 },
+      { name: '01/05', value: 80 },
+      { name: '01/06', value: 67 }
+    ];
+    
   }
 
   voirDuerp() {

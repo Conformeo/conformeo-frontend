@@ -22,6 +22,11 @@
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
+            ],"allowedCommonJsDependencies": [
+              "canvg",
+              "html2pdf.js",
+              "rgbcolor",
+              "raf"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -61,7 +66,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "optimization": false,
+              "optimization": true,
               "extractLicenses": false,
               "sourceMap": false
             }

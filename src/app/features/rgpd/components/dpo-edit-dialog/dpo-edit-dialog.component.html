@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Gestion du DPO</h2>
+<form [formGroup]="form" (ngSubmit)="onSave()" style="min-width:260px">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Nom</mat-label>
+    <input matInput formControlName="nom" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Téléphone</mat-label>
+    <input matInput formControlName="telephone">
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Date de désignation</mat-label>
+    <input matInput type="date" formControlName="designation_date" required>
+  </mat-form-field>
+  <mat-checkbox formControlName="is_external">DPO externe</mat-checkbox>
+  <div style="margin-top:1.2em;">
+    <button mat-stroked-button color="primary" type="submit" [disabled]="form.invalid">Enregistrer</button>
+    <button mat-button type="button" (click)="onCancel()">Annuler</button>
+  </div>
+</form>

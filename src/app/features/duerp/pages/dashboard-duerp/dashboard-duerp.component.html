@@ -1,13 +1,70 @@
-<!-- ...charts, stats, etc. ... -->
-<button mat-raised-button color="primary" (click)="voirDuerp()">Voir détail DUERP</button>
-<div *ngIf="stats">
-  <div class="stat">{{stats.sites}} sites</div>
-  <div class="stat">{{stats.risques}} risques</div>
-  <div class="stat">{{stats.plansAction}} plans d’action</div>
-  <div class="stat">{{stats.auditsRecents}} audits récents</div>
+<div class="dashboard-module-card">
+  <!-- Loader -->
+  <div *ngIf="loading" class="center-spinner">
+    <mat-spinner diameter="38"></mat-spinner>
+  </div>
+
+  <!-- Gestion d’erreur -->
+  <div *ngIf="!loading && error" class="empty-chart">
+    Impossible de charger les données DUERP.
+  </div>
+
+  <!-- Contenu principal -->
+  <ng-container *ngIf="!loading && !error">
+    <h2>DUERP</h2>
+    <div class="module-score-summary" *ngIf="stats || demoStats">
+      <div class="stat-block">
+        <div class="stat-label">Audits</div>
+        <div class="stat-value">{{ stats?.audits ?? demoStats.audits }}</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">Taux critique</div>
+        <div class="stat-value">{{ stats?.tauxCritique ?? demoStats.tauxCritique }}%</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">Dernier audit</div>
+        <div class="stat-value">{{ stats?.dernierAudit ?? demoStats.dernierAudit }}</div>
+      </div>
+    </div>
+
+    <!-- Répartition des risques (camembert) -->
+    <div class="module-chart-row">
+      <ngx-charts-pie-chart
+        *ngIf="risquesData.length > 0; else emptyRisques"
+        [results]="risquesData"
+        [legend]="true"
+        [labels]="true"
+        [doughnut]="false"
+        [explodeSlices]="false"
+        [animations]="true"
+        [view]="[340,170]">
+      </ngx-charts-pie-chart>
+      <ng-template #emptyRisques>
+        <div class="empty-chart">Aucun risque recensé</div>
+      </ng-template>
+    </div>
+
+    <!-- Timeline audits -->
+    <div class="module-chart-row">
+      <ngx-charts-line-chart
+        *ngIf="timelineData.length > 0; else emptyTimeline"
+        [scheme]="'cool'"
+        [results]="[{name:'Audits',series:timelineData}]"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="false"
+        [autoScale]="true"
+        xAxisLabel="Date"
+        yAxisLabel="Score"
+        [view]="[340,170]">
+      </ngx-charts-line-chart>
+      <ng-template #emptyTimeline>
+        <div class="empty-chart">Pas d’historique d’audits</div>
+      </ng-template>
+    </div>
+
+    <div class="module-actions">
+      <button mat-button color="primary" (click)="voirDuerp()">Voir détail DUERP</button>
+    </div>
+  </ng-container>
 </div>
-<div>
-  <ngx-charts-pie-chart [results]="risquesData" scheme="natural"></ngx-charts-pie-chart>
-  <ngx-charts-line-chart [results]="timelineData" scheme="vivid"></ngx-charts-line-chart>
-</div>
-<button mat-raised-button (click)="voirDuerp()">Voir détail DUERP</button>

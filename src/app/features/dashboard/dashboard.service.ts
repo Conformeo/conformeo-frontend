@@ -10,7 +10,7 @@ export class DashboardService {
       { label: 'Sites',            value: 24,        icon: 'home' },
       { label: 'Contrôles à venir', value: 5, variant: 'risk', icon: 'alert-triangle' },
       { label: 'Inspections OK',   value: '92 %',    icon: 'check-circle' },  // 👈
-      { label: 'Actions en cours', value: 7, variant: 'risk', icon: 'alert-triangle' }
+      { label: 'Actions à venir', value: 7, variant: 'risk', icon: 'alert-triangle' }
     ]);
   }
 }

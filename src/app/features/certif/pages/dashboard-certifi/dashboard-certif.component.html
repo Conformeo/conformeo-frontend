@@ -1,21 +1,55 @@
-<div class="dashboard-certif-container">
-  <h2>Certifications</h2>
-  <div>
-    <div>Certificats actifs : {{stats.nb_certifs}}</div>
-    <div>À renouveler sous 30 jours : {{stats.expireSous30j}}</div>
-    <div>Audits récents : {{stats.auditsRecents}}</div>
-    <button mat-raised-button color="primary" (click)="voirDetail()">Voir détail</button>
+<div class="dashboard-module-card">
+  <h2>{{ titreModule }}</h2>
+  <div class="module-score-summary" *ngIf="mainStats && mainStats.length > 0; else noStats">
+    <div class="stat-block" *ngFor="let stat of mainStats">
+      <div class="stat-label">{{ stat.label }}</div>
+      <div class="stat-value">{{ stat.value }}</div>
+    </div>
   </div>
-  <div style="margin-top:24px;">
-    <ngx-charts-line-chart
-      [results]="[{ name: 'Certifications', series: timelineData }]"
+  <ng-template #noStats>
+    <div class="empty-chart">Pas de statistiques</div>
+  </ng-template>
+
+  <div class="module-chart-row">
+    <ngx-charts-bar-vertical
+      *ngIf="isChartNotEmpty(); else chartEmpty"
+      [results]="chartData"
       [xAxis]="true"
       [yAxis]="true"
+      [legend]="false"
+      [animations]="true"
+      [scheme]="'vivid'"
+      [view]="[320,170]">
+    </ngx-charts-bar-vertical>
+    <ng-template #chartEmpty>
+      <div class="empty-chart">Aucun graphique disponible</div>
+    </ng-template>
+  </div>
+
+  <div class="module-chart-row">
+    <ngx-charts-line-chart
+      *ngIf="isTimelineNotEmpty(); else timelineEmpty"
+      [scheme]="'cool'"
+      [results]="timelineData"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="false"
       [showXAxisLabel]="true"
       [showYAxisLabel]="true"
-      xAxisLabel="Date"
-      yAxisLabel="Nb certifs"
-      scheme="vivid"
-      *ngIf="timelineData.length"></ngx-charts-line-chart>
+      [autoScale]="true"
+      [animations]="true"
+      xAxisLabel="Mois"
+      yAxisLabel="Certifications"
+      [view]="[340,170]">
+    </ngx-charts-line-chart>
+    <ng-template #timelineEmpty>
+      <div class="empty-chart">Pas d’historique</div>
+    </ng-template>
+  </div>
+
+  <div class="module-actions">
+    <button mat-button color="primary" (click)="voirDetail()">Voir le détail</button>
+    <button mat-stroked-button (click)="exporter()">Exporter</button>
+    <button mat-stroked-button (click)="ajouterNouveau()">Ajouter</button>
   </div>
 </div>

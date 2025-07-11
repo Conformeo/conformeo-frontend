@@ -1,56 +1,71 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-rgpd-audit-detail',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatTableModule,
+    MatButtonModule,
+    MatInputModule
+  ],
   templateUrl: './rgpd-audit-detail.component.html',
   styleUrls: ['./rgpd-audit-detail.component.scss']
 })
 export class RgpdAuditDetailComponent implements OnInit {
   displayedColumns: string[] = ['label', 'answer', 'critical', 'advice'];
-  dataSource = new MatTableDataSource<any>();
-  filterValue = '';
-  showCriticalOnly = false;
-
-  // DATA MOCK pour avoir un vrai visuel
   exigences = [
-    { label: 'Tenir un registre', answer: 'Oui', critical: true, advice: 'Obligatoire pour tous.', details: '...' },
-    { label: 'Informer personnes', answer: 'Oui', critical: false, advice: '', details: '...' },
-    { label: 'AIPD en place', answer: 'Non', critical: true, advice: 'Revoir la procédure.', details: '...' },
-    { label: 'DPO nommé', answer: 'Non', critical: false, advice: '', details: '...' },
-    // etc…
+    { label: 'Tenir un registre', answer: 'Oui', critical: true, advice: 'Obligatoire pour tous.' },
+    { label: 'Informer personnes', answer: 'Oui', critical: false, advice: '' },
+    { label: 'AIPD en place', answer: 'Non', critical: true, advice: 'Revoir la procédure.' },
+    { label: 'DPO nommé', answer: 'Non', critical: false, advice: '' }
+    // ...
   ];
 
-    constructor(private router: Router) {}
+  filterValue = '';
+  showCriticalOnly = false;
+  filteredData = this.exigences;
 
-  retourSynthese() {
-    this.router.navigate(['/dashboard']);  // Ou '/rgpd', selon ta synthèse cible
-  }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.dataSource.data = this.exigences;
+    this.filterTable();
+  }
+
+  retourSynthese() {
+    this.router.navigate(['/rgpd']);  // Ou '/dashboard', adapte selon ta cible
   }
 
   applyFilter(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.filterValue = value;
+    this.filterValue = (event.target as HTMLInputElement).value;
     this.filterTable();
   }
 
   filterTable() {
     let filtered = this.exigences;
     if (this.filterValue) {
-      filtered = filtered.filter(el => el.label.toLowerCase().includes(this.filterValue.toLowerCase()));
+      filtered = filtered.filter(ex =>
+        ex.label.toLowerCase().includes(this.filterValue.toLowerCase())
+      );
     }
     if (this.showCriticalOnly) {
-      filtered = filtered.filter(el => el.critical);
+      filtered = filtered.filter(ex => ex.critical);
     }
-    this.dataSource.data = filtered;
+    this.filteredData = filtered;
   }
 
   exportPDF() { alert('PDF exporté (mock)'); }
   exportCSV() { alert('CSV exporté (mock)'); }
-  refaireAudit() { alert('Rediriger vers nouvel audit RGPD'); }
+  refaireAudit() { this.router.navigate(['/rgpd/audit/new']); }
 }

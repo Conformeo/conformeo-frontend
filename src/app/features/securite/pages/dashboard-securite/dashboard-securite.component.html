@@ -1,21 +1,65 @@
-<div class="dashboard-securite-container">
-  <h2>Sécurité</h2>
-  <div>
-    <div>Nb contrôles : {{stats.nb_controles}}</div>
-    <div>Non-conformités en cours : {{stats.nb_nc}}</div>
-    <div>Dernier contrôle : {{stats.last_ctrl | date:'shortDate'}}</div>
-    <button mat-raised-button color="primary" (click)="voirDetail()">Voir détail</button>
+<div class="dashboard-module-card">
+  <h2>{{ titreModule }}</h2>
+
+  <!-- Résumé stats -->
+  <div class="module-score-summary" *ngIf="mainStats && mainStats.length > 0; else noStats">
+    <div class="stat-block" *ngFor="let stat of mainStats">
+      <div class="stat-label">{{ stat.label }}</div>
+      <div class="stat-value">{{ stat.value }}</div>
+    </div>
   </div>
-  <div style="margin-top:24px;">
-    <ngx-charts-line-chart
-      [results]="[{ name: 'Non-conformités', series: timelineData }]"
+  <ng-template #noStats>
+    <div class="empty-chart">Pas de statistiques</div>
+  </ng-template>
+
+  <!-- Bar Chart -->
+  <div class="module-chart-row">
+    <ngx-charts-bar-vertical
+      *ngIf="isChartNotEmpty(); else chartEmpty"
+      [results]="chartData"
       [xAxis]="true"
       [yAxis]="true"
-      [showXAxisLabel]="true"
-      [showYAxisLabel]="true"
-      xAxisLabel="Date"
-      yAxisLabel="NC"
-      scheme="vivid"
-      *ngIf="timelineData.length"></ngx-charts-line-chart>
+      [legend]="false"
+      [animations]="true"
+      [scheme]="'vivid'"
+      [view]="[320,170]">
+    </ngx-charts-bar-vertical>
+    <ng-template #chartEmpty>
+      <div class="empty-chart">Aucun graphique disponible</div>
+    </ng-template>
+
+    <ng-template #chartEmpty>
+      <div class="empty-chart">Aucun graphique disponible</div>
+    </ng-template>
+  </div>
+
+  <!-- Timeline (line chart) avec sécurité anti-erreur -->
+  <div class="module-chart-row">
+    <ng-container *ngIf="timelineData && timelineData.length > 0 && timelineData[0]?.series && timelineData[0].series.length > 0; else timelineEmpty">
+      <ngx-charts-line-chart
+        [scheme]="'cool'"
+        [results]="timelineData"
+        [xAxis]="true"
+        [yAxis]="true"
+        [legend]="false"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [autoScale]="true"
+        [animations]="true"
+        xAxisLabel="Mois"
+        yAxisLabel="Non-conformités"
+        [view]="[340,170]">
+      </ngx-charts-line-chart>
+    </ng-container>
+    <ng-template #timelineEmpty>
+      <div class="empty-chart">Pas d’historique</div>
+    </ng-template>
+  </div>
+
+  <!-- Actions -->
+  <div class="module-actions">
+    <button mat-button color="primary" (click)="voirDetail()">Voir le détail</button>
+    <button mat-stroked-button (click)="exporter()">Exporter</button>
+    <button mat-stroked-button (click)="ajouterNouveau()">Ajouter</button>
   </div>
 </div>

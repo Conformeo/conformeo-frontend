@@ -1,52 +1,48 @@
-<div class="audit-detail-container">
-
-  <button mat-stroked-button (click)="retourSynthese()">
-    ← Retour synthèse RGPD
-  </button>
-
+<div class="audit-detail-card">
   <h2>Détail de l’audit RGPD</h2>
 
-  <mat-form-field appearance="outline" style="width: 240px; margin-bottom: 10px;">
-    <mat-label>Recherche exigence…</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Filtrer">
-  </mat-form-field>
-
-  <mat-checkbox [(ngModel)]="showCriticalOnly" (change)="filterTable()" style="margin-bottom: 10px;">
-    Afficher seulement les critiques
-  </mat-checkbox>
-
-  <mat-table [dataSource]="dataSource" class="mat-elevation-z2" style="margin-bottom:24px;">
-    <ng-container matColumnDef="label">
-      <mat-header-cell *matHeaderCellDef>Exigence</mat-header-cell>
-      <mat-cell *matCellDef="let el">{{el.label}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="answer">
-      <mat-header-cell *matHeaderCellDef>Réponse</mat-header-cell>
-      <mat-cell *matCellDef="let el">{{el.answer}}</mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="critical">
-      <mat-header-cell *matHeaderCellDef>Critique</mat-header-cell>
-      <mat-cell *matCellDef="let el">
-        <span [ngClass]="{'text-danger': el.critical, 'text-success': !el.critical}">
-          {{el.critical ? 'Oui' : 'Non'}}
-        </span>
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="advice">
-      <mat-header-cell *matHeaderCellDef>Conseil</mat-header-cell>
-      <mat-cell *matCellDef="let el"><span style="font-size:0.95em">{{el.advice}}</span></mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-
-  <div style="margin-bottom:24px;">
-    <button mat-raised-button color="primary" (click)="exportPDF()">Télécharger PDF</button>
-    <button mat-raised-button color="primary" (click)="exportCSV()">Exporter CSV</button>
-    <button mat-raised-button color="accent" (click)="refaireAudit()">Refaire l’audit RGPD</button>
+  <div class="filters-row">
+    <mat-form-field>
+      <input matInput placeholder="Rechercher une exigence..." [value]="filterValue" (input)="applyFilter($event)">
+    </mat-form-field>
+    <mat-checkbox [(ngModel)]="showCriticalOnly" (change)="filterTable()">Critique uniquement</mat-checkbox>
   </div>
-  <button mat-stroked-button (click)="retourSynthese()">
-    ← Retour synthèse RGPD
-    </button>
 
+  <table mat-table [dataSource]="filteredData" class="mat-elevation-z1">
+
+    <ng-container matColumnDef="label">
+      <th mat-header-cell *matHeaderCellDef> Exigence </th>
+      <td mat-cell *matCellDef="let ex"> {{ ex.label }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="answer">
+      <th mat-header-cell *matHeaderCellDef> Réponse </th>
+      <td mat-cell *matCellDef="let ex"> {{ ex.answer }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="critical">
+      <th mat-header-cell *matHeaderCellDef> Critique </th>
+      <td mat-cell *matCellDef="let ex">
+        <span [ngClass]="{ 'critical': ex.critical }">{{ ex.critical ? 'Oui' : 'Non' }}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="advice">
+      <th mat-header-cell *matHeaderCellDef> Conseil </th>
+      <td mat-cell *matCellDef="let ex">
+        <span *ngIf="ex.advice; else na">{{ ex.advice }}</span>
+        <ng-template #na><span class="text-muted">-</span></ng-template>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <div class="actions-row mt-4">
+    <button mat-stroked-button (click)="retourSynthese()">Retour</button>
+    <button mat-stroked-button (click)="exportPDF()">Exporter PDF</button>
+    <button mat-stroked-button (click)="exportCSV()">Exporter CSV</button>
+    <button mat-flat-button color="primary" (click)="refaireAudit()">Refaire un audit</button>
+  </div>
 </div>

@@ -1,49 +1,49 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-
-import { CertifService } from '../../certif.service';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-dashboard-certif',
   standalone: true,
-  imports: [
-    CommonModule,
-    NgxChartsModule
-  ],
-  providers: [DatePipe],
+  imports: [CommonModule, NgxChartsModule],
   templateUrl: './dashboard-certif.component.html',
   styleUrls: ['./dashboard-certif.component.scss']
 })
 export class DashboardCertifComponent implements OnInit {
-  @Input() userId!: number;
-
-  stats: any = {};
-  expiringCertifs: any[] = [];
+  @Input() titreModule = 'Certifications';
+  @Input() userId: number = 1;
+  mainStats: any[] = [];
+  chartData: any[] = [];
   timelineData: any[] = [];
-  loading = true;
-
-  constructor(private certifService: CertifService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loading = true;
-    this.certifService.getCertifSummary(this.userId).subscribe(summary => {
-      this.stats = summary;
-      this.loading = false;
-    });
-    this.certifService.getExpiringCertifs(this.userId).subscribe(certifs => {
-      this.expiringCertifs = certifs;
-    });
-    this.certifService.getTimeline(this.userId).subscribe(history => {
-      this.timelineData = (history || []).map(c => ({
-        name: new Date(c.date).toLocaleDateString(),
-        value: c.nb_certifs ?? 0
-      }));
-    });
+    // Exemple statique
+    this.mainStats = [
+      { label: 'Certifications à jour', value: 5 },
+      { label: 'Échues', value: 2 }
+    ];
+    this.chartData = [
+      { name: 'À jour', value: 5 },
+      { name: 'Échues', value: 2 }
+    ];
+    this.timelineData = [
+      { name: 'Mai', series: [{ name: 'À jour', value: 4 }, { name: 'Échues', value: 3 }] },
+      { name: 'Juin', series: [{ name: 'À jour', value: 5 }, { name: 'Échues', value: 2 }] }
+    ];
   }
 
-  voirDetail() {
-    this.router.navigate(['/certif/detail']);
+  isChartNotEmpty(): boolean {
+    return Array.isArray(this.chartData) && this.chartData.length > 0 && typeof this.chartData[0]?.value === 'number' && this.chartData[0].value > 0;
   }
+
+  isTimelineNotEmpty(): boolean {
+    return Array.isArray(this.timelineData) &&
+      this.timelineData.length > 0 &&
+      Array.isArray(this.timelineData[0]?.series) &&
+      this.timelineData[0].series.length > 0;
+  }
+
+  voirDetail() {}
+  exporter() {}
+  ajouterNouveau() {}
 }

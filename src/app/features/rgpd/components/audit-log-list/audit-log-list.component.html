@@ -1,0 +1,7 @@
+ <h4>Historique des actions RGPD</h4>
+    <ul>
+      <li *ngFor="let log of logs">
+        [{{ log.timestamp | date:'short' }}] - {{ log.action }} {{ log.object_type }} (ID {{ log.object_id }}) - {{ log.details || '' }}
+      </li>
+      <li *ngIf="!logs.length">Aucune action enregistrée.</li>
+    </ul>

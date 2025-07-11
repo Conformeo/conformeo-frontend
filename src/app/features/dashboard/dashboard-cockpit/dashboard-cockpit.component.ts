@@ -29,8 +29,8 @@ export class DashboardCockpitComponent {
   modulesActive = {
     rgpd: true,
     duerp: true,      // Active/désactive chaque bloc
-    ouvriers: false,
-    certif: false,
+    ouvriers: true,
+    certif: true,
     securite: true
     // Ajoute d'autres modules...
   };

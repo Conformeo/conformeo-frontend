@@ -84,6 +84,10 @@ export const routes: Routes = [
         data: { title: 'Rapports' },
       },
       {
+        path: 'rgpd',
+        loadChildren: () => import('./features/rgpd/rgpd.routes').then(m => m.RGPD_ROUTES)
+      },
+      {
         path: 'ai',
         loadChildren: () => import('./features/ai/ai.module')
           .then(m => m.AiModule),

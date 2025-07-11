@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RgpdScore } from '../../models/rgpd-score.model';
+import { Obligation } from '../../models/obligation';
 
 @Injectable({ providedIn: 'root' })
 export class RgpdService {
@@ -12,34 +13,39 @@ export class RgpdService {
     return this.http.get<any[]>('/api/rgpd/exigences');
   }
 
-  // Liste des audits RGPD (optionnel: filtrer par user)
-  getAudits(userId?: number): Observable<any[]> {
+  // Lister tous les audits RGPD pour un utilisateur
+  getAudits(userId: number): Observable<any[]> {
     return this.http.get<any[]>('/api/rgpd/audits', {
-      params: userId ? { user_id: userId } : {},
+      params: { user_id: userId }
     });
   }
 
-  // Détail d’un audit (inclut score et exigences)
+  // Détail d’un audit RGPD
   getAudit(auditId: number): Observable<any> {
-    return this.http.get<any>(`/api/rgpd/audit/${auditId}`);
+    return this.http.get<any>(`/api/rgpd/audits/${auditId}`);
   }
 
-  // Scoring détaillé d’un audit (optionnel, si endpoint dédié)
+  // Score détaillé d’un audit (optionnel, si endpoint dédié)
   getScore(auditId: number): Observable<RgpdScore> {
     return this.http.get<RgpdScore>(`/api/rgpd/audits/${auditId}/score`);
   }
 
-  // Créer un audit
+  // Créer un audit RGPD
   createAudit(audit: any): Observable<any> {
     return this.http.post<any>('/api/rgpd/audits', audit);
   }
 
-  // Historique des audits par user (si besoin)
-  getAuditHistory(userId: number): Observable<{audits: any[]}> {
-    return this.http.get<{audits: any[]}>(`/api/rgpd/audits/${userId}`);
+  // Historique des audits (timeline)
+  getTimeline(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`/api/rgpd/audits/timeline?user_id=${userId}`);
   }
 
-  // Exports PDF/CSV
+  // Synthèse du dernier audit RGPD d’un user
+  getLastAudit(userId: number): Observable<any> {
+    return this.http.get<any>(`/api/rgpd/audits/last?user_id=${userId}`);
+  }
+
+  // Export CSV/PDF d’un audit
   downloadCsv(auditId: number) {
     return this.http.get(`/api/rgpd/audits/${auditId}/csv`, { responseType: 'blob' });
   }
@@ -47,8 +53,17 @@ export class RgpdService {
     return this.http.get(`/api/rgpd/audits/${auditId}/pdf`, { responseType: 'blob' });
   }
 
+  // Répartition des exigences par domaine
+  getDomainStats(auditId: number): Observable<any[]> {
+    return this.http.get<any[]>(`/api/rgpd/audits/${auditId}/domains`);
+  }
 
-  // Générateurs rapport
+  // --------- Obligations dynamiques ---------
+  getObligations(userId: number): Observable<Obligation[]> {
+    return this.http.get<Obligation[]>(`/api/obligations?user_id=${userId}`);
+  }
+
+  // --------- Générateurs de rapports locaux (HTML/MD) ---------
   generateMarkdown(score: any): string {
     let md = `# Rapport RGPD\n\n**Score** : ${score.score}%\n\n`;
     md += `## Points critiques non conformes\n`;
@@ -74,20 +89,5 @@ export class RgpdService {
     });
     html += `</ul>`;
     return html;
-  }
-
-  // Récupère la synthèse du dernier audit RGPD d’un user
-  getLastAudit(userId: number): Observable<any> {
-    return this.http.get<any>(`/api/rgpd/audits?user_id=${userId}`);
-  }
-  
-  // Récupère l’historique de scores pour la timeline
-  getTimeline(userId: number): Observable<any[]> {
-    return this.http.get<any[]>(`/api/rgpd/audits?user_id=${userId}`);
-  }
-  
-  // Récupère la répartition des exigences par domaine
-  getDomainStats(auditId: number): Observable<any[]> {
-    return this.http.get<any[]>(`/api/rgpd/audits/${auditId}/domains`);
   }
 }

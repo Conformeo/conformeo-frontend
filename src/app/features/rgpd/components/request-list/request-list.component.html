@@ -1,0 +1,22 @@
+<h4>Demandes RGPD</h4>
+<button mat-raised-button color="primary" (click)="showForm = true" *ngIf="!showForm">Faire une demande</button>
+<form *ngIf="showForm" (ngSubmit)="submitRequest()">
+  <mat-form-field appearance="outline">
+    <mat-label>Type de demande</mat-label>
+    <select matInput [(ngModel)]="newRequest.type" name="type" required>
+      <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+    </select>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <input matInput [(ngModel)]="newRequest.message" name="message" placeholder="Message">
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit">Envoyer</button>
+  <button mat-button type="button" (click)="showForm = false">Annuler</button>
+</form>
+<ul>
+  <li *ngFor="let req of requests">
+    [{{ req.status }}] <strong>{{ req.type }}</strong> – {{ req.message }} 
+    <span *ngIf="req.date_submitted">({{ req.date_submitted | date:'short' }})</span>
+  </li>
+  <li *ngIf="!requests.length" class="text-muted">Aucune demande.</li>
+</ul>

@@ -1,0 +1,12 @@
+<div class="rgpd-home-page">
+  <h1>Module RGPD</h1>
+  <app-dashboard-rgpd [userId]="1"></app-dashboard-rgpd>
+  <app-register-list [userId]="1"></app-register-list>
+
+
+  <div class="rgpd-actions-row">
+    <button mat-flat-button color="primary" routerLink="/rgpd/audit/new">Nouvel audit RGPD</button>
+    <button mat-stroked-button routerLink="/rgpd/history">Historique des audits</button>
+    <button mat-stroked-button routerLink="/rgpd/procedure">DPO & obligations</button>
+  </div>
+</div>

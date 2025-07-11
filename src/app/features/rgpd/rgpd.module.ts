@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { RGPD_ROUTES } from './rgpd.routes';
+
 // Angular Material et Forms
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -20,6 +23,7 @@ import { ExigenceDetailDialogComponent } from '../rgpd/pages/rgpd-score/exigence
     ExigenceDetailDialogComponent,
   ],
   imports: [
+    RouterModule.forChild(RGPD_ROUTES),
     CommonModule,
     FormsModule,
     MatTableModule,

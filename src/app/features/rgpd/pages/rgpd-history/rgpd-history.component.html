@@ -1,20 +1,19 @@
-<h3>Historique des audits RGPD</h3>
-<table mat-table [dataSource]="audits" class="mat-elevation-z2" *ngIf="audits?.length">
-  <ng-container matColumnDef="created_at">
-    <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-    <mat-cell *matCellDef="let a">{{a.created_at | date:'short'}}</mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="score">
-    <mat-header-cell *matHeaderCellDef>Score</mat-header-cell>
-    <mat-cell *matCellDef="let a">{{a.score}}%</mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="details">
-    <mat-header-cell *matHeaderCellDef>Détail</mat-header-cell>
-    <mat-cell *matCellDef="let a">
-      <a [routerLink]="['/rgpd/score', a.id]">Voir le score</a>
-    </mat-cell>
-  </ng-container>
-  <mat-header-row *matHeaderRowDef="['created_at', 'score', 'details']"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: ['created_at', 'score', 'details'];"></mat-row>
-</table>
-<div *ngIf="!audits.length">Aucun audit RGPD trouvé.</div>
+<div class="rgpd-history-card">
+  <h2>Historique des audits RGPD</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Score</th>
+        <th>Détail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of audits">
+        <td>{{ a.date }}</td>
+        <td>{{ a.score }}%</td>
+        <td><a [routerLink]="['/rgpd/audit', a.id]">Voir</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

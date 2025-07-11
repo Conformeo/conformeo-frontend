@@ -1,0 +1,79 @@
+<div *ngIf="loading" class="center-spinner">Chargement…</div>
+
+<div *ngIf="!loading">
+
+  <h3>Délégué à la Protection des Données (DPO)</h3>
+
+  <!-- Affichage du DPO existant -->
+  <ng-container *ngIf="dpo && !showDpoForm; else noDpo">
+    <p><strong>Nom :</strong> {{ dpo.nom || '—' }}</p>
+    <p><strong>Email :</strong> {{ dpo.email || '—' }}</p>
+    <p><strong>Téléphone :</strong> {{ dpo.telephone || '—' }}</p>
+    <p><strong>Désignation :</strong> 
+      {{ dpo.designation_date ? (dpo.designation_date | date:'shortDate') : '—' }}
+    </p>
+    <p><strong>Statut :</strong> {{ dpo.is_external ? 'Externe' : 'Interne' }}</p>
+    <div class="dpo-actions">
+      <button mat-stroked-button color="primary" (click)="showForm()">Modifier</button>
+      <button mat-stroked-button color="warn" (click)="deleteDpo()" type="button">Supprimer</button>
+    </div>
+  </ng-container>
+
+  <!-- Bloc si aucun DPO désigné -->
+  <ng-template #noDpo>
+    <p class="alert">❌ DPO non désigné !</p>
+    <button mat-stroked-button color="primary" (click)="showForm()">Ajouter un DPO</button>
+  </ng-template>
+
+  <!-- Formulaire édition/ajout DPO -->
+  <form *ngIf="showDpoForm" (ngSubmit)="saveDpo()" class="dpo-form" autocomplete="off">
+    <div class="dpo-fields">
+      <mat-form-field appearance="outline">
+        <input matInput [(ngModel)]="dpoForm.nom" name="nom" placeholder="Nom" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput [(ngModel)]="dpoForm.email" name="email" placeholder="Email" required type="email">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput [(ngModel)]="dpoForm.telephone" name="telephone" placeholder="Téléphone">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput [(ngModel)]="dpoForm.designation_date" name="designation_date" placeholder="Date de désignation" type="date">
+      </mat-form-field>
+      <mat-checkbox [(ngModel)]="dpoForm.is_external" name="is_external">DPO externe</mat-checkbox>
+    </div>
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit">Enregistrer</button>
+      <button mat-button type="button" (click)="cancelDpoForm()">Annuler</button>
+    </div>
+  </form>
+
+  <h4>Procédure & Obligations</h4>
+
+  <!-- Formulaire ajout d'obligation -->
+  <form (ngSubmit)="addObligation()" #obForm="ngForm" class="add-obligation-form" style="margin-bottom: 1rem;">
+    <mat-form-field appearance="outline">
+      <input matInput [(ngModel)]="newObligationLabel" name="label" placeholder="Nouvelle obligation RGPD" required>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!newObligationLabel">Ajouter</button>
+  </form>
+
+  <ul>
+    <li *ngFor="let ob of obligations">
+      <mat-checkbox 
+        [checked]="ob.status"
+        (change)="updateObligationStatus(ob, $event.checked)">
+      </mat-checkbox>
+      <strong>{{ ob.label }}</strong>
+      <span *ngIf="ob.last_update"> (MAJ {{ ob.last_update | date:'shortDate' }}) </span>
+      <button mat-icon-button color="warn" aria-label="Supprimer" (click)="deleteObligation(ob)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </li>
+    <li *ngIf="!obligations || obligations.length === 0" class="text-muted">
+      Aucune obligation déclarée.
+    </li>
+  </ul>
+  <button mat-raised-button color="accent" (click)="exportPdf()">Exporter RGPD PDF</button>
+
+</div>

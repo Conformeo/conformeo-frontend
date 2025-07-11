@@ -1,3 +1,56 @@
-.dashboard-duerp-container {
-  .stat { margin-bottom: 8px; }
+.dashboard-module-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px #0001;
+  padding: 1.4rem 2.1rem;
+  min-width: 320px;
+  max-width: 430px;
+  margin: 0 auto 1.5rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.center-spinner {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.module-score-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.stat-block {
+  text-align: center;
+  min-width: 80px;
+}
+.stat-label {
+  color: #666;
+  font-size: 0.93em;
+}
+.stat-value {
+  font-weight: bold;
+  font-size: 1.22em;
+  color: #21825c;
+}
+.module-chart-row {
+  margin: 0.5rem 0 0.2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.empty-chart {
+  color: #aaa;
+  font-style: italic;
+  padding: 0.7rem 0;
+}
+.module-actions {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
 }

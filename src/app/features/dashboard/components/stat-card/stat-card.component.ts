@@ -29,5 +29,5 @@ export class StatCardComponent {
     variant?: 'risk' | 'default' | string;
   };
 
-  @Input() icon?: string; // 👈 AJOUTÉ !
+  @Input() icon?: string; 
 }

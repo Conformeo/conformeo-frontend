@@ -1,0 +1,25 @@
+<div class="audit-new-card">
+  <h2>Nouvel audit RGPD</h2>
+
+  <!-- Loading -->
+  <div *ngIf="loading">Chargement des exigences...</div>
+
+  <!-- Formulaire d’audit -->
+  <form *ngIf="!loading && exigences.length > 0">
+    <div *ngFor="let ex of exigences">
+      <label>{{ ex.titre }}</label>
+      <select [(ngModel)]="reponses[ex.id]" name="ex_{{ex.id}}">
+        <option value="">---</option>
+        <option value="conforme">Conforme</option>
+        <option value="non_conforme">Non conforme</option>
+        <option value="non_applicable">N/A</option>
+      </select>
+    </div>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="saving">Valider l’audit</button>
+  </form>
+
+  <!-- Messages -->
+  <div *ngIf="saving">Enregistrement...</div>
+  <div *ngIf="success" class="success-msg">Audit enregistré !</div>
+  <div *ngIf="error" class="error-msg">Erreur lors de l’enregistrement…</div>
+</div>
