@@ -30,6 +30,7 @@ export class DashboardCertifComponent implements OnInit {
       { name: 'Mai', series: [{ name: 'À jour', value: 4 }, { name: 'Échues', value: 3 }] },
       { name: 'Juin', series: [{ name: 'À jour', value: 5 }, { name: 'Échues', value: 2 }] }
     ];
+    // console.log('[DEBUG] dashboard-certif chargé');
   }
 
   isChartNotEmpty(): boolean {

@@ -9,14 +9,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   selector: 'app-dashboard-duerp',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     NgxChartsModule,
     MatProgressSpinnerModule
   ],
   templateUrl: './dashboard-duerp.component.html',
   styleUrls: ['./dashboard-duerp.component.scss']
 })
-
 export class DashboardDuerpComponent implements OnInit {
   @Input() userId!: number;
 
@@ -24,14 +23,14 @@ export class DashboardDuerpComponent implements OnInit {
   risquesData: any[] = [];
   timelineData: any[] = [];
   loading = true;
-  error = false; 
+  error = false;
   demoStats = {
     audits: 6,
     tauxCritique: 22,
     dernierAudit: '2025-06-14',
     risquesPrincipaux: [
-      { domaine: 'Chute', nb: 4 },
-      { domaine: 'Électrocution', nb: 2 }
+      { domaine: 'Chute', value: 4 },
+      { domaine: 'Électrocution', value: 2 }
     ]
   };
 
@@ -41,6 +40,12 @@ export class DashboardDuerpComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (!this.userId) {
+      console.error('[DashboardDuerpComponent] userId manquant');
+      this.error = true;
+      this.loading = false;
+      return;
+    }
     this.loading = true;
     this.duerpService.getSynthese(this.userId).subscribe({
       next: (data) => {
@@ -50,33 +55,63 @@ export class DashboardDuerpComponent implements OnInit {
       error: () => {
         this.stats = { sites: 0, risques: 0, plansAction: 0, auditsRecents: 0 };
         this.loading = false;
+        this.error = true;
       }
     });
+
+    // Correction : mapping pour ngx-charts (name/value)
     this.duerpService.getRisquesParType(this.userId).subscribe({
-      next: (data) => this.risquesData = data,
-      error: () => this.risquesData = []
+      next: (data) => {
+        // console.log('[DEBUG] risquesData reçu :', data);
+        this.risquesData = Array.isArray(data)
+          ? data.map(r => ({
+              name: r.domaine ?? r.name ?? "Inconnu",
+              value: r.nb ?? r.value ?? 0
+            }))
+          : [];
+      },
+      error: () => {
+        console.error('[ERROR] Impossible de charger les risques');
+        this.risquesData = [];
+      }
     });
+
     this.duerpService.getTimeline(this.userId).subscribe({
       next: (data) => this.timelineData = data,
       error: () => this.timelineData = []
     });
-    this.stats = {
-      audits: 6,
-      tauxCritique: 22,
-      dernierAudit: '2025-06-14',
-      risquesPrincipaux: [
-        { domaine: 'Chute', nb: 4 },
-        { domaine: 'Électrocution', nb: 2 }
-      ]
-    };
-    this.timelineData = [
-      { name: '01/03', value: 40 },
-      { name: '01/04', value: 60 },
-      { name: '01/05', value: 80 },
-      { name: '01/06', value: 67 }
-    ];
-    
+
+    // Debug/demo
+    // this.stats = this.demoStats;
+    // this.timelineData = [
+    //   { name: '01/03', value: 40 },
+    //   { name: '01/04', value: 60 },
+    //   { name: '01/05', value: 80 },
+    //   { name: '01/06', value: 67 }
+    // ];
+    // console.log('[DEBUG] dashboard-duerp chargé');
   }
+
+  getLastAuditDate(date: string | Date | undefined): string {
+    if (!date) return '—';
+    try {
+      const d = typeof date === 'string' ? new Date(date) : date;
+      // Vérifie si la date est valide
+      if (isNaN(d.getTime())) return date.toString();
+      return d.toLocaleDateString('fr-FR');
+    } catch {
+      return date?.toString() ?? '—';
+    }
+  }
+
+  formatTimelineDate(date: string | Date): string {
+    if (!date) return '';
+    const d = typeof date === 'string' ? new Date(date) : date;
+    if (isNaN(d.getTime())) return date?.toString() ?? '';
+    // Tu peux choisir le format que tu veux ici
+    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+  }
+
 
   voirDuerp() {
     this.router.navigate(['/duerp/detail']);

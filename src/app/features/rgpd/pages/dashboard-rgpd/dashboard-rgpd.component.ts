@@ -17,23 +17,31 @@ import { RouterModule } from '@angular/router';
 })
 export class DashboardRgpdComponent implements OnInit {
   @Input() userId!: number;
-  loading = false;
-  score: any;
+  loading = true;
+  score: any = { score: null, conforme: 0, non_conforme: 0 };
   alertesCritiques: string[] = [];
   scoreChartData: any[] = [];
   timelineData: any[] = [];
   domainChartData: any[] = [];
+  error = false;
+
 
   ngOnInit() {
+    if (!this.userId) {
+      console.error('[DashboardRGPDComponent] userId manquant');
+      this.error = true;
+      this.loading = false;
+      return;
+    }
     this.loading = true;
-    // Mock API call
-    setTimeout(() => {
+    // --- Remplace par ton vrai call API ---
+      // --- EXEMPLE : mets ici les données reçues ---
       this.score = { score: 82, conforme: 15, non_conforme: 3 };
+      this.alertesCritiques = ["Alerte critique RGPD"];
       this.scoreChartData = [
         { name: 'Conforme', value: 15 },
         { name: 'Non conforme', value: 3 }
       ];
-      this.alertesCritiques = [];
       this.timelineData = [
         { name: '01/04', value: 60 },
         { name: '01/05', value: 70 },
@@ -45,6 +53,8 @@ export class DashboardRgpdComponent implements OnInit {
         { name: 'Sécurité', value: 3 }
       ];
       this.loading = false;
-    }, 300);
+
+    // // Debug
+    // console.log('[DEBUG] dashboard-rgpd chargé');
   }
 }

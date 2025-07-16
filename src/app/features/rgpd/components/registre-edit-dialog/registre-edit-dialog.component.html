@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Éditer un traitement</h2>
+<mat-dialog-content>
+  <form (ngSubmit)="save()">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nom du traitement</mat-label>
+      <input matInput [(ngModel)]="registerForm.nom_traitement" name="nom_traitement" required>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Finalité</mat-label>
+      <input matInput [(ngModel)]="registerForm.finalite" name="finalite">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Personnes concernées</mat-label>
+      <textarea matInput [(ngModel)]="registerForm.personnes_concernees" name="personnes_concernees"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Base légale</mat-label>
+      <input matInput [(ngModel)]="registerForm.base_legale" name="base_legale">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Durée de conservation</mat-label>
+      <input matInput [(ngModel)]="registerForm.duree_conservation" name="duree_conservation">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Mesures de sécurité</mat-label>
+      <textarea matInput [(ngModel)]="registerForm.mesures_securite" name="mesures_securite"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Catégorie de données</mat-label>
+      <input matInput [(ngModel)]="registerForm.categorie_donnees" name="categorie_donnees">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Catégorie de personnes</mat-label>
+      <input matInput [(ngModel)]="registerForm.categorie_personnes" name="categorie_personnes">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Commentaire</mat-label>
+      <textarea matInput [(ngModel)]="registerForm.commentaire" name="commentaire"></textarea>
+    </mat-form-field>
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="cancel()" type="button">Annuler</button>
+      <button mat-raised-button color="primary" type="submit">Enregistrer</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

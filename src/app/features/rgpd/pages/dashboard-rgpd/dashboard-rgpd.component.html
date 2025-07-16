@@ -5,17 +5,27 @@
   <ng-container *ngIf="!loading">
     <div class="rgpd-score-summary">
       <h2>
-        RGPD | <span *ngIf="score?.score !== undefined; else noScore">{{ score.score }}%</span>
-        <ng-template #noScore><span style="color: #bbb;">Pas de score</span></ng-template>
+        RGPD |
+        <span *ngIf="score.score !== null && score.score !== undefined; else noScore">
+          {{ score.score }}%
+        </span>
+        <ng-template #noScore>
+          <span style="color: #bbb;">Pas de score</span>
+        </ng-template>
       </h2>
-      <div *ngIf="alertesCritiques.length; else noCrit">
-        <div class="critical-alert" *ngFor="let crit of alertesCritiques">⚠️ {{ crit }}</div>
+      <div *ngIf="alertesCritiques.length > 0; else noCrit">
+        <div class="critical-alert" *ngFor="let crit of alertesCritiques">
+          ⚠️ {{ crit }}
+        </div>
       </div>
-      <ng-template #noCrit><div class="ok-msg">Aucune alerte critique</div></ng-template>
+      <ng-template #noCrit>
+        <div class="ok-msg">Aucune alerte critique</div>
+      </ng-template>
     </div>
+
     <div class="rgpd-chart-row">
       <ngx-charts-pie-chart
-        *ngIf="scoreChartData && scoreChartData.length > 0 && (scoreChartData[0].value + scoreChartData[1].value) > 0; else pieEmpty"
+        *ngIf="scoreChartData.length > 0; else pieEmpty"
         [results]="scoreChartData"
         [labels]="true"
         [doughnut]="true"
@@ -23,11 +33,14 @@
         [animations]="true"
         [view]="[230,170]">
       </ngx-charts-pie-chart>
-      <ng-template #pieEmpty><div class="empty-chart">Aucune donnée conforme / non conforme</div></ng-template>
+      <ng-template #pieEmpty>
+        <div class="empty-chart">Aucune donnée conforme / non conforme</div>
+      </ng-template>
     </div>
+
     <div class="rgpd-chart-row">
       <ngx-charts-line-chart
-        *ngIf="timelineData && timelineData.length > 0; else lineEmpty"
+        *ngIf="domainChartData.length > 0; else barEmpty"
         [scheme]="'cool'"
         [results]="[{ name: 'Score', series: timelineData }]"
         [xAxis]="true" [yAxis]="true" [legend]="false"
@@ -36,20 +49,25 @@
         xAxisLabel="Date" yAxisLabel="Score (%)"
         [view]="[340,200]">
       </ngx-charts-line-chart>
-      <ng-template #lineEmpty><div class="empty-chart">Pas d'historique de scores RGPD</div></ng-template>
+      <ng-template #lineEmpty>
+        <div class="empty-chart">Pas d'historique de scores RGPD</div>
+      </ng-template>
     </div>
+
     <div class="rgpd-chart-row">
       <ngx-charts-bar-vertical
-        *ngIf="domainChartData && domainChartData.length > 0 && domainChartData[0].value > 0; else barEmpty"
+        *ngIf="domainChartData.length > 0; else barEmpty"
         [results]="domainChartData"
         [xAxis]="true" [yAxis]="true"
         [legend]="false" [animations]="true"
         [scheme]="'vivid'"
         [view]="[320,180]">
       </ngx-charts-bar-vertical>
-      <ng-template #barEmpty><div class="empty-chart">Pas de répartition par domaine</div></ng-template>
+      <ng-template #barEmpty>
+        <div class="empty-chart">Pas de répartition par domaine</div>
+      </ng-template>
     </div>
-    <!-- Un seul bouton ici, pour aller sur la page dédiée -->
+
     <div class="rgpd-actions">
       <button mat-stroked-button color="accent" routerLink="/rgpd">Gestion RGPD</button>
     </div>

@@ -11,11 +11,11 @@ export interface LoginResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-
   private apiUrl = environment.apiUrl;
 
+  // Connexion utilisateur (POST login)
   login(email: string, password: string): Observable<LoginResponse> {
-    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
     const body = new URLSearchParams();
     body.set('username', email);
     body.set('password', password);
@@ -26,15 +26,30 @@ export class AuthService {
     );
   }
 
+  // Déconnexion (supprime le token)
   logout(): void {
     localStorage.removeItem('access_token');
   }
 
+  // Récupérer le token JWT
   getToken(): string | null {
     return localStorage.getItem('access_token');
   }
 
+  // Est-ce que l'utilisateur est connecté ?
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('access_token');
+    return !!this.getToken();
+  }
+
+  // Extraire user_id depuis le token (si présent)
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.user_id ?? null;
+    } catch {
+      return null;
+    }
   }
 }

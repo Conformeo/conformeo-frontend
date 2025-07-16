@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { RgpdService } from '../../rgpd.service'
+import { AuthService } from '../../../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rgpd-audit-new',
@@ -18,16 +21,25 @@ export class RgpdAuditNewComponent implements OnInit {
   success = false;
   error = false;
 
+  constructor(
+    private rgpdService: RgpdService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
   ngOnInit() {
-    // Remplace cette partie par un appel à ton API pour charger les exigences
-    setTimeout(() => {
-      this.exigences = [
-        { id: 1, titre: 'Registre des traitements à jour' },
-        { id: 2, titre: 'Mentions légales RGPD présentes' },
-        { id: 3, titre: 'Procédure de violation documentée' }
-      ];
-      this.loading = false;
-    }, 300);
+    this.loading = true;
+    // Charge dynamiquement les exigences
+    this.rgpdService.getExigences().subscribe({
+      next: exigences => {
+        this.exigences = exigences;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = true;
+        this.loading = false;
+      }
+    });
   }
 
   submit() {
@@ -35,14 +47,34 @@ export class RgpdAuditNewComponent implements OnInit {
     this.success = false;
     this.error = false;
 
-    // Simule un POST vers l’API (remplace par un vrai appel à ton backend)
-    setTimeout(() => {
-      // Imite un succès ou une erreur
-      const ok = Math.random() > 0.15;
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      this.error = true;
       this.saving = false;
-      this.success = ok;
-      this.error = !ok;
-      if (ok) this.reponses = {}; // reset form
-    }, 800);
+      return;
+    }
+    // Prépare la structure à envoyer : adapte si nécessaire !
+    const audit = {
+      user_id: userId,
+      company_id: 1, // À adapter si sélection d'une société
+      statut: 'EN_COURS',
+      exigences: this.exigences.map(ex => ({
+        exigence_id: ex.id,
+        answer: this.reponses[ex.id] || null
+      }))
+    };
+
+    this.rgpdService.createAudit(audit).subscribe({
+      next: (createdAudit) => {
+        this.saving = false;
+        this.success = true;
+        // Redirige vers la page détail de l’audit nouvellement créé
+        this.router.navigate(['/rgpd/audit', createdAudit.id]);
+      },
+      error: () => {
+        this.error = true;
+        this.saving = false;
+      }
+    });
   }
 }

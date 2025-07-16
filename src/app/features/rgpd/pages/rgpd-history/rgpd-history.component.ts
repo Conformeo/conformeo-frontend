@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { RgpdService } from '../../rgpd.service'; // ← adapte le chemin si besoin
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-rgpd-history',
@@ -11,11 +13,34 @@ import { RouterModule } from '@angular/router';
 })
 export class RgpdHistoryComponent implements OnInit {
   audits: any[] = [];
+  loading = true;
+  error = false;
+
+  constructor(
+    private rgpdService: RgpdService,
+    private authService: AuthService    // <-- injecte ici
+
+  ) {}
+
   ngOnInit() {
-    // À remplacer par appel API
-    this.audits = [
-      { id: 11, date: '2025-07-10', score: 82 },
-      { id: 10, date: '2025-06-01', score: 75 }
-    ];
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      this.error = true;
+      this.loading = false;
+      return;
+    }
+    this.rgpdService.getAudits(userId).subscribe({
+      next: audits => {
+        this.audits = audits;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = true;
+        this.loading = false;
+      }
+    });
   }
 }
+
+
+

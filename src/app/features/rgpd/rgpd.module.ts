@@ -16,6 +16,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { RgpdScoreComponent } from '../rgpd/pages/rgpd-score/rgpd-score.component';
 import { ExigenceDetailDialogComponent } from '../rgpd/pages/rgpd-score/exigence-detail-dialog/exigence-detail-dialog.component';
+import { RegistreEditDialogComponent } from './components/registre-edit-dialog/registre-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ExigenceDetailDialogComponent } from '../rgpd/pages/rgpd-score/exigence
     MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,
-    NgxChartsModule
+    NgxChartsModule,
+    RegistreEditDialogComponent
   ],
   exports: [RgpdScoreComponent]
 })

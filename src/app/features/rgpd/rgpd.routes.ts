@@ -6,7 +6,7 @@ import { RgpdAuditDetailComponent } from './pages/rgpd-audit-detail/rgpd-audit-d
 import { RgpdAuditNewComponent } from './pages/rgpd-audit-new/rgpd-audit-new.component';
 import { RgpdProcedureComponent } from './pages/rgpd-procedure/rgpd-procedure.component';
 import { canActivateAuth } from '../../shared/guards/auth.guard';
-
+import { RegistreListComponent } from './components/registre-list/registre-list.component';
 // On part du principe que le module est lazy chargé sous le path "rgpd"
 
 export const RGPD_ROUTES: Routes = [
@@ -19,7 +19,9 @@ export const RGPD_ROUTES: Routes = [
       { path: 'history', component: RgpdHistoryComponent }, // /rgpd/historique
       { path: 'audit/new', component: RgpdAuditNewComponent }, // /rgpd/audit/new
       { path: 'audit/:id', component: RgpdAuditDetailComponent }, // /rgpd/audit/42
-      { path: 'procedure', component: RgpdProcedureComponent } // /rgpd/procedure
+      { path: 'procedure', component: RgpdProcedureComponent }, // /rgpd/procedure
+      { path: 'rgpd/registre', component: RegistreListComponent },
+
     ]
   }
 ];

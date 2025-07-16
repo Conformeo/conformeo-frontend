@@ -20,21 +20,31 @@ export class LoginComponent implements OnInit {
   private readonly router = inject(Router);
 
   ngOnInit(): void {
+    if (this.auth.isLoggedIn()) {
+      this.router.navigate(['/dashboard']);
+    }
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.email]], // OAuth2 = "username"
       password: ['', Validators.required]
     });
+    
   }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
       return;
     }
-    const { email, password } = this.loginForm.value;
-    this.auth.login(email, password).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
-      error: () => this.errorMsg = 'Identifiants invalides'
+    const { username, password } = this.loginForm.value;
+    this.auth.login(username, password).subscribe({
+      next: (res) => {
+        // LOG pour debug, à retirer ensuite
+        console.log('Login OK:', res);
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        console.error('Erreur login:', err);
+        this.errorMsg = 'Identifiants invalides';
+      }
     });
-
   }
 }

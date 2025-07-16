@@ -19,20 +19,10 @@ import { DashboardCockpitComponent } from '../../dashboard-cockpit/dashboard-coc
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.scss'],
-  // template: `
-  //   <h1 class="text-2xl font-semibold mb-4">Tableau de bord</h1>
-
-  //   <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-  //     <app-stat-card
-  //       *ngFor="let stat of stats$ | async"
-  //       [stat]="stat">
-  //     </app-stat-card>
-  //   </div>
-  // `
 })
 export class DashboardPageComponent implements OnInit {
   stats$!: Observable<DashboardStat[]>;
-  auditId!: number;
+  auditId?: number;
   idAuditEnCours = 1; // ou valeur réelle
   idUser = 1; 
 

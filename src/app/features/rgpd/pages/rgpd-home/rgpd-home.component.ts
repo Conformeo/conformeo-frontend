@@ -5,7 +5,7 @@ import { DashboardRgpdComponent } from '../dashboard-rgpd/dashboard-rgpd.compone
 // import { RgpdProcedureComponent } from '../rgpd-procedure/rgpd-procedure.component';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { RegisterListComponent } from '../../components/register-list/register-list.component';
+import { RegistreListComponent } from '../../components/registre-list/registre-list.component';
 
 @Component({
   selector: 'app-rgpd-home',
@@ -14,7 +14,7 @@ import { RegisterListComponent } from '../../components/register-list/register-l
     CommonModule,
     RouterModule,
     DashboardRgpdComponent,
-    RegisterListComponent,
+    RegistreListComponent,
     MatButtonModule
     // Ajoute ici d'autres sous-composants RGPD (audit, historique, etc)
   ],

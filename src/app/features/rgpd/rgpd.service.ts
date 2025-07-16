@@ -90,4 +90,17 @@ export class RgpdService {
     html += `</ul>`;
     return html;
   }
+
+  addExigence(auditId: number, exigence: any): Observable<any> {
+    return this.http.post<any>(`/api/rgpd/audits/${auditId}/exigences`, exigence);
+  }
+
+  updateExigence(exigenceId: number, data: any): Observable<any> {
+    return this.http.put<any>(`/api/rgpd/audits/exigences/${exigenceId}`, data);
+  }
+
+  deleteExigence(exigenceId: number): Observable<void> {
+    return this.http.delete<void>(`/api/rgpd/audits/exigences/${exigenceId}`);
+  }
+
 }

@@ -42,7 +42,14 @@ export class DashboardSecuriteComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // console.log('[DEBUG] dashboard-securite chargé');
+    // console.log('[DEBUG][securite] chartData:', this.chartData);
+    if (!this.isChartNotEmpty()) {
+      console.warn('[WARN][securite] chartData mal formée:', this.chartData);
+    }
+  }
+
 
   isChartNotEmpty(): boolean {
     return Array.isArray(this.chartData) &&
@@ -50,7 +57,6 @@ export class DashboardSecuriteComponent implements OnInit {
           typeof this.chartData[0]?.value === 'number' &&
           this.chartData[0].value > 0;
   }
-
 
   voirDetail() { /* navigation/detail */ }
   exporter() { /* export */ }

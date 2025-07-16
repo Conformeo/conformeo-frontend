@@ -1,9 +1,11 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <input
-    id="email"
-    formControlName="email"
+    id="username"
+    formControlName="username"
     placeholder="Email"
     required
+    autocomplete="username"
+    type="email"
   />
 
   <input
@@ -12,14 +14,14 @@
     type="password"
     placeholder="Mot de passe"
     required
+    autocomplete="current-password"
   />
 
   <button type="submit" [disabled]="loginForm.invalid">
     Se connecter
   </button>
 
-  <!-- Le sélecteur .error doit correspondre au test Cypress -->
   <div *ngIf="errorMsg" class="error">
-    Identifiants invalides
+    {{ errorMsg }}
   </div>
 </form>

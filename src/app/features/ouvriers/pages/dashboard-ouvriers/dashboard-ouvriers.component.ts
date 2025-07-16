@@ -33,6 +33,10 @@ export class DashboardOuvriersComponent implements OnInit {
       { name: 'Mai', series: [{ name: 'Formés', value: 11 }, { name: 'Non formés', value: 3 }] },
       { name: 'Juin', series: [{ name: 'Formés', value: 12 }, { name: 'Non formés', value: 2 }] }
     ];
+    // console.log('[DEBUG] dashboard-ouvriers chargé');
+    // console.log('[DEBUG] dashboard-ouvriers chargé');
+    // console.log('[DEBUG][dashboard-ouvriers] chartData:', this.chartData);
+    // console.log('[DEBUG][dashboard-ouvriers] timelineData:', this.timelineData);
   }
 
   isChartNotEmpty(): boolean {

@@ -1,9 +1,13 @@
 <div *ngIf="loading">Chargement…</div>
 <div *ngIf="!loading">
   <h3>Registre des traitements</h3>
-  <button mat-raised-button color="primary" (click)="showForm = true" *ngIf="!showForm">Ajouter un traitement</button>
 
-  <form *ngIf="showForm" (ngSubmit)="editId ? saveEdit() : addRegister()" class="register-form">
+  <button mat-raised-button color="primary" (click)="showForm = true" *ngIf="!showForm">
+    Ajouter un traitement
+  </button>
+
+  <!-- Formulaire ajout rapide -->
+  <form *ngIf="showForm" (ngSubmit)="addRegister()" class="register-form">
     <mat-form-field appearance="outline">
       <input matInput [(ngModel)]="registerForm.nom_traitement" name="nom_traitement" placeholder="Nom du traitement" required>
     </mat-form-field>
@@ -20,16 +24,29 @@
       <input matInput [(ngModel)]="registerForm.duree_conservation" name="duree_conservation" placeholder="Durée de conservation">
     </mat-form-field>
     <div class="form-actions">
-      <button mat-raised-button color="primary" type="submit">{{ editId ? 'Enregistrer' : 'Ajouter' }}</button>
+      <button mat-raised-button color="primary" type="submit">
+        Ajouter
+      </button>
       <button mat-button type="button" (click)="cancel()">Annuler</button>
     </div>
   </form>
 
-  <ul>
+  <!-- Export PDF -->
+  <button mat-raised-button color="primary" (click)="exportPdf()" [disabled]="!registers.length">
+    Exporter en PDF
+  </button>
+
+  <!-- Liste des traitements -->
+  <ul id="registre-table">
     <li *ngFor="let reg of registers">
       <strong>{{ reg.nom_traitement }}</strong>
       <span *ngIf="reg.finalite">– {{ reg.finalite }}</span>
-      <button mat-button color="primary" (click)="editRegister(reg)">Éditer</button>
+      <span *ngIf="reg.base_legale">[{{ reg.base_legale }}]</span>
+      <span *ngIf="reg.personnes_concernees">, {{ reg.personnes_concernees }}</span>
+      <span *ngIf="reg.duree_conservation">, durée : {{ reg.duree_conservation }}</span>
+      <button mat-icon-button (click)="editRegister(reg)">
+        <mat-icon>edit</mat-icon>
+      </button>
       <button mat-button color="warn" (click)="deleteRegister(reg)">Supprimer</button>
     </li>
     <li *ngIf="!registers.length" class="text-muted">Aucun traitement renseigné.</li>

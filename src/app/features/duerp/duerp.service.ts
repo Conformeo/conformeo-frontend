@@ -7,8 +7,10 @@ export class DuerpService {
   constructor(private http: HttpClient) {}
 
   getSynthese(userId: number): Observable<any> {
+    if (!userId) console.warn('[DuerpService] userId manquant !');
     return this.http.get<any>(`/api/duerp/synthese?user_id=${userId}`);
   }
+
 
   getTimeline(userId: number): Observable<any[]> {
     return this.http.get<any[]>(`/api/duerp/audits?user_id=${userId}`);

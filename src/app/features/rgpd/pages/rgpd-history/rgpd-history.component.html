@@ -1,6 +1,10 @@
 <div class="rgpd-history-card">
   <h2>Historique des audits RGPD</h2>
-  <table>
+
+  <div *ngIf="loading">Chargement…</div>
+  <div *ngIf="error" class="error">Erreur lors du chargement des audits</div>
+
+  <table *ngIf="!loading && !error && audits.length > 0">
     <thead>
       <tr>
         <th>Date</th>
@@ -10,10 +14,19 @@
     </thead>
     <tbody>
       <tr *ngFor="let a of audits">
-        <td>{{ a.date }}</td>
-        <td>{{ a.score }}%</td>
-        <td><a [routerLink]="['/rgpd/audit', a.id]">Voir</a></td>
+        <td>{{ a.created_at ? (a.created_at | date:'short') : '—' }}</td>
+        <td>
+          {{ a.score !== undefined && a.score !== null ? a.score + '%' : '—' }}
+        </td>
+        <td>
+          <a [routerLink]="['/rgpd/audit', a.id]">Voir</a>
+        </td>
       </tr>
     </tbody>
   </table>
+
+  <div *ngIf="!loading && !error && audits.length === 0">
+    <p>Aucun audit RGPD trouvé.</p>
+    <a [routerLink]="['/rgpd/audit/new']" class="btn btn-primary">Créer un audit</a>
+  </div>
 </div>
