@@ -40,8 +40,7 @@
 
     <div class="rgpd-chart-row">
       <ngx-charts-line-chart
-        *ngIf="domainChartData.length > 0; else barEmpty"
-        [scheme]="'cool'"
+        *ngIf="timelineData.length > 0; else lineEmpty"
         [results]="[{ name: 'Score', series: timelineData }]"
         [xAxis]="true" [yAxis]="true" [legend]="false"
         [showXAxisLabel]="true" [showYAxisLabel]="true"

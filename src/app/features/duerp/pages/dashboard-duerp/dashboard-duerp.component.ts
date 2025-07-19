@@ -34,6 +34,7 @@ export class DashboardDuerpComponent implements OnInit {
     ]
   };
 
+
   constructor(
     private duerpService: DuerpService,
     private router: Router
@@ -47,6 +48,7 @@ export class DashboardDuerpComponent implements OnInit {
       return;
     }
     this.loading = true;
+
     this.duerpService.getSynthese(this.userId).subscribe({
       next: (data) => {
         this.stats = data;
@@ -59,10 +61,8 @@ export class DashboardDuerpComponent implements OnInit {
       }
     });
 
-    // Correction : mapping pour ngx-charts (name/value)
     this.duerpService.getRisquesParType(this.userId).subscribe({
       next: (data) => {
-        // console.log('[DEBUG] risquesData reçu :', data);
         this.risquesData = Array.isArray(data)
           ? data.map(r => ({
               name: r.domaine ?? r.name ?? "Inconnu",
@@ -71,7 +71,6 @@ export class DashboardDuerpComponent implements OnInit {
           : [];
       },
       error: () => {
-        console.error('[ERROR] Impossible de charger les risques');
         this.risquesData = [];
       }
     });
@@ -80,23 +79,12 @@ export class DashboardDuerpComponent implements OnInit {
       next: (data) => this.timelineData = data,
       error: () => this.timelineData = []
     });
-
-    // Debug/demo
-    // this.stats = this.demoStats;
-    // this.timelineData = [
-    //   { name: '01/03', value: 40 },
-    //   { name: '01/04', value: 60 },
-    //   { name: '01/05', value: 80 },
-    //   { name: '01/06', value: 67 }
-    // ];
-    // console.log('[DEBUG] dashboard-duerp chargé');
   }
 
   getLastAuditDate(date: string | Date | undefined): string {
     if (!date) return '—';
     try {
       const d = typeof date === 'string' ? new Date(date) : date;
-      // Vérifie si la date est valide
       if (isNaN(d.getTime())) return date.toString();
       return d.toLocaleDateString('fr-FR');
     } catch {
@@ -108,10 +96,8 @@ export class DashboardDuerpComponent implements OnInit {
     if (!date) return '';
     const d = typeof date === 'string' ? new Date(date) : date;
     if (isNaN(d.getTime())) return date?.toString() ?? '';
-    // Tu peux choisir le format que tu veux ici
     return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' });
   }
-
 
   voirDuerp() {
     this.router.navigate(['/duerp/detail']);

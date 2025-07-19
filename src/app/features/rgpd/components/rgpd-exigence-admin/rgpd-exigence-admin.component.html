@@ -1,0 +1,39 @@
+<h2>Gestion des exigences RGPD</h2>
+
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div>
+  <input [(ngModel)]="newLabel" placeholder="Nouvelle exigence..." />
+  <button mat-raised-button color="primary" (click)="addExigence()">Ajouter</button>
+</div>
+
+<table class="admin-table" *ngIf="!loading">
+  <tr>
+    <th>#</th>
+    <th>Exigence</th>
+    <th>Actions</th>
+  </tr>
+  <tr *ngFor="let ex of exigences">
+    <td>{{ ex.id }}</td>
+    <td *ngIf="!editing[ex.id]">{{ ex.label }}</td>
+    <td *ngIf="editing[ex.id]">
+      <input [(ngModel)]="editedLabel[ex.id]" />
+    </td>
+    <td>
+      <button *ngIf="!editing[ex.id]" mat-icon-button color="accent" (click)="startEdit(ex)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button *ngIf="editing[ex.id]" mat-icon-button color="primary" (click)="saveEdit(ex)">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button *ngIf="editing[ex.id]" mat-icon-button (click)="cancelEdit(ex)">
+        <mat-icon>close</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteExigence(ex)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </tr>
+</table>
+
+<div *ngIf="loading">Chargement…</div>

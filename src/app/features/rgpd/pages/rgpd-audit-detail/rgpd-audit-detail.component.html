@@ -1,48 +1,74 @@
-<div class="audit-detail-card">
-  <h2>Détail de l’audit RGPD</h2>
+<div *ngIf="loading" class="loading">
+  <mat-progress-spinner diameter="32" mode="indeterminate"></mat-progress-spinner>
+  <span>Chargement de l’audit...</span>
+</div>
 
-  <div class="filters-row">
-    <mat-form-field>
-      <input matInput placeholder="Rechercher une exigence..." [value]="filterValue" (input)="applyFilter($event)">
-    </mat-form-field>
-    <mat-checkbox [(ngModel)]="showCriticalOnly" (change)="filterTable()">Critique uniquement</mat-checkbox>
-  </div>
+<div *ngIf="error" class="error">
+  Erreur de chargement de l’audit.
+</div>
 
-  <table mat-table [dataSource]="filteredData" class="mat-elevation-z1">
+<div *ngIf="!loading && audit" class="audit-detail">
+  <h2>
+    Audit RGPD du {{ audit.created_at | date:'longDate' }}
+    <span *ngIf="audit.score !== undefined && audit.score !== null">
+      – Score : <b>{{ audit.score }}%</b>
+    </span>
+  </h2>
 
+  <table mat-table [dataSource]="exigences" class="mat-elevation-z1" *ngIf="exigences.length > 0">
+
+    <!-- Label -->
     <ng-container matColumnDef="label">
       <th mat-header-cell *matHeaderCellDef> Exigence </th>
-      <td mat-cell *matCellDef="let ex"> {{ ex.label }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="answer">
-      <th mat-header-cell *matHeaderCellDef> Réponse </th>
-      <td mat-cell *matCellDef="let ex"> {{ ex.answer }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="critical">
-      <th mat-header-cell *matHeaderCellDef> Critique </th>
       <td mat-cell *matCellDef="let ex">
-        <span [ngClass]="{ 'critical': ex.critical }">{{ ex.critical ? 'Oui' : 'Non' }}</span>
+        {{ ex.label }}
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="advice">
-      <th mat-header-cell *matHeaderCellDef> Conseil </th>
+    <!-- Answer -->
+    <ng-container matColumnDef="answer">
+      <th mat-header-cell *matHeaderCellDef> Réponse </th>
       <td mat-cell *matCellDef="let ex">
-        <span *ngIf="ex.advice; else na">{{ ex.advice }}</span>
-        <ng-template #na><span class="text-muted">-</span></ng-template>
+        <mat-form-field appearance="outline" class="mini">
+          <input matInput [(ngModel)]="ex.answer" placeholder="Réponse" />
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Comment -->
+    <ng-container matColumnDef="comment">
+      <th mat-header-cell *matHeaderCellDef> Commentaire </th>
+      <td mat-cell *matCellDef="let ex">
+        <mat-form-field appearance="outline" class="mini">
+          <input matInput [(ngModel)]="ex.comment" placeholder="Commentaire" />
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <!-- Action -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let ex">
+        <button mat-mini-fab color="primary" (click)="saveExigence(ex)" [disabled]="saving[ex.id]">
+          <mat-icon *ngIf="!saving[ex.id]">save</mat-icon>
+          <mat-progress-spinner *ngIf="saving[ex.id]" diameter="18" mode="indeterminate"></mat-progress-spinner>
+        </button>
+        <span *ngIf="saveSuccess[ex.id]" class="success-msg">✔️</span>
+        <span *ngIf="saveError[ex.id]" class="error-msg">Erreur</span>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <div class="actions-row mt-4">
-    <button mat-stroked-button (click)="retourSynthese()">Retour</button>
-    <button mat-stroked-button (click)="exportPDF()">Exporter PDF</button>
-    <button mat-stroked-button (click)="exportCSV()">Exporter CSV</button>
-    <button mat-flat-button color="primary" (click)="refaireAudit()">Refaire un audit</button>
+  <div *ngIf="exigences.length === 0 && !loading" class="empty-table">
+    Aucune exigence sur cet audit.
+  </div>
+
+  <div class="actions">
+    <button mat-stroked-button (click)="retourSynthese()">
+      Retour à l’historique
+    </button>
   </div>
 </div>

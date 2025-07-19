@@ -1,80 +1,130 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { RgpdService } from '../../rgpd.service'
-import { AuthService } from '../../../../core/services/auth.service';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { RgpdService } from '../../rgpd.service';
 import { Router } from '@angular/router';
+
+interface Exigence {
+  id: number;
+  label: string;
+  priority?: number;
+}
 
 @Component({
   selector: 'app-rgpd-audit-new',
   standalone: true,
-  imports: [CommonModule, NgFor, NgIf, FormsModule, MatButtonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatSelectModule,
+  ],
   templateUrl: './rgpd-audit-new.component.html',
-  styleUrls: ['./rgpd-audit-new.component.scss']
+  styleUrls: ['./rgpd-audit-new.component.scss'],
 })
 export class RgpdAuditNewComponent implements OnInit {
-  exigences: any[] = [];
-  reponses: { [key: string]: string } = {};
+  exigences: Required<Exigence>[] = [];
+  grouped: { [priority: number]: Required<Exigence>[] } = {};
+
+  /** FormGroup global (tous les contrôles) */
+  masterForm!: FormGroup;
+  /** Un sous‑groupe par priorité, utilisé comme stepControl */
+  stepGroups: FormGroup[] = [];
+
   loading = true;
   saving = false;
   success = false;
   error = false;
 
   constructor(
-    private rgpdService: RgpdService,
-    private authService: AuthService,
-    private router: Router
+    private fb: FormBuilder,
+    private rgpd: RgpdService,
+    private router: Router,
   ) {}
 
-  ngOnInit() {
-    this.loading = true;
-    // Charge dynamiquement les exigences
-    this.rgpdService.getExigences().subscribe({
-      next: exigences => {
-        this.exigences = exigences;
+  ngOnInit(): void {
+    this.fetchExigences();
+  }
+
+  
+
+  private mapAnswer(v: 'conforme'|'non_conforme'|'non_applicable') {
+    return v; // plus de conversion nécessaire – backend accepte les minuscules
+  }
+
+
+  private fetchExigences(): void {
+    this.rgpd.getExigences().subscribe({
+      next: (raw) => {
+        // ➊ mapping + priorité par défaut
+        this.exigences = (raw as Exigence[]).map((e, idx) => ({
+          id: e.id,
+          label: e.label,
+          priority: e.priority ?? (idx < 5 ? 1 : idx < 12 ? 2 : idx < 18 ? 3 : 4),
+        })) as Required<Exigence>[];
+
+        // ➋ regroupement
+        for (const ex of this.exigences) {
+          if (!this.grouped[ex.priority]) this.grouped[ex.priority] = [];
+          this.grouped[ex.priority].push(ex);
+        }
+
+        // ➌ FormGroup principal
+        const controls: Record<string, any> = {};
+        this.exigences.forEach((ex) => (controls[String(ex.id)] = ['', Validators.required]));
+        this.masterForm = this.fb.group(controls);
+
+        // ➍ sous‑groupes pour le stepper
+        for (let p = 1; p <= 4; p++) {
+          const sub = this.fb.group({});
+          (this.grouped[p] || []).forEach((ex) => {
+            sub.addControl(String(ex.id), this.masterForm.get(String(ex.id))!);
+          });
+          this.stepGroups.push(sub);
+        }
+
         this.loading = false;
       },
       error: () => {
-        this.error = true;
         this.loading = false;
-      }
+        this.error = true;
+      },
     });
   }
 
-  submit() {
-    this.saving = true;
-    this.success = false;
-    this.error = false;
+  isAuditReady(): boolean {
+    // retourne true si chaque exigence a une valeur non vide
+    return this.exigences.every(
+      (ex) => !!this.masterForm.get(String(ex.id))?.value,
+    );
+  }
 
-    const userId = this.authService.getUserId();
-    if (!userId) {
-      this.error = true;
-      this.saving = false;
-      return;
-    }
-    // Prépare la structure à envoyer : adapte si nécessaire !
-    const audit = {
-      user_id: userId,
-      company_id: 1, // À adapter si sélection d'une société
+  submit(): void {
+    if (!this.isAuditReady()) return;
+    this.saving = true;
+
+    const payload = {
+      titre: 'Audit ' + new Date().toLocaleDateString('fr-FR'),
       statut: 'EN_COURS',
       exigences: this.exigences.map(ex => ({
         exigence_id: ex.id,
-        answer: this.reponses[ex.id] || null
-      }))
+        answer: this.mapAnswer(this.masterForm.get(String(ex.id))!.value as any),
+      })),
     };
 
-    this.rgpdService.createAudit(audit).subscribe({
-      next: (createdAudit) => {
-        this.saving = false;
-        this.success = true;
-        // Redirige vers la page détail de l’audit nouvellement créé
-        this.router.navigate(['/rgpd/audit', createdAudit.id]);
-      },
-      error: () => {
+    this.rgpd.createAudit(payload).subscribe({
+      next: () => this.router.navigate(['/rgpd/history']),
+      error: err => {
+        console.error(err.error.detail);   // ← voir la cause exacte si 422
         this.error = true;
         this.saving = false;
-      }
+      },
     });
   }
 }

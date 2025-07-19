@@ -1,7 +1,10 @@
+// -----------------------------------------------------------------------------
+// rgpd-history.component.ts (Angular standalone component)
+// -----------------------------------------------------------------------------
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { RgpdService } from '../../rgpd.service'; // ← adapte le chemin si besoin
+import { RgpdService } from '../../rgpd.service';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
@@ -18,29 +21,31 @@ export class RgpdHistoryComponent implements OnInit {
 
   constructor(
     private rgpdService: RgpdService,
-    private authService: AuthService    // <-- injecte ici
-
+    private authService: AuthService
   ) {}
 
+  /**
+   * Charge l’historique des audits RGPD de l’utilisateur connecté.
+   * Si l’identifiant n’est pas disponible (cas très rare quand le token
+   * n’a pas encore été stocké), on affiche simplement l’état vide.
+   */
   ngOnInit() {
     const userId = this.authService.getUserId();
     if (!userId) {
-      this.error = true;
       this.loading = false;
       return;
     }
-    this.rgpdService.getAudits(userId).subscribe({
-      next: audits => {
-        this.audits = audits;
+
+    this.rgpdService.getAudits().subscribe({
+      next: (audits) => {
+        this.audits = audits ?? [];
         this.loading = false;
       },
       error: () => {
         this.error = true;
+        this.audits = [];
         this.loading = false;
       }
     });
   }
 }
-
-
-

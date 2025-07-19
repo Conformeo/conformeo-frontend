@@ -1,25 +1,49 @@
-<div class="audit-new-card">
+<div class="audit-new-card" *ngIf="!loading; else loadingTpl">
   <h2>Nouvel audit RGPD</h2>
 
-  <!-- Loading -->
-  <div *ngIf="loading">Chargement des exigences...</div>
+  <mat-horizontal-stepper linear>
+    <ng-container *ngFor="let p of [1, 2, 3, 4]; let idx = index">
+      <mat-step [stepControl]="stepGroups[idx]" [completed]="false">
+        <ng-template matStepLabel>Priorité {{ p }}</ng-template>
 
-  <!-- Formulaire d’audit -->
-  <form *ngIf="!loading && exigences.length > 0">
-    <div *ngFor="let ex of exigences">
-      <label>{{ ex.titre }}</label>
-      <select [(ngModel)]="reponses[ex.id]" name="ex_{{ex.id}}">
-        <option value="">---</option>
-        <option value="conforme">Conforme</option>
-        <option value="non_conforme">Non conforme</option>
-        <option value="non_applicable">N/A</option>
-      </select>
-    </div>
-    <button mat-raised-button color="primary" (click)="submit()" [disabled]="saving">Valider l’audit</button>
-  </form>
+        <p class="step-comment">
+          {{ p === 1 ? 'Mesures clés (données sensibles, mineurs…)'
+            : p === 2 ? 'Actions juridiques & information'
+            : p === 3 ? 'Gouvernance & pilotage'
+            : 'Actions complémentaires' }}
+        </p>
 
-  <!-- Messages -->
-  <div *ngIf="saving">Enregistrement...</div>
-  <div *ngIf="success" class="success-msg">Audit enregistré !</div>
-  <div *ngIf="error" class="error-msg">Erreur lors de l’enregistrement…</div>
+        <form [formGroup]="stepGroups[idx]" class="step-form">
+          <div class="grid-container" *ngIf="grouped[p]?.length; else noDataTpl">
+            <ng-container *ngFor="let ex of grouped[p]">
+              <mat-form-field appearance="outline" class="exigence-field">
+                <mat-label>{{ ex.label }}</mat-label>
+                <mat-select formControlName="{{ ex.id }}">
+                  <mat-option value="conforme">Conforme</mat-option>
+                  <mat-option value="non_conforme">Non conforme</mat-option>
+                  <mat-option value="non_applicable">N/A</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </form>
+
+        <div class="btn-row">
+          <button mat-stroked-button matStepperPrevious *ngIf="idx > 0">Précédent</button>
+          <button mat-raised-button color="primary" matStepperNext *ngIf="idx < 3" [disabled]="stepGroups[idx].invalid">
+            Suivant
+          </button>
+          <button mat-raised-button color="primary" *ngIf="idx === 3" (click)="submit()" [disabled]="saving || !isAuditReady()">
+            {{ saving ? 'Enregistrement…' : 'Valider l’audit' }}
+          </button>
+        </div>
+      </mat-step>
+    </ng-container>
+  </mat-horizontal-stepper>
+
+  <p class="success-msg" *ngIf="success">Audit enregistré !</p>
+  <p class="error-msg" *ngIf="error">Une erreur est survenue.</p>
 </div>
+
+<ng-template #loadingTpl><p>Chargement des exigences…</p></ng-template>
+<ng-template #noDataTpl><p>Aucune exigence pour cette priorité.</p></ng-template>

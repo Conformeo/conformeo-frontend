@@ -34,8 +34,8 @@
 
     <div class="module-chart-row">
       <ngx-charts-pie-chart
-        *ngIf="(risquesData ?? []).length > 0; else emptyRisques"
-        [results]="risquesData ?? []"
+        *ngIf="risquesData ?? []"
+        [results]="risquesData"
         [legend]="true"
         [labels]="true"
         [doughnut]="false"
@@ -50,8 +50,8 @@
 
     <div class="module-chart-row">
       <ngx-charts-line-chart
-        *ngIf="(timelineData ?? []).length > 0; else emptyTimeline"
-        [results]="[{name:'Audits',series:timelineData ?? []}]"
+        *ngIf="timelineData ?? []"
+        [results]="timelineData"
         [xAxis]="true"
         [yAxis]="true"
         [legend]="false"

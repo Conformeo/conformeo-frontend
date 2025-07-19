@@ -3,6 +3,7 @@ import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { PieChartModule, LineChartModule, BarChartModule } from '@swimlane/ngx-charts';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { RgpdService } from '../../rgpd.service';
 
 @Component({
   selector: 'app-dashboard-rgpd',
@@ -16,7 +17,7 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./dashboard-rgpd.component.scss']
 })
 export class DashboardRgpdComponent implements OnInit {
-  @Input() userId!: number;
+  @Input() userId!: number; // garde-le si tu veux du multi-user plus tard
   loading = true;
   score: any = { score: null, conforme: 0, non_conforme: 0 };
   alertesCritiques: string[] = [];
@@ -25,36 +26,53 @@ export class DashboardRgpdComponent implements OnInit {
   domainChartData: any[] = [];
   error = false;
 
+  constructor(
+    private rgpdService: RgpdService
+  ) {}
 
   ngOnInit() {
-    if (!this.userId) {
-      console.error('[DashboardRGPDComponent] userId manquant');
-      this.error = true;
-      this.loading = false;
-      return;
-    }
     this.loading = true;
-    // --- Remplace par ton vrai call API ---
-      // --- EXEMPLE : mets ici les données reçues ---
-      this.score = { score: 82, conforme: 15, non_conforme: 3 };
-      this.alertesCritiques = ["Alerte critique RGPD"];
-      this.scoreChartData = [
-        { name: 'Conforme', value: 15 },
-        { name: 'Non conforme', value: 3 }
-      ];
-      this.timelineData = [
-        { name: '01/04', value: 60 },
-        { name: '01/05', value: 70 },
-        { name: '01/06', value: 80 },
-        { name: '01/07', value: 82 }
-      ];
-      this.domainChartData = [
-        { name: 'Base légale', value: 2 },
-        { name: 'Sécurité', value: 3 }
-      ];
-      this.loading = false;
 
-    // // Debug
-    // console.log('[DEBUG] dashboard-rgpd chargé');
+    // --- Dernier audit (pas besoin de param si auth par token)
+    this.rgpdService.getLastAudit().subscribe({
+      next: (res) => {
+        this.score = res;
+        this.scoreChartData = [
+          { name: 'Conforme',     value: res.conforme     ?? 0 },
+          { name: 'Non conforme', value: res.non_conforme ?? 0 },
+          { name: 'N/A', value: res.non_conforme ?? 0 }
+        ];
+        this.alertesCritiques = res.critical_ko ?? [];
+        if (res.id) {
+          this.rgpdService.getDomainStats(res.id).subscribe({
+            next: (stats) => {
+              this.domainChartData = stats ?? [];
+            },
+            error: () => { this.domainChartData = []; }
+          });
+        } else {
+          this.domainChartData = [];
+        }
+      },
+      error: () => {
+        this.error = true;
+        this.score = { score: null, conforme: 0, non_conforme: 0 };
+        this.scoreChartData = [];
+        this.alertesCritiques = [];
+        this.domainChartData = [];
+      },
+      complete: () => this.loading = false
+    });
+
+    // --- Timeline (pas besoin de param si auth par token)
+    this.rgpdService.getTimeline().subscribe({
+      next: (audits) => {
+        this.timelineData = (audits || []).map(a => ({
+          name: (a.created_at || '').slice(0, 10),
+          value: a.score ?? 0
+        }));
+      },
+      error: () => { this.timelineData = []; }
+    });
   }
 }

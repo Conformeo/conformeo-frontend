@@ -7,6 +7,7 @@ import { Registre } from '../../models/registre';
 @Injectable({ providedIn: 'root' })
 export class RegistreService {
   constructor(private http: HttpClient) {}
+  
 
   // Récupérer tous les registres du user courant (le back déduit du token)
   list(): Observable<Registre[]> {

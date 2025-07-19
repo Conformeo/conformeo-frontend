@@ -1,10 +1,43 @@
-.audit-detail-container {
-  max-width: 900px;
-  margin: 32px auto 0;
+.audit-detail {
+  max-width: 880px;
+  margin: 40px auto;
+  padding: 24px;
   background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px #0001;
-  padding: 32px;
+  border-radius: 10px;
+  box-shadow: 0 1px 8px #e0e0e0;
 }
-.text-danger { color: #d32f2f; font-weight: bold; }
-.text-success { color: #388e3c; }
+
+.loading, .error, .empty-table {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0;
+  color: #607d8b;
+  font-size: 1.1em;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+mat-form-field.mini {
+  width: 100%;
+  min-width: 80px;
+  max-width: 200px;
+}
+
+.actions {
+  margin-top: 16px;
+}
+
+.success-msg {
+  color: #1bb16b;
+  margin-left: 8px;
+  font-weight: bold;
+}
+.error-msg {
+  color: #d32f2f;
+  margin-left: 8px;
+  font-weight: bold;
+}

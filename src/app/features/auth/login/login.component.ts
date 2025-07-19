@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     if (this.auth.isLoggedIn()) {
@@ -27,7 +28,6 @@ export class LoginComponent implements OnInit {
       username: ['', [Validators.required, Validators.email]], // OAuth2 = "username"
       password: ['', Validators.required]
     });
-    
   }
 
   onSubmit(): void {
@@ -37,12 +37,11 @@ export class LoginComponent implements OnInit {
     const { username, password } = this.loginForm.value;
     this.auth.login(username, password).subscribe({
       next: (res) => {
-        // LOG pour debug, à retirer ensuite
-        console.log('Login OK:', res);
-        this.router.navigate(['/dashboard']);
+        // Redirige sur la page demandée, ou dashboard par défaut
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+        this.router.navigate([returnUrl]);
       },
       error: (err) => {
-        console.error('Erreur login:', err);
         this.errorMsg = 'Identifiants invalides';
       }
     });
